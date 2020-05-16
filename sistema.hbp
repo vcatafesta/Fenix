@@ -11,20 +11,6 @@
 
 {mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition  
 
-arq1
-arq2
-arq3
-arq4
-arq5
-arq6
-arq7
-arq8
-arq9
-arq10
-arq11
-arq12
-arq13
-arq14
 arq15
 arq16
 arq17
