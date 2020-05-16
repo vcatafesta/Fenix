@@ -1,13 +1,113 @@
 #include "fenix.ch"
 
 
-FUNCTION Main()
-   local oMenu
+function main()
+********************
+   LOCAL oMenu
+	LOCAL unidade  := "C"   // verificar essa variavel
+	LOCAL terminal
+	LOCAL Comp
+	
+	public aDbfs := {	"comp",;
+					"cadmerc",;
+					"cadadm",;
+					"cadfor",;
+					"cadcli",;
+					"compras",;
+					"baixacom",;
+					"gastos",;
+					"desc",;
+					"arq_emb",;
+					"cadprod",;
+					"embals",;
+					"entrada",;
+					"estoque",;
+					"vendas",;
+					"baixaven",;
+					"dad_nfen",;
+					"clmntdet",;
+					"imposto",;
+					"bcdesc",;
+					"clafisc",;
+					"chec",;
+					"usuario",;
+					"frete",;
+					"ftmto",;
+					"bcntacom",;
+					"cadicms",;
+					"cfop",;
+					"bancnota",;
+					"cadclas",;
+					"cadfun",;
+					"cheq",;
+					"percmer",;
+					"pgfun",;
+					"hora",;
+					"demovi",;
+					"dpcarg",;
+					"cadlin",;
+					"crealin",;
+					"cdade",;
+					"sit_trib",;
+					"cadcons",;
+					"data_sem",;
+					"dialet",;
+					"justific",;
+					"controld",;
+					"opflh",;
+					"despesa",;
+					"represen",;
+					"venrepre",;
+					"cadesp",;
+					"cadhis",;
+					"lembre",;
+					"orcmto",;
+					"ctr_ent",;
+					"nfat",;
+					"vazil",;
+					"sldvaz",;
+					"ctrvaz",;
+					"comcx",;
+					"comvz",;
+					"regiao",;
+					"cmda",;
+					"estq_c",;
+					"pgfat",;
+					"bco",;
+					"abcprod",;
+					"ocor",;
+					"rgvaz",;
+					"ven_m",;
+					"abc_cli",;
+					"relcom",;
+					"devoluc",;
+					"etq_dv",;
+					"estorno",;
+					"frota",;
+					"ivt",;
+					"nfcomp",;
+					"cpom",;
+					"tblp",;
+					"cadfrete",;
+					"status",;
+					"",;
+					"",;
+					"",;
+					"cbo",;
+					"cest",;
+					"log",;
+					"reajuste",;
+					"agplote",;
+					"imprped",;
+					"etiqueta",;
+					"etqenv",;
+					"etqpre"}
 
+	
    Public Logfan	:= spac(4)
    Public NMuser
    Public CT_cli 	:= ' '
-   Public cdtr 		:= ' '
+   Public cdtr 	:= ' '
    Public rcb_V 	:= ' '
    Public psb 		:= ' '
    Public l9 		:= ' '
@@ -16,25 +116,25 @@ FUNCTION Main()
    Public cbc 		:= ' '
    Public gerbol 	:= ' '
    Public z 		:= ' '
-   Public fat 		:= ' '
+	Public fat 		:= ' '
 
-   arq1()
+	arq1()
    stor unidade to DRT
    stor terminal to CODTER
    stor comp to Ncomp
-   close all
+	DbCloseAll()
    Use
 
-	if logfan = '    '
+	if logfan = Space(4)
 		login()
 		*Logfan := 'LOGFAN'
 		*NMuser := 'NMUSER/...'
-   endi
+   end
 
    Ctr_User()
 
-   arq17()
-   loca for X = ' '
+   Area(aDbfs[17])
+   locate for X = ' '
    if eof()
       @ 40,01 say '                                                   '
    else
@@ -45,12 +145,12 @@ FUNCTION Main()
 
 
    if Ncomp = 'SERVIDOR'
-      arq3()
+      Area(aDbfs[3])
       Repl DATASIS with date()
       Unlock
       use
    else
-      arq3()
+      Area(aDbfs[3])
       loca for date() = datasis
       if eof()
          Unlock
@@ -80,9 +180,9 @@ FUNCTION Main()
    setColor( "w+/b" )
    scroll()    
    oMenu := Monta_Menu()
-   do while MenuModal( oMenu, 00, 00, 79, 79, "w+/b" ) != 999 ;  enddo
-   return( NIL )
-
+   
+	while MenuModal( oMenu, 00, 00, 79, 79, "w+/b" ) != 999 ;  enddo
+   return( nil )
 
 
 function Monta_Menu()
@@ -210,16 +310,17 @@ function Monta_Menu()
    else
       oItem:Enabled := .T.
    endi
+
 *----------
 *VENDAS
 *----------
-   oPopUp := PopUp()
-   oPopUp :ColorSpec:= cCorItem
+   oPopUp           := PopUp()
+   oPopUp:ColorSpec := cCorItem
    oTopBar:AddItem( MenuItem ( "&Vendas", oPopUp, ,) )
 
-      oPopUp1 := PopUp()
-      oPopUp1 :ColorSpec:= cCorItem
-      oItem := MenuItem( "&Registrar Saida", {|| Alert("vendas()") })
+	oPopUp1 := PopUp()
+	oPopUp1 :ColorSpec:= cCorItem
+	oItem := MenuItem( "&Registrar Saida", {|| Alert("vendas()") })
       oPopUp:AddItem( oItem )
       if Yvenda = 'B'
          oItem:Enabled := .f.

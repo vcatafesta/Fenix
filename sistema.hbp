@@ -2,7 +2,9 @@
 -inc
 #-compr=yes
 -info
--gui
+#-gui
+-n2
+-b
 
 #libs
 -lxhb
@@ -12,7 +14,6 @@
 {mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition  
 
 menu
-login
 cadastro
 cadastro.prg
 funcoes.prg
