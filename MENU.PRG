@@ -1,36 +1,22 @@
-#include "button.ch"   
-#include "inkey.ch"
-#require "hbwin"
-#define FORM_A4 9
-#define RGB( nR,nG,nB ) ( nR + ( nG * 256 ) + ( nB * 256 * 256 ) ) 
-#define PS_SOLID   0 
-#define BLACK           RGB( 0x0 ,0x0 ,0x0 ) 
-#define BLUE            RGB( 0x0 ,0x0 ,0x85 ) 
-#define GREEN           RGB( 0x0 ,0x85,0x0 ) 
-#define CYAN            RGB( 0x0 ,0x85,0x85 ) 
-#define RED             RGB( 0x85,0x0 ,0x0 ) 
-#define MAGENTA         RGB( 0x85,0x0 ,0x85 ) 
-#define BROWN           RGB( 0x85,0x85,0x0 ) 
-#define WHITE           RGB( 0xC6,0xC6,0xC6 ) 
+#include "fenix.ch"
 
 
 FUNCTION Main()
    local oMenu
 
-   Public Logfan := spac(4)
+   Public Logfan	:= spac(4)
    Public NMuser
-   Public CT_cli := ' '
-   Public cdtr := ' '
-   Public rcb_V := ' '
-   Public psb := ' '
-   Public l9 := ' '
-   Public rt := ' '
-   Public saibx := ' '
-   Public cbc := ' '
-   Public gerbol := ' '
-   Public z := ' '
-   Public fat := ' '
-
+   Public CT_cli 	:= ' '
+   Public cdtr 		:= ' '
+   Public rcb_V 	:= ' '
+   Public psb 		:= ' '
+   Public l9 		:= ' '
+   Public rt 		:= ' '
+   Public saibx 	:= ' '
+   Public cbc 		:= ' '
+   Public gerbol 	:= ' '
+   Public z 		:= ' '
+   Public fat 		:= ' '
 
    arq1()
    stor unidade to DRT
@@ -39,13 +25,11 @@ FUNCTION Main()
    close all
    Use
 
-   if logfan = '    '
-      login()
-*   Logfan := 'LOGFAN'
-*   NMuser := 'NMUSER/...'
-
+	if logfan = '    '
+		login()
+		*Logfan := 'LOGFAN'
+		*NMuser := 'NMUSER/...'
    endi
-
 
    Ctr_User()
 
@@ -98,6 +82,9 @@ FUNCTION Main()
    oMenu := Monta_Menu()
    do while MenuModal( oMenu, 00, 00, 79, 79, "w+/b" ) != 999 ;  enddo
    return( NIL )
+
+
+
 function Monta_Menu()
    local oTopBar, oPopUp, oPopUp1, oPopUp2, oPopUp3, oItem, oItem1, oItem2
    
