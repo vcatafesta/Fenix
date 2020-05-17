@@ -5,11 +5,6 @@ function CorNormal()
 	SetColor("w+/b")
 	return nil
 
-function ResTela( cScreen )
-***************************
-	RestScreen(,,,,  cScreen )
-	return NIL
-
 function bcor()
 ***************
    set color to w/b+
@@ -75,7 +70,7 @@ function snh_adm()
          say := 'X'
          retu
       endi
-      Area(aDbfs[3])
+      Area(oMenu:aDbfs[3])
       loca for senha = SNA
       if eof()
          Unlock
@@ -228,7 +223,7 @@ do whil ty = 0
    OI := 0
    l := 2
    dct := -1
-   Area(aDbfs[5])
+   Area(oMenu:aDbfs[5])
    index on dscnto to I5
    set index to I5
    do whil .not. eof()
@@ -263,7 +258,7 @@ do whil ty = 0
    if TY # 1
       retu
    endi
-   Area(aDbfs[5])
+   Area(oMenu:aDbfs[5])
    go top
    ln := 2
    SET DEVI TO PRINT
@@ -312,7 +307,7 @@ do whil ty = 0
    ??'Listagem email clientes do estado: '+Pest
    ?'Desconto desses: '+ltrim(str(oi))
    ?
-   Area(aDbfs[5])
+   Area(oMenu:aDbfs[5])
    go top
    do whil .not. eof()
       if Pest # '  '
@@ -409,7 +404,7 @@ do whil t = 0
 *      rest scre from tela
       retu
    endi
-   Area(aDbfs[5])
+   Area(oMenu:aDbfs[5])
    DBGOTOP()
    if TT = 1
       LOCATE FOR ALLTRIM(MNOME)$CLIENTE
@@ -542,7 +537,7 @@ set bell off
 
 function ctr_user()
 *******************
-Area(aDbfs[23])
+Area(oMenu:aDbfs[23])
 loca for codusu = logfan
 if eof()
    Unlock
@@ -687,7 +682,7 @@ STATIC PROCEDURE PrnTest( cPrinter, cBMPFile, lAsk )
          oPrinter:NewLine()
          oPrinter:NewLine()
 
-         Area(aDbfs[5])
+         Area(oMenu:aDbfs[5])
          loca for codc = PEC
          if eof()
             unlock
@@ -837,7 +832,7 @@ STATIC PROCEDURE PrnTest( cPrinter, cBMPFile, lAsk )
 
 
 
-*         Area(aDbfs[15])
+*         Area(oMenu:aDbfs[15])
 *         go top
 *         do whil .not. eof()
 *         if nroped # NP
@@ -927,7 +922,7 @@ do whil NMC = spac(15)
       rest scre from tela
       retu
    endi
-   Area(aDbfs[49])
+   Area(oMenu:aDbfs[49])
    DBGOTOP()
    LOCATE FOR ALLTRIM(NMC)$NREP
    IF EOF()
@@ -959,7 +954,7 @@ do whil NMC = spac(15)
          read
          @ 01,51 clea to 16,77
          ln := 3
-         Area(aDbfs[49])
+         Area(oMenu:aDbfs[49])
          set index to c49
          go reg49
          loop
@@ -983,9 +978,9 @@ rest scre from tela
 
 function caduser()
 ******************
-save scre to caduser
+					save scre to caduser
                DDA := ' '
-               do whil DDA := ' '
+               while DDA = ' '
                   lp := ' '
                   cls
                   CAD := '* CADASTRO DE USUµRIO *'
@@ -1055,7 +1050,7 @@ save scre to caduser
                   set color to G+/r+
                   @ 05,42 say 'Senha Cadastrada Com Sucesso !!!'
                   tcor()
-                  Area(aDbfs[23])
+                  Area(oMenu:aDbfs[23])
                   loca for fantazia = logfan
                   if eof()
                      CD := ' '
@@ -1066,7 +1061,7 @@ save scre to caduser
                         if CODUS = '    '
                            exit
                         endi
-								Area(aDbfs[31])                        
+								Area(oMenu:aDbfs[31])                        
                         loca for codfun = CODUS
                         if eof()
                            Unlock
@@ -1099,12 +1094,12 @@ save scre to caduser
                            lp := 'x'
                            exit
                         endi
-                        Area(aDbfs[23])
+                        Area(oMenu:aDbfs[23])
                         loca for codusu = CODUS
                         if eof()
                            Unlock
                            Use
-                           Area(aDbfs[23])
+                           Area(oMenu:aDbfs[23])
                            appe blan
                            repl codusu with codus, fantazia with logfan, senha with SHA, dtcad with dt
                            repl cadastro with BLQ, venda with BLQ, regv with BLQ, bxv with BLQ, edtv with BLQ, estqv with BLQ
@@ -1150,81 +1145,1018 @@ rest scre from caduser
 
 function login()
 ****************
-save scre to login
-R := ' '
-do whil .t.
-   cls
-*   LOG := spac(15)
-   LOG := "GABRIEL"
-   @ 09,21 to 14,50
-   @ 10,23 say 'Usu rio:' get LOG pict '!!!!!!!!!!!!!!!'
-   read
-   if LOG = '      '
-     quit
-   endi
-*   SNA := SPAC(6)
-   SNA := "168935"
-   @ 12,23 say 'Senha..:'
-   set color to w+/n,X
-   @ 12,32 get SNA
-   read
-   Area(aDbfs[23])
-   loca for fantazia = LOG .and. senha = SNA
-   if eof()
-      Unlock
-      Use
-      @ 20,22 say '* Usu rio NÆo Cadastrado !!!' get R
-      read
-      Area(aDbfs[3])
-      go top
-      do whil .not. eof()
-         if cadbloq = 'B'   
-            Unlock
-            Use
-            R := 'X'
-            exit
-         else
-            @ 20,22 say '* Cadastrar Usu rio? <S/N>' get R pict '!'
-            read
-            if R # 'S'
-               Unlock
-               Use
-               quit
-            endi
-            stor SNA to SHA
-            stor LOG to LOGFan
-            Unlock
-            Use
-            caduser()
-         endi
-      endd
-      if R = 'X'
-         R = ' '
-         loop
-      endi
-   endi
-   stor SNA to SHA
-   stor codusu to LOGFan
-   stor fantazia to NMuser
-   Unlock
-   Use
-   Area(aDbfs[9])
-   stor desc to descto
-   Unlock
-   Area(aDbfs[11])
-   go top
-   do whil .not. eof()
-      desc_t=0
-      des_prc=0
-      vpreco=0
-      stor 100-descto to desc_t
-      stor desc_t/100 to des_prc
-      stor precopl/des_prc to vpreco
-      repl preco with Vpreco
-      skip
-   endd
-   Unlock
-   Use
-   retu
+	LOCAL cScreen := SaveScreen()
+	LOCAL R       := Space(1)
+	LOCAL log     := Space(15)
+	LOCAL SNA     := "168935"
+	LOCAL cSenha  := Space(6)
+	
+	Area("Usuario")
+	while true		
+		MaBox(09, 21, 14, 50 )
+		@ 11,23 say 'Usuario..:' get log    pict "@!" valid UsuarioErrado(@Log)
+		@ 12,23 say 'Senha....:' get cSenha pict "@S" valid !Empty(cSenha)
+		read
+		if lastkey() = ESC
+			ErrorBeep()
+			if conf("Pergunta: Deseja encerrar?")
+				oMenu:Limpa()
+				DbCloseAll()
+				quit
+			end
+			loop
+		end
+		//Area(oMenu:aDbfs[23]) //usuario
+		loca for fantazia = LOG .and. senha = SNA
+		if eof()
+			Unlock
+			Use
+			@ 20,22 say '* Usu rio NÆo Cadastrado !!!' get R
+			read
+			Area(oMenu:aDbfs[3])
+			go top
+			while !eof()
+				if cadbloq = 'B'   
+					Unlock
+					Use
+					R := 'X'
+					exit
+				else
+					@ 20,22 say '* Cadastrar Usu rio? <S/N>' get R pict '!'
+					read
+					if R # 'S'
+						Unlock
+						Use
+						quit
+					endi
+					stor SNA to SHA
+					stor LOG to LOGFan
+					Unlock
+					Use
+					caduser()
+				end
+			end
+			if R = 'X'
+				R = ' '
+				loop
+			end
+		end
+		Sha    := Sna
+		LogFan := CodUsu
+		nMuser := Fantazia
+		Unlock
+		Use
+		
+		Area(oMenu:aDbfs[9])
+		Descto := Desc
+		Unlock
+		
+		Area("cadprod") // oMenu:aDbfs[11])
+		CadProd->(DbGoTop())
+		
+		if CadProd->(TravaArq())
+			while Cadprod->(!Eof())
+				desc_t         := 0
+				des_prc        := 0
+				vpreco         := 0
+				desc_t         := 100-descto
+				des_prc        := desc_t/100
+				vpreco         := precopl/des_prc
+				CadProd->Preco := vPreco
+				CadProd->(DbSkip(1))
+			end			
+		end	
+		CadProd->(Libera())
+		Unlock
+		Use
+		return
+	end
 
-endd
+function MaBox(nRow, nCol, nRow1, nCol1, cColor)
+************************************************
+	hb_default( @cColor, "w+/b")
+	ms_box( nRow, nCol, nRow1, nCol1,, cColor)
+	return nil
+
+function conf(cString)
+**********************
+	return(alert(cstring, {" Sim ", " Nao "}) == 1)	
+	
+function Alerta( cString, aArray )
+**********************************
+	aArray := IIF( aArray = NIL, { " Okay " }, aArray )
+	Return( Alert( cString, aArray, 31 ))
+
+function Nada(cString)
+**********************
+	LOCAL cScreen := SaveScreen()
+
+	hb_default( @cString, "INFO: Nada consta nos parametros informados.")
+	ErrorBeep()
+	Alerta( cString )
+	return(ResTela( cScreen ))
+
+function ErrorBeep()
+********************
+	Tone(87.3,1)
+	Tone(40,3.5)
+	return nil
+
+function Mensagem( String, Color, nLine )
+*****************************************
+	LOCAL cScreen := SaveScreen()
+	LOCAL pstrlen := len(string) + 6
+	LOCAL cFundo  := 112
+	LOCAL pBack
+	LOCAL Row
+	LOCAL Col
+	LOCAL Col2
+
+	IF nLine = Nil
+		Row    := ((  MaxRow() + 1 ) / 2 ) - 2
+		Col    := ((( MaxCol() + 1 ) - PstrLen ) ) / 2
+		Col2   := ((( MaxCol() + 1 ) / 2 ) - 10 )
+	Else
+		Row	 := nLine
+		Col    := ((( MaxCol() + 1 ) - PstrLen ) ) / 2
+		Col2   := ((( MaxCol() + 1 ) / 2 ) - 10 )
+	EndIF
+
+	hb_default(@Color, "w+/r")
+	ms_box( Row, Col, Row+4, Col+PstrLen, B_SINGLE_DOUBLE, Color)
+	setcolor(Color)
+	Print( Row + 2, Col + 4, String, Color)
+	setcolor("")
+	Return( cScreen )
+
+Function ColorSet( pfore, pback, pUns )
+***************************************
+	IF pfore == nil 
+		 pfore := Standard()
+		 pback := Enhanced()
+	ELSEIF pfore < 0 
+		 pfore := Standard()
+		 pback := Enhanced()
+	ELSE
+		 pback := Roloc(pfore)
+	ENDIF
+	return( nil )
+	
+function m_frame()
+		return B_SINGLE_DOUBLE
+	
+	
+function cor()
+		return 31
+	
+Function MS_Box( nRow, nCol, nRow1, nCol1, cFrame, nCor)
+********************************************************
+LOCAL nComp 	 := ( nCol1 - nCol )-1
+DEFAU cFrame TO M_Frame()
+DEFAU nCor	 TO Cor()
+
+return(Hb_DispBox( nRow, nCol, nRow1, nCol1, cFrame + " ", nCor))
+
+Function Roloc(nColor)
+**********************
+LOCAL cColor  := ColorIntToStr(nColor)
+LOCAL inverse := FT_InvClr( cColor)
+Return(nColor := ColorStrToInt(inverse))
+
+
+FUNCTION nSetColor(std, enh, uns)
+*********************************
+LOCAL cStd, ;
+	   cEnh, ;
+		cUns, ;
+		cColor
+
+cStd	 := attrtoa(std)
+cEnh	 := attrtoa(enh)
+cUns	 := attrtoa(uns)
+//cColor := setcolor()
+
+ColorStandard(std)
+ColorEnhanced(enh)
+ColorUnselected(uns)
+cColor := cStd + ',' + cEnh + ',,,' + cUns
+
+//cColor := strswap(cColor, "," , 1, cStd)
+//cColor := strswap(cColor, "," , 2, cEnh)
+//cColor := strswap(cColor, "," , 4, cUns)
+Setcolor( cColor )
+Return Nil
+
+//******************************************************************************
+
+FUNCTION cSetColor(ColorStr)
+****************************
+LOCAL nStd, ;
+		nEnh, ;
+		nUns
+		
+nStd := atoattr( strextract( ColorStr, ",", 1))
+nEnh := atoattr( strextract( ColorStr, ",", 2))
+nUns := atoattr( strextract( ColorStr, ",", 4))
+
+/*
+* Set FUNCky Colors
+*/
+ColorStandard(nStd)
+ColorEnhanced(nEnh)
+Colorunselected(nUns)
+
+/* Set Clipper Colors */
+SetColor( ColorStr )
+return Nil
+
+//******************************************************************************
+
+Function atoattr(cColor)
+************************
+return (ColorStrToInt(cColor))
+
+//******************************************************************************
+
+function attrtoa(nColor)
+************************
+return (ColorIntToStr(nColor))		
+
+//******************************************************************************
+
+function ColorStandard( nStd )
+
+   // ***************************
+   STATI nStandard
+   LOCAL nSwap := nStandard
+
+   IF ( ISNIL( nStd ) )
+      RETURN nStandard
+   ELSE
+      nStandard := nStd
+   ENDIF
+   RETURN nSwap
+
+// ******************************************************************************
+
+   FUNCTION ColorEnhanced( nEnh )
+
+   // ***************************
+   STATI nEnhanced
+   LOCAL nSwap := nEnhanced
+
+   IF ( ISNIL( nEnh ) )
+      RETURN nEnhanced
+   ELSE
+      nEnhanced := nEnh
+   ENDIF
+   RETURN nSwap
+
+// ******************************************************************************
+
+   FUNCTION ColorUnselected( nUns )
+
+   // ***************************
+   STATI nUnselected
+   LOCAL nSwap := nUnselected
+
+   IF ( ISNIL( nUns ) )
+      RETURN nUnselected
+   ELSE
+      nUnselected := nUns
+   ENDIF
+   RETURN nSwap
+
+	 FUNCTION ColorIntToStr( xColor )
+
+   // ***************************
+   LOCAL cColor
+   Return( cColor := ft_N2Color( xColor ) )
+
+   FUNCTION ColorStrToInt( xColor )
+
+   // ***************************
+   LOCAL nColor
+   Return( nColor := ft_Color2N( xColor ) )
+
+	
+Function aMaxStrLen( xArray )
+*****************************
+LOCAL nTam    := Len(xArray)
+LOCAL nLen    := 0
+LOCAL nMaxLen := 0
+LOCAL x
+
+For x := 1 To nTam
+	nLen := Len(xArray[x])
+	IF nMaxLen < nLen
+		nMaxLen := nLen
+	EndIF	
+Next
+return( nMaxLen )
+
+//******************************************************************************
+
+Function aPrintLen( xArray )
+*****************************
+return( Len( xArray))
+
+
+Function StrExtract( string, delims, ocurrence )
+************************************************
+LOCAL nInicio := 1
+LOCAL nConta  := GT_StrCount(delims, string)
+LOCAL aArray  := {}
+LOCAL aNum    := {}
+LOCAL nLen    := Len(delims)
+LOCAL cChar   := Repl('%',nLen)
+LOCAL cNewStr := String
+LOCAL nPosIni := 1
+LOCAL aPos
+LOCAL nFim
+LOCAL x
+LOCAL nPos
+
+IF cChar == delims
+   cChar := Repl("*",nLen)
+EndIF	
+
+IF nConta = 0 .AND. ocurrence > 0
+   return(string)
+ENDIF
+	
+
+/*
+For x := 1 to nConta
+   nInicio   := At( Delims, cNewStr)
+   cNewStr   := Stuff(cNewStr, nInicio, 1, cChar)
+	nFim      := At( Delims, cNewStr)
+	cString   := SubStr(cNewStr, nInicio+1, nFim-nInicio-1)
+	if !Empty(cString)
+	   Aadd( aArray, cString)
+	End		
+Next
+*/
+
+/*
+For x := 1 to nConta
+   nPos      := At( Delims, cNewStr)
+   cNewStr   := Stuff(cNewStr, nPos, 1, cChar)
+	nLen      := nPos-nPosini
+	cString   := SubStr(cNewStr, nPosIni, nLen)
+	nFim      := At( Delims, cNewStr)
+	nPosIni   := nPos+1
+	if !Empty(cString)
+	   Aadd( aArray, cString)
+	End		
+Next
+*/
+
+aPos   := aStrPos(string, Delims)
+nConta := Len(aPos)
+For x := 1 to nConta 
+   nInicio  := aPos[x]
+	IF x = 1
+	   cString   := Left(String, nInicio-1)
+	Else
+		nFim     := aPos[x-1]
+	   cString  := SubStr(String, nFim+1, nInicio-nFim-1)
+	EndIF	
+	Aadd( aArray, cString)
+Next
+
+nConta := Len(aArray)
+IF ocurrence > nConta .OR. oCurrence = 0
+   return(string) 
+EndIF
+
+Return(aArray[ocurrence])
+
+
+Function StrSwap( string, cChar, nPos, cSwap)
+*********************************************
+	LOCAL nConta := GT_StrCount( cChar, string ),;
+	      aPos,;
+	      nX,;
+			nLen
+	
+	IF nConta > 0
+      aPos := aStrPos(string, cChar)
+		nLen := Len(aPos)
+		IF nLen >= 0
+		   IF nPos <= nLen
+		      string := Stuff(string, aPos[nPos], Len(cChar), cSwap)
+		   EndIF
+		EndIF	
+	EndIF
+return( string)
+
+//******************************************************************************
+
+Function aStrPos(string, delims)
+********************************
+LOCAL nConta  := GT_StrCount(delims, string)
+LOCAL nLen    := Len(delims)
+LOCAL cChar   := Repl("%",nLen)
+LOCAL aNum    := {}
+LOCAL x
+
+IF cChar == delims
+   cChar := Repl("*",delims)
+EndIF	
+
+IF nConta = 0
+   Return(aNum)
+EndIF
+
+FOR x := 1 To nConta 
+   nPos   := At( Delims, string )
+	string := Stuff(string, nPos, 1, cChar)
+	Aadd( aNum, nPos)
+Next
+Aadd( aNum, Len(string)+1)
+Return(aNum)
+
+//******************************************************************************
+
+function isnil(x)
+	return(HB_ISNIL(x))
+	
+Function FazMenu( nTopo, nEsquerda, aArray, Cor )
+*************************************************
+	LOCAL cFrame2	  := SubStr( M_Frame(), 2, 1 )
+	LOCAL nFundo	  := ( nTopo + Len( aArray ) + 3 )
+	LOCAL cTitulo    := "ESCOLHA UMA OPÇÃO" 
+	LOCAL nTamTitle  := ( Len( cTitulo ) + 12 )
+	LOCAL nDireita   := ( nEsquerda + AmaxStrLen( aArray ) + 1 )
+	LOCAL cChar      :=  "?v?=??"
+
+	IF ( nDireita - nEsquerda ) <  nTamTitle
+		nDireita := ( nEsquerda + nTamTitle )
+	EndIF
+	Cor := IIF( Cor = NIL, Cor(), Cor )
+	//MaBox( nTopo, nEsquerda, nFundo, nDireita )
+	MS_Box( nTopo, nEsquerda, nFundo, nDireita )
+	Print(nFundo-2, nEsquerda+1, Repl(SubStr(M_Frame(),2,1),(nDireita-nEsquerda)-1), Cor())
+	Print(nFundo-1, nEsquerda+1, cTitulo, Roloc(Cor()), (nDireita-nEsquerda)-1)
+	Print(nFundo-1, nDireita-8, cChar, Roloc(Cor()))
+	//nChoice := Mx_Choice( @nTopo, @nEsquerda, aArray, Cor )
+	nSetColor(Cor)
+	nChoice := Achoice( nTopo+1, nEsquerda+1, nFundo-1, nDireita-1, aArray)
+return( nChoice )	
+
+
+Function ResTela( cScreen )
+***************************
+Return( RestScreen( 0, 0, MaxRow(), MaxCol(),  cScreen ))	
+
+Function UsuarioErrado( cNome )
+******************************
+LOCAL aRotinaInclusao  := {{||CadUser() }}
+LOCAL aRotinaAlteracao := NIL // {{||AltSenha() }}
+LOCAL cScreen	        := SaveScreen()
+LOCAL Arq_Ant          := Alias()
+LOCAL Ind_Ant          := IndexOrd()
+
+Area(oMenu:aDbfs[23]) //usuario
+( Usuario->(Order( USUARIO_FANTAZIA )), Usuario->(DbGoTop()))
+IF Usuario->(Eof()) .OR. Usuario->(!DbSeek("ADMIN"))
+   //GravaSenhaAdmin(OK)
+Else
+	IF Empty(Usuario->Senha) 
+	   //GravaSenhaAdmin(FALSO)
+	EndIF	
+EndIF
+
+IF Usuario->(!DbSeek( cNome ))
+   Usuario->(Escolhe( 00, 00, MaxRow(), "Fantazia", "USUARIO", aRotinaInclusao, NIL, aRotinaAlteracao, NIL, NIL, NIL ))
+	cNome := Usuario->Fantazia
+EndIF
+
+AreaAnt( Arq_Ant, Ind_Ant )
+return( OK )
+
+function order(Ordem)
+*********************
+	hb_default( @ordem, 0)
+	DbSetOrder( Ordem )
+	DbGoto( Recno())   // fixar bug
+	return( IndexOrd())
+	
+	
+function AreaAnt( Arq_Ant, Ind_Ant )
+************************************
+	IF !Empty( Arq_Ant )
+		Select( Arq_Ant )
+		Order( Ind_Ant )
+	EndIF
+	return nil
+
+
+Function Escolhe
+Param Col1, Lin1, Col2, Nome_Campo, Cabecalho, aRotina, lExcecao, aRotinaAlteracao, aRotinaExclusao, lLimpaTela, lDbSeek
+************************************************************************************************************************
+LOCAL _Atela  := SaveScreen()
+LOCAL _corant := SetColor()
+LOCAL Arq_Ant := Alias()
+LOCAL Ind_Ant := IndexOrd()
+LOCAL _Tam
+LOCAL Lin2
+LOCAL nRecno
+		cCampo  := Nome_Campo
+      Col2    := IF( Col2 == 22, (MaxRow()-2), Col2)
+      nCol    := Col2
+		nLin	  := Lin1+1
+PRIVA aScroll
+IF ValType( Nome_Campo ) != "A"
+	Cabecalho := IIF( Cabecalho = Nil, "", Cabecalho )
+	IF ValType( &Nome_Campo ) = "D"
+		Lin2 := Lin1 + 9
+	Else
+		nTam := Len( &Nome_Campo. )
+		nCab := Len( Cabecalho )
+		Lin2 := IIF( nTam >= nCab, nTam + ( Lin1 + 1 ), nCab + ( Lin1 + 1 ) )
+	EndIF
+	_Vetor1 := { Nome_Campo }
+	_Vetor2 := { IF ( Cabecalho = Nil, Cabecalho := .T. , Cabecalho := Upper( Cabecalho ) ) }
+   IF Lin2 >= 78
+      Lin2 := 78
+	EndIF
+Else
+	_Vetor1 := Nome_Campo
+	_Vetor2 := Cabecalho
+	Lin2	  := 70
+EndIF
+IF lLimpaTela = NIL .OR. lLimpatela = OK
+	oMenu:Limpa()
+EndIF
+MaBox( Col1, Lin1,	Col2, Lin2+2, /*Cabecalho*/ )
+MaBox( Col1, Lin1+2, Col2, Lin2+2, /*Cabecalho*/ )
+Print( Col1, Lin1+2, SubStr( B_SINGLE_DOUBLE, 1, 1 ), Cor())
+Print( Col2, Lin1+2, SubStr( B_SINGLE_DOUBLE, 5, 1 ), Cor())
+
+IF aRotina != NIL
+	IF Alias() = "LISTA"
+		IF aRotinaAlteracao != NIL
+			Print( Col2, Lin1+3, "INSERT _Incluir DELETE _Excluir F2 _Cod Fabr CTRL+ENTER _Alterar", Roloc( Cor()), Lin2 - (Lin1+1))
+		Else
+			Print( Col2, Lin1+3, "INSERT _Incluir DELETE _Excluir F2 _Cod Fabr", Roloc( Cor()), Lin2 - (Lin1+1))
+		EndIF
+	Else
+		IF aRotinaAlteracao != NIL
+			Print( Col2, Lin1+3, "INSERT _Incluir DELETE _Excluir F2 _Filtro CTRL+ENTER _Alterar", Roloc( Cor()), Lin2 - (Lin1+1))
+		Else
+			Print( Col2, Lin1+3, "INSERT _Incluir DELETE _Excluir F2 _Filtro", Roloc( Cor()), Lin2 - (Lin1+1))
+		EndIF
+	EndIF
+EndIF
+IF lDbSeek != NIL
+	nRecno := Recno()
+EndIF
+DbGoTop()
+IF Eof()
+	IF aRotina != NIL
+		IF Conf("Arquivo Vazio... Deseja Incluir Registros ?")
+			Eval( aRotina[1])
+			AreaAnt( Arq_Ant, Ind_Ant )
+		EndIF
+	EndIF
+EndIF
+IF lDbSeek != NIL
+	DbGoto( nRecno )
+EndIF
+ScrollBarDisplay( aScroll := ScrollBarNew( Col1+1, Lin1+1, Col2-1, Roloc(Cor()),1))
+DbEdit((Col1+1), (Lin1+3), (Col2-1), (Lin2+1), _Vetor1, "_Funcao", OK, _Vetor2 )
+ResTela( _Atela )
+SetColor(_corant )
+Return( OK )
+
+Function _Funcao( Modo, Ponteiro , Var)
+***************************************
+LOCAL GetList		:= {}
+LOCAL cScreen		:= SaveScreen()
+LOCAL Key			:= LastKey()
+LOCAL Arq_Ant		:= Alias()
+LOCAL Ind_Ant		:= IndexOrd()
+LOCAL cN_Original := Space(15)
+STATI nPosicao 	:= 1
+LOCAL nLastrec 	:= Lastrec()
+LOCAL Registro
+LOCAL Salva_tela
+
+ScrollBarUpdate( aScroll, Recno(), Lastrec(), OK )
+Do Case
+	Case Key = F2
+		IF Alias() = "LISTA"
+			//oMenu:Limpa()
+			//MaBox( 10, 10, 12, 48 )
+			//@ 11, 11 Say "Codigo Fabricante..." Get cN_Original Pict "@!" Valid CodiOriginal( @cN_Original )
+			//Read
+			//IF LastKey() = ESC
+			//	ResTela( cScreen )
+		   //		Return(1)
+			//EndIF
+			//ResTela( cScreen )
+		Else
+			IF Alias() = "RECEBER"
+				//oMenu:Limpa()
+				//ClientesFiltro()
+				ResTela( cScreen )
+			EndIF
+		EndiF
+		AreaAnt( Arq_Ant, Ind_Ant )
+		Return(1)
+
+	Case Key = K_INS
+		IF aRotina != Nil
+			IF PodeIncluir()
+				Eval( aRotina[1])
+			Else
+				IF lExcecao != Nil
+					Eval( aRotina[1])
+				EndiF
+			EndIF
+		EndIF
+		AreaAnt( Arq_Ant, Ind_Ant )
+		Return(1)
+
+	Case Key = K_CTRL_RET		 // Ctrl-Enter
+		IF aRotinaAlteracao != Nil
+			IF PodeAlterar()
+				Eval( aRotinaAlteracao[1])
+			Else
+				IF lExcecao != Nil
+					Eval( aRotinaAlteracao[1])
+				EndiF
+			EndIF
+		EndIF
+		AreaAnt( Arq_Ant, Ind_Ant )
+		Return(1)
+
+	Case Key = K_DEL
+		IF aRotina != Nil
+			IF PodeExcluir()
+				IF aRotinaExclusao != NIL
+					IF !Eval( aRotinaExclusao[1] )
+						Return(1)
+					EndIF
+				EndIF
+				ErrorBeep()
+				IF Conf("Pergunta: Excluir Registro sob o Cursor ?")
+					IF TravaReg()
+						DbDelete()
+						Libera()
+					  Keyb Chr( K_CTRL_PGUP )
+					EndIF
+				EndIF
+			EndIF
+		EndIF
+		Return(1)
+
+	Case Modo < 4
+		Return(1)
+
+	CASE LastKey() = 27
+		nPosicao := 1
+		Return(0)
+
+	CASE LastKey() = 13
+      Return(0)
+
+	CASE LastKey() >= 48 .AND. LastKey() <= 122	&&  1 a Z
+		IF   ValType( cCampo ) = "C"
+			xVar := Upper(Chr(Key))
+			xVar := xVar + Space( nTam - Len( xVar))
+			Keyb(Chr(K_RIGHT))
+			@ nCol-1, nLin+2 Get xVar Pict "@!"
+			Read
+
+		ElseIf ValType( cCampo ) = "N"
+			IF nKey < Chr(48) .OR. nKey > Chr(57) // 0 a 9
+				Return(1)
+			EndIF
+			xVar := Chr(nKey)
+			Keyb(Chr(K_RIGHT))
+			@ nCol-1, nLin+2 Get xVar
+			Read
+
+		ElseIf ValType( cCampo ) = "D"
+			xVar := Date()
+			@ nCol-1, nLin+2 Get xVar Pict "##/##/##"
+			Read
+		EndIF
+		IF LasTKey() = ESC
+			ResTela( cScreen )
+			Return(1)
+		EndIF
+		xVar := IIF( ValType( cCampo ) = "C", AllTrim( xVar ), xVar)
+		ResTela( cScreen )
+		DbSeek( xVar )
+		Return(1)
+
+	OTHERWISE
+		IF Alias() = "RECEBER"			
+		EndIF
+		Return(1)
+
+ENDCASE
+
+FUNCTION ScrollBarNew( nTopRow, nTopColumn, nBottomRow, cColorString, nInitPosition )
+*************************************************************************************
+	LOCAL aScrollBar := ARRAY( TB_ELEMENTS )
+
+	aScrollBar[ TB_ROWTOP ] 	:= nTopRow
+	aScrollBar[ TB_COLTOP ] 	:= nTopColumn
+	aScrollBar[ TB_ROWBOTTOM ] := nBottomRow
+	aScrollBar[ TB_COLBOTTOM ] := nTopColumn
+
+	IF cColorString == NIL
+		cColorString := "W/N"
+	ENDIF
+	aScrollBar[ TB_COLOR ] := cColorString
+
+	IF nInitPosition == NIL
+		nInitPosition := 1
+	ENDIF
+	aScrollBar[ TB_POSITION ] := nInitPosition
+
+	RETURN ( aScrollBar )
+
+FUNCTION ScrollBarDisplay( aScrollBar )
+***************************************
+LOCAL cOldColor
+LOCAL nRow
+
+cOldColor := SETCOLOR( aScrollBar[ TB_COLOR ] )
+@ aScrollBar[ TB_ROWTOP ], aScrollBar[ TB_COLTOP ] SAY TB_UPARROW
+@ aScrollBar[ TB_ROWBOTTOM ], aScrollBar[ TB_COLBOTTOM ] SAY TB_DNARROW
+
+FOR nRow := (aScrollBar[ TB_ROWTOP ] + 1) TO (aScrollBar[ TB_ROWBOTTOM ] - 1)
+	@ nRow, aScrollBar[ TB_COLTOP ] SAY TB_BACKGROUND
+NEXT
+SETCOLOR( cOldColor )
+RETURN ( aScrollBar )
+
+FUNCTION ScrollBarUpdate( aScrollBar, nCurrent, nTotal, lForceUpdate )
+*******************************************************************
+LOCAL cOldColor
+LOCAL nNewPosition
+LOCAL nScrollHeight := ( aScrollBar[TB_ROWBOTTOM] - 1 ) - ( aScrollBar[TB_ROWTOP] )
+
+IF nTotal < 1
+	nTotal := 1
+ENDIF
+
+IF nCurrent < 1
+	nCurrent := 1
+ENDIF
+
+IF nCurrent > nTotal
+	nCurrent := nTotal
+ENDIF
+
+IF lForceUpdate == NIL
+	lForceUpdate := .F.
+ENDIF
+
+cOldColor := SETCOLOR( aScrollBar[ TB_COLOR ] )
+
+nNewPosition := ROUND( (nCurrent / nTotal) * nScrollHeight, 0 )
+
+nNewPosition := IIF( nNewPosition < 1, 1, nNewPosition )
+nNewPosition := IIF( nCurrent == 1, 1, nNewPosition )
+nNewPosition := IIF( nCurrent >= nTotal, nScrollHeight, nNewPosition )
+
+IF nNewPosition <> aScrollBar[ TB_POSITION ] .OR. lForceUpdate
+	@ (aScrollBar[ TB_POSITION ] + aScrollBar[ TB_ROWTOP ]), aScrollBar[ TB_COLTOP ] SAY TB_BACKGROUND
+	@ (nNewPosition + aScrollBar[ TB_ROWTOP ]), aScrollBar[ TB_COLTOP ] SAY TB_HIGHLIGHT
+	aScrollBar[ TB_POSITION ] := nNewPosition
+ENDIF
+SETCOLOR( cOldColor )
+RETURN ( aScrollBar )
+
+Function Refresh()
+******************
+DbSkip(0)
+Return Nil
+
+Function TravaReg( nTentativa, aRegistros )
+******************************************
+LOCAL cScreen := SaveScreen()
+LOCAL lContinua, Restart := OK
+nTentativa := IIF( nTentativa = Nil, 2, nTentativa )
+lContinua  := ( nTentativa == 0 )
+
+WHILE Restart
+	WHILE ( !RLock() .AND. ( nTentativa > 0 .OR. lContinua ))
+		  Mensagem(" Travando Registro " + AllTrim(Str( Recno())) + " no Arquivo " + Alias(), CorBox())
+		  IF InKey(1) = ESC
+			  Exit
+		  EndIF
+		  nTentativa--
+	EndDo
+	IF !RLock()
+		IF !Conf("Registro em uso. Tentar Novamente ? " )
+			 ResTela( cScreen )
+			 Return( FALSO )
+		EndIF
+		ResTart := OK
+		nTentativa := 4
+
+	Else
+		ResTela( cScreen )
+		Return( OK )
+	EndIF
+EndDo
+
+Function TravaArq()
+*******************
+	IF Flock()
+		Return( OK )
+	EndIF
+	WHILE !FLock()
+		ErrorBeep()
+		IF !Conf("Arquivo em uso em outra Esta‡ao. Tentar Novamente ?" )
+			Return( FALSO )
+		EndIF
+		IF FLock()
+			Return( OK )
+		EndIF
+	EndDo
+	Return( OK )
+
+Function Incluiu()
+******************
+	DbAppend()
+	IF !NetErr()
+		Return( OK )
+	EndIF
+	DbAppend()
+	WHILE NetErr()
+		ErrorBeep()
+		IF !Conf("Registro em uso em outra Esta‡ao. Tentar Novamente ? " )
+			Return( FALSO )
+		EndIF
+		DbAppend()
+		IF !NetErr()
+			Return( OK )
+		EndIF
+	EndDo
+	return( OK )
+
+Function Libera()
+*****************
+//DbCommit()			  // Atualiza Buffers
+DbSkip(0)				// Refresh
+DbGoto( Recno())		// Refresh
+DbUnLock()				// Libera Registros / Arquivos
+Return Nil
+
+
+function podeincluir()
+	return OK
+
+function podeexcluir()
+	return OK
+
+function podealterar()
+	return OK
+
+Function CorBox( nTipo )
+************************
+	hb_default( @nTipo, 1 )
+	return( 31 )
+
+Function NetUse( cBcoDados, lModo, nSegundos, cAlias )
+******************************************************
+LOCAL cScreen := SaveScreen()
+LOCAL nArea   := 0
+LOCAL Restart := OK
+LOCAL cStr1
+LOCAL cStr2
+LOCAL cStr3
+LOCAL cStr4
+LOCAL cStr5
+LOCAL cStr6
+LOCAL lForever
+LOCAL cTela
+LOCAL lAberto := FALSO
+P_DEF( lModo, OK )
+P_DEF( nSegundos, 2 )
+
+cBcoDados := StrTran( cBcoDados, '.DBF')
+cAlias	 := IIF( cAlias = NIL, cBcoDados, cAlias )
+lForever  := ( nSegundos = 0 )
+lAberto	 := (cBcoDados)->(Used())
+WHILE Restart
+	WHILE ( lForever .OR. nSegundos > 0 )
+		IF lModo
+			Use (cBcoDados) SHARED NEW Alias ( cAlias ) VIA RDDNAME
+		Else
+			Use (cBcoDados) EXCLUSIVE NEW Alias ( cAlias ) VIA RDDNAME
+		EndIF
+		IF !NetErr()
+			ResTela( cScreen )
+			Return( OK )
+		EndIF
+		cTela := Mensagem("Tentando acesso a " + Upper(Trim(cBcoDados)) + ".DBF...")
+		Inkey(.5)
+		nSegundos -= .5
+		ResTela( cTela )
+	EndDo
+	nOpcao := Conf("Acesso Negado a " + Upper(Trim( cBcoDados )) + " Novamente ? ")
+	IF nOpcao = OK
+		ResTart := OK
+	Else
+		ResTart := FALSO
+		DbCloseAll()
+		FChDir( oAmbiente:xBase )
+		SetColor("")
+		Cls
+		cStr1 := "#1 Se outra esta??o estiver usando o sistema, finalize-a. ;;"
+		cStr2 := "#2 Se outra esta??o estiver indexando, aguarde o t?rmino. ;;"
+		cStr3 := "#3 Se SHARE estiver instalado, aumente os par?metros de   ;"
+		cStr4 := "   travamento de arquivos. Ex.: SHARE /F:18810 /L:510.    ;;"
+		cStr5 := "#4 Em ambiente de rede NOVELL, verifique o arquivo NET.CFG;"
+		cStr6 := "   e se necess rio, acrescente a linha FILE HANDLES=127.  ;"
+		Alert( cStr1 + cStr2 + cStr3 + cStr4 + cStr5 + cStr6, "W+/B")
+		Break
+		//Quit
+	EndIF
+EndDo
+Return( FALSO )
+
+function Write( Linha, Col, xString, nCor)
+*-----------------------------------*
+	LOCAL Color_Ant := SetCOlor()
+
+	Linha   := Iif( Linha	= NIL, Row(),	Linha   )
+	Col	  := Iif( Col		= NIL, Col(),	Col	  )
+	xString := Iif( xString = NIL, "",     xString )
+
+	if nCor = nil
+		//SetColor(ColorIntToStr(Color_Ant))
+		DevPos( Linha, Col ) ; Qqout( xString )
+	else	
+		Print( Linha, Col, xString, nCor )
+      SetColor( Color_Ant)	
+   endif		
+	return nil
+
+function Print( row, col, string, attrib, length, cChar)
+*+-----------------------------------------------------+*
+	LOCAL Color_Ant := SetColor()
+	LOCAL nLen      := Len(string)
+	DEFAU attrib    TO oMenu:CorMenu //ColorStrToInt(Color_Ant)
+	DEFAU length    TO nLen
+	DEFAU cChar     TO Space(1)
+
+	if length > nLen
+		string += Repl(cChar,length-nlen)
+		nLen   := length
+	endif	
+	SetColor(ColorIntToStr(attrib))
+	DevPos(row, col) ; DevOut(Left(string,nLen))
+	//hb_DispOutAt( row, col, Left(string,nLen))	
+	SetColor( Color_Ant)
+	return NIL
+
+
+function print1( nrow, ncol, xstring)
+************************************
+	DispBegin()
+   SetPos(nrow, ncol)
+   DispOut( xstring )
+   DispEnd()         
+	return nil
+
+function printf(string, attrib)
+	LOCAL Color_Ant := SetColor()
+	LOCAL row       := row()
+	LOCAL col       := col()
+	DEFAU attrib  TO oMenu:CorMenu //ColorStrToInt(Color_Ant)
+
+	SetColor(ColorIntToStr(attrib))
+	DevPos(row, col) ; DevOut(string)
+	//hb_DispOutAt( row, col, string)
+	SetColor( Color_Ant)
+	return string
+
+function aPrint( row, col, string, attrib, length)
+	LOCAL Color_Ant := SetColor()
+	LOCAL nLen      := Len(string)
+
+	hb_default(@attrib, ColorStrToInt(SetColor()))
+	hb_default(@length, nLen)
+
+	if length > nLen
+		string += Repl(Space(1),length-nlen)
+		nLen   := length
+	endif	
+
+	dispbegin()
+	SetColor(ColorIntToStr(attrib))
+	DevPos(row, col) ; DevOut(Left(string,nLen))
+	SetColor( Color_Ant)
+	dispend()
+	return NIL

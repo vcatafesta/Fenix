@@ -1,0 +1,1 @@
+#define USUARIO_FANTAZIA	1

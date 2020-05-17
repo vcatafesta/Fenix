@@ -19,21 +19,47 @@ function Arq1()
 	return(Restela(cScreen))
 	return
 
+
+function verarquivo()
+**********************
+LOCAL nTam := Len(oMenu:aDbfs)
+LOCAL nX
+LOCAL cDbf
+
+for nX := 1 to nTam
+	cDbf := oMenu:aDbfs[nX] + ".dbf"
+	if !file(cDbf)
+		//ErrorBeep()
+		mensagem("Erro: Arquivo " + upper(cDbf) + " nao existe")
+	end
+next
+oMenu:Limpa()	
+return	
+
 function area(cDatabase)
 ************************
-LOCAL cTela := SaveScreen()
+LOCAL cScreen := SaveScreen()
 
+	rddsetdefault("SIXCDX")
 	while true
 	   arq1()
-	   if comp = "SERVIDOR"
+	   if oMenu:Comp = "SERVIDOR"
 		  drt  	:= "C:"
 		  access := cDatabase
 	   else
 		  drt 	:= "T:"
 		  access := "T:\" + cDatabase
 	   endi
-	   Unlock
-		use &access exclusive
+	   //Unlock
+		//use &access exclusive
+		
+		if cDatabase == oMenu:aDbfs[23] // usuario
+			Ferase("usuario.cdx")
+			use usuario exclusive new
+			index on Usuario->Fantazia Tag Fantazia to Usuario
+			Usuario->(DbCloseArea())
+		end
+		Use &access shared new
 		if neterr()
 			mensagem("Aguarde, Acesso compartilhado!")
 			tcor()
@@ -43,16 +69,3 @@ LOCAL cTela := SaveScreen()
 	end
 	return(Restela(cScreen))
 	
-	
-function MaBox(nRow, nCol, nRow1, nCol1, cColor)
-************************************************
-	hb_default( @cColor, "G+/r+")
-	DispBox( nRow, nCol, nRow1, nCol1,, cColor)
-	DispBox( nRow+1, nCol+1, nRow1-1, nCol1-1,, cColor)
-	return nil
-
-function mensagem(cString)
-**************************
-	MaBox(09, 21, 14, 49)
-	@ 11,23 say cString
-	return
