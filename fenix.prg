@@ -165,23 +165,15 @@ function main()
          Use
       end
    end
-   set key -41 to
    public DRT
-   SET BELL OFF
-   SET SAFE OFF
-   SET DATE BRIT
-   SET TALK OFF
-   SET CENT ON
-   SET EXCL ON
-	SET DELE ON
    Date := Date()
    Dif  := Date()
    SET( _SET_EVENTMASK, INKEY_ALL )
    SetBlink(.f.)
    mSetCursor(.T.)
    //SetMode(25,80)
-   setColor( "w+/b" )
-   scroll()    
+   SetColor("")
+   oMenu:Limpa()
    oPull := Monta_Menu()
    
 	while MenuModal( oPull, 00, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
@@ -448,15 +440,18 @@ function Monta_Menu()
 	oPopUp  := PopUp()
    oPopUp :ColorSpec:= cCorItem
    oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
-****
-
-****
-
-   Date := Date()
+   Rodape()
+   return ( oTopBar )
+   
+function Rodape()
+*****************   
+	Date := Date()
    DTF  := Date()
    nRow := MaxRow()
-   //set color to b*/w,w+/bg,b*/w,w+/bg,b*/w,b*/w
-   //@ 24,00 clea to 42,131
+   
+   nSetColor(31)
+	Write(nRow, 00, Space(MaxCol()),31)
+   inkey(0)
    Write(nRow,00, logfan+'-'+trim(nmuser))
    Write(nRow,20, "|")
    Write(nRow,22, Date())
@@ -469,7 +464,7 @@ function Monta_Menu()
    Write(nRow,62, ''+NCOMP+'')
    Write(nRow,75, '|')
    Write(nRow,77, oMenu:Unidade)
-   return ( oTopBar )
+   return nil
    
 Function Encerra(nResult)
 *************************

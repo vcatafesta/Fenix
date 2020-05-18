@@ -210,20 +210,24 @@ endi
 
 function lstcli()
 *****************
-   @ 00,00 clea to 23,79
-   Pest='  '
-   @ 00,01 say '- Listagem de Clientes' 
-   @ 01,01 say 'Estado:' get Pest pict '!!'
-   read
-   if Pest = '  '
-      retu
-   endi
-ty := 0
-do whil ty = 0
-   OI := 0
-   l := 2
-   dct := -1
-   Area(oMenu:aDbfs[5])
+	
+   oMenu:Limpa()
+   Pest := Space(2)
+   Mabox(10, 10,12, 40, "LISTAGEM DE CLIENTES") 
+   @ 11, 11 say 'Estado:' get Pest pict '@!' valid !Empty(Pest)
+   read   
+   if LastKey() = ESC
+   	if conf("Pergunta: Deseja encerrar?")
+      	return nil
+      endif   
+   endif
+	ty := 0
+	while ty = 0
+   	OI := 0
+   	l := 2
+   	dct := -1
+   
+   	Area(oMenu:aDbfs[5])
    index on dscnto to I5
    set index to I5
    do whil .not. eof()
@@ -1151,7 +1155,7 @@ function login()
 	
 	Area("Usuario")
 	while true		
-		MaBox(09, 21, 14, 50 )
+		MaBox(09, 21, 14, 50, "LOGIN")
 		@ 11,23 say 'Usuario..:' get cLogin    pict "@!" valid UsuarioErrado( @cLogin )
 		@ 12,23 say 'Senha....:' get cPassword pict "@S" valid SenhaErrada( cLogin, cPassword )
 		read
@@ -1197,12 +1201,41 @@ function login()
 		return nil
 	end
 
-function MaBox(nRow, nCol, nRow1, nCol1, cColor)
-************************************************
-	hb_default( @cColor, "w+/b")
-	ms_box( nRow, nCol, nRow1, nCol1,, cColor)
-	return nil
-
+   
+*--------------------------------------------------------------------------*	
+def MaBox( nTopo, nEsq, nFundo, nDireita, Cabecalho, Rodape, lInverterCor )
+*--------------------------------------------------------------------------*
+	LOCAL cPattern := " "
+	LOCAL pfore 	:= 31
+	LOCAL pback    := Roloc(31)	
+	LOCAL cCor     := Roloc(31)
+	LOCAL pUns     := Roloc( pFore )
+	
+	hb_default(@nTopo, 0)
+	hb_default(@nEsq, 0)
+	hb_default(@nFundo,   maxrow())
+	hb_default(@nDireita, maxcol())
+	
+	if(nDireita > maxcol(), nDireita := maxcol(), nDireita)		
+	if(nFundo   > maxrow(), nFundo   := maxrow(), nFundo)	
+	
+   DispBegin()
+	hb_DispBox( nTopo, nEsq, nFundo, nDireita, M_Frame() + cPattern, pfore )
+   
+	if !(IsNil(Cabecalho))
+		aPrint( nTopo, nEsq+1, "Û", cCor, (nDireita-nEsq)-1)
+		aPrint( nTopo, nEsq+1, Padc( Cabecalho, ( nDireita-nEsq)-1), cCor )
+	endif
+	
+	if !(IsNil(Rodape))
+		aPrint( nFundo, nEsq+1, "Û", cCor, (nDireita-nEsq)-1)
+		aPrint( nFundo, nEsq+1, Padc( Rodape, ( nDireita-nEsq)-1), cCor )
+	endif
+	nSetColor( pfore, pback, pUns )
+   DispEnd()
+	return NIL
+endef   
+   
 function conf(cString)
 **********************
 	return(alert(cstring, {" Sim ", " Nao "}) == 1)	
