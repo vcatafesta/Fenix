@@ -1584,7 +1584,7 @@ Function FazMenu( nTopo, nEsquerda, aArray, Cor )
 *************************************************
 	LOCAL cFrame2	  := SubStr( M_Frame(), 2, 1 )
 	LOCAL nFundo	  := ( nTopo + Len( aArray ) + 3 )
-	LOCAL cTitulo    := "ESCOLHA UMA OPÇÃO" 
+	LOCAL cTitulo    := "ESCOLHA UMA OPCAO" 
 	LOCAL nTamTitle  := ( Len( cTitulo ) + 12 )
 	LOCAL nDireita   := ( nEsquerda + AmaxStrLen( aArray ) + 1 )
 	LOCAL cChar      :=  "?v?=??"

@@ -1,44 +1,35 @@
+#include "fenix.ch"
+
 function cadastro()
 	LOCAL nChoice := 0	
+   LOCAL cScreen := SaveScreen()
 	CDT := Space(1)
 
-while CDT = Space(1)
-  	Area("desc")
+	Area("desc")
    descto := Desc->desc
-
 	Area("cadcli")
-   count for ativo = 'A' to QCL
-   //unlock
-   //Use
-   
-   Tela := savescreen(00,00,23,79)
-   
-   oMenu:Limpa()
-   aMenu := {"Pesquisa", "Cadastrar", "Listagem"}
-   nChoice := FazMenu( 10, 10, aMenu)
-	Do Case
-	Case nChoice = 0
-		return
-	Case nChoice = 1
-		
-   Endcase   
-   
-   @ 00,00 clea to 23,79
-   @ 03,23 to 05,48 doub
-   TEF := '* CADASTRO DE CLIENTES *'
-   bcor()
-   @ 04,24 say TEF
-   tcor()
-   @ 02,01 say '|'+ltrim(str(QCL))+' '+'Clientes Ativos|'
-   TI := 0
-   @ 07,04 prompt 'PESQUISA'
-   @ 07,15 prompt 'CADASTRAR'
-   @ 07,26 prompt 'LISTAGEM'
-   menu to TI
-   if TI = 0
-      restscreen(00,00,23,79,TELA)
-      retu
-   elseif TI = 1
+   Qcl := Cadcli->(Lastrec())
+	
+   while true
+		oMenu:Limpa()
+	   aMenu := {"Pesquisa", "Cadastrar", "Listagem"}
+   	nChoice := FazMenu( 10, 10, aMenu)
+		Do Case
+		Case nChoice = 0
+   		Restela( cScreen )
+			return
+		Case nChoice = 1
+      	ClientesPesquisa()
+		Case nChoice = 2
+      	ClientesInclusao()
+		Case nChoice = 3
+   		LstCli()
+	   Endcase   
+	enddo
+
+Function ClientesPesquisa()
+***************************
+	oMenu:Limpa()      
       TT := 0
       cdtr := 'X'
       psqcli()
@@ -1506,7 +1497,11 @@ while CDT = Space(1)
       endd
       restscreen(00,00,23,79,TELA)
       retu
-   elseif Ti = 2
+    
+   
+Function ClientesInclusao()
+***************************
+      oMenu:Limpa()
       FJ := ' '
       do whil FJ = ' '
          @ 10,04 say '* <P>essoa Fisica ou <E>mpresa:' get FJ pict '!' valid (FJ $ 'PE')
@@ -1957,15 +1952,5 @@ while CDT = Space(1)
          restscreen(00,00,23,79,TELA)
          retu
       endd
-   elseif Ti = 3
-      lstcli()
-      restscreen(00,00,23,79,TELA)
-      retu
-   Endi
-   restscreen(00,00,23,79,TELA)
-   retu
-endd
-
-
 
 
