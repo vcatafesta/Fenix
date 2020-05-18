@@ -451,7 +451,6 @@ function Rodape()
    
    nSetColor(31)
 	Write(nRow, 00, Space(MaxCol()),31)
-   inkey(0)
    Write(nRow,00, logfan+'-'+trim(nmuser))
    Write(nRow,20, "|")
    Write(nRow,22, Date())
