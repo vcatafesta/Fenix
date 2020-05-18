@@ -11,6 +11,7 @@
 /***************************************************************************************************/
 #define FINALLY 				 	endsequence
 #Define fi         				endif
+#define def							function
 #Define fed
 #define endef
 #define enddef

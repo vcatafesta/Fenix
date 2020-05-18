@@ -19,7 +19,7 @@ function main()
    Public z 		:= ' '
    Public fat 		:= ' '
 	public oMenu   := TMenuNew()
-	oMenu:aDbfs    := {		"comp",;
+	oMenu:aDbfs    := {"comp",;
 					"cadmerc",;
 					"cadadm",;
 					"cadfor",;
@@ -112,11 +112,12 @@ function main()
 					"imprped",;
 					"etiqueta",;
 					"etqenv",;
-					"etqpre"}
-
+					"etqpre"}	
+	
 
 
 	Cls
+   SetaAmbiente()
 	VerArquivo()
 
 	arq1()
@@ -468,3 +469,19 @@ function Monta_Menu()
 
    return ( oTopBar )
 
+function SetaAmbiente()
+	set key -41 to
+   SET BELL OFF
+   SET SAFE OFF
+   SET DATE BRIT
+   SET TALK OFF
+   SET CENT ON
+   SET EXCL ON
+	SET DELE ON
+   SET( _SET_EVENTMASK, INKEY_ALL )
+   SetBlink(.f.)
+   mSetCursor(.T.)
+   //SetMode(25,80)
+   setColor( "w+/b" )
+return nil
+   

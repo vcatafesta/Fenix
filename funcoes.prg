@@ -19,7 +19,7 @@ function tcor()
 
 function cab()
 **************
-         oPrinter:TextOut( oPrinter:PrinterName + ": MaxRow() = " + hb_ntos( oPrinter:MaxRow() ) + "   MaxCol() = " + hb_ntos( oPrinter:MaxCol() ) )
+			oPrinter:TextOut( oPrinter:PrinterName + ": MaxRow() = " + hb_ntos( oPrinter:MaxRow() ) + "   MaxCol() = " + hb_ntos( oPrinter:MaxCol() ) )
          oPrinter:SetColor( RED )
          oPrinter:SetPrc(oPrinter:Prow()+3, Pcol()+25 )
          oPrinter:SetFont('monotype corsiva',30,{-1,14}, 0, .T., .F.)
@@ -42,7 +42,6 @@ function cab()
          nColTTF     := 40 * oPrinter:CharWidth
          nColCharSet := 60 * oPrinter:CharWidth
          oPrinter:NewLine()
-
 
 function mdsha()
 ****************
@@ -1145,17 +1144,17 @@ rest scre from caduser
 
 function login()
 ****************
-	LOCAL cScreen := SaveScreen()
-	LOCAL R       := Space(1)
-	LOCAL log     := Space(15)
-	LOCAL SNA     := "168935"
-	LOCAL cSenha  := Space(6)
+	LOCAL cScreen   := SaveScreen()
+	LOCAL R         := Space(1)
+	LOCAL cLogin    := Space(15)
+	LOCAL cPassword := Space(6)
+	LOCAL SNA       := "168935"
 	
 	Area("Usuario")
 	while true		
 		MaBox(09, 21, 14, 50 )
-		@ 11,23 say 'Usuario..:' get log    pict "@!" valid UsuarioErrado(@Log)
-		@ 12,23 say 'Senha....:' get cSenha pict "@S" valid !Empty(cSenha)
+		@ 11,23 say 'Usuario..:' get cLogin    pict "@!" valid UsuarioErrado( @cLogin )
+		@ 12,23 say 'Senha....:' get cPassword pict "@S" valid SenhaErrada( cLogin, cPassword )
 		read
 		if lastkey() = ESC
 			ErrorBeep()
@@ -1166,15 +1165,16 @@ function login()
 			end
 			loop
 		end
-		//Area(oMenu:aDbfs[23]) //usuario
+      Log := cLogin
+		Area("usuario")
 		loca for fantazia = LOG .and. senha = SNA
 		if eof()
 			Unlock
 			Use
-			@ 20,22 say '* Usu rio NÆo Cadastrado !!!' get R
+			@ 20,22 say '* Usuario nao Cadastrado!' get R
 			read
-			Area(oMenu:aDbfs[3])
-			go top
+			Area("cadadm")
+			CadAdm->(DbGotop())
 			while !eof()
 				if cadbloq = 'B'   
 					Unlock
@@ -1201,7 +1201,8 @@ function login()
 				loop
 			end
 		end
-		Sha    := Sna
+		
+      Sha    := Sna
 		LogFan := CodUsu
 		nMuser := Fantazia
 		Unlock
@@ -1635,6 +1636,19 @@ EndIF
 
 AreaAnt( Arq_Ant, Ind_Ant )
 return( OK )
+
+def SenhaErrada(cLogin, cPassWord)
+	LOCAL cSenha  := Usuario->( AllTrim( Senha ))
+	LOCAL Passe   := cPassword
+	
+	IF !Empty( Passe) .AND. cSenha == Passe
+		return true
+	EndIF
+	cPassword := Space(6)
+	ErrorBeep()
+	Alert("ERRO: Senha nao confere.")
+	return false
+endef
 
 function order(Ordem)
 *********************

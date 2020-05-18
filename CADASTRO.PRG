@@ -1,7 +1,7 @@
 CDT := ' '
-DO WHIL CDT = ' '
+while CDT = ' '
    Area(aDbfs[9])
-   stor desc to descto
+   descto := desc
    Unlock
 	Area(aDbfs[5])
    count for ativo = 'A' to QCL

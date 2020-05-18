@@ -14,12 +14,12 @@ CLASS TMenu
 ENDCLASS
 
 METHOD New( cAlias )
-	Self:Row 			:= 09
-	Self:Col 			:= 15
-	Self:aDbfs        := {}
-	Self:Unidade      := "C"
-	Self:Terminal     := nil
-	Self:Comp			:= "SERVIDOR"
+	Self:Row		:= 09
+	Self:Col		:= 15
+	Self:aDbfs		:= {}
+	Self:Unidade	:= "C"
+	Self:Terminal	:= nil
+	Self:Comp		:= "SERVIDOR"
 	
 	return( Self )
 

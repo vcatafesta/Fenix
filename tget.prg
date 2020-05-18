@@ -54,7 +54,7 @@ CREATE CLASS Get
 
    EXPORTED:
    VAR cType 
-	VAR lHideInput     INIT .F.
+   VAR lHideInput     INIT .F.
    VAR cStyle         INIT "*" 
    VAR decPos         INIT 0   READONLY /* CA-Cl*pper NG says that it contains NIL, but in fact it contains zero. [vszakats] */
    VAR hasFocus       INIT .F. READONLY
@@ -142,8 +142,8 @@ CREATE CLASS Get
    VAR nDispLen                /* NOTE: This one is placed inside the instance area for CA-Cl*pper 5.3 [vszakats] */
 #endif
    VAR cColorSpec
-   VAR nPos           INIT 0
-   VAR lChanged       INIT .F.
+   VAR nPos				INIT 0
+   VAR lChanged		INIT .F.
    VAR lClear         INIT .F.
    VAR nRow
    VAR nCol
