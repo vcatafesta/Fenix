@@ -101,9 +101,9 @@ function main()
 					"tblp",;
 					"cadfrete",;
 					"status",;
-					"",;
-					"",;
-					"",;
+					"perdas",;
+					"prlt",;
+					"carsal",;
 					"cbo",;
 					"cest",;
 					"log",;
@@ -116,15 +116,17 @@ function main()
 	
 
 
-	Cls
-   SetaAmbiente()
+	oMenu:Limpa()
+  	SetaAmbiente()
+	//altd()
 	VerArquivo()
+	UsaArquivo()
+   oMenu:Limpa()
 
-	arq1()
+	//arq1()
    Drt    := oMenu:Unidade
-	CodTer := oMenu:Terminal
+	//CodTer := oMenu:Terminal
 	nComp  := oMenu:Comp
-	DbCloseAll()
 
 	if logfan = Space(4)
 		login()
@@ -177,22 +179,22 @@ function main()
    SET( _SET_EVENTMASK, INKEY_ALL )
    SetBlink(.f.)
    mSetCursor(.T.)
-   SetMode(25,80)
+   //SetMode(25,80)
    setColor( "w+/b" )
    scroll()    
    oPull := Monta_Menu()
    
-	while MenuModal( oPull, 00, 00, 79, 79, "w+/b" ) != 999 ;  enddo
+	while MenuModal( oPull, 00, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
    return( nil )
 
 function Monta_Menu()
    local oTopBar, oPopUp, oPopUp1, oPopUp2, oPopUp3, oItem, oItem1, oItem2
-   
    local cCorBar  := "b*/w,w+/bg,b*/w,w+/bg,b*/w,b*/w"
    local cCorItem := "w+/bg,b*/w,w+/bg,b*/w,w/bg,w+/bg"
+	local nResult  := 0
+   
 
-
-   oTopBar := TopBar( 0,0,131)
+   oTopBar := TopBar( 0,0, MaxCol())
    oTopBar:ColorSpec := cCorBar
 
    oPopUp := PopUp()
@@ -443,31 +445,40 @@ function Monta_Menu()
 *----------
 *SAIR
 *----------
-   oPopUp := PopUp()
+	oPopUp  := PopUp()
    oPopUp :ColorSpec:= cCorItem
-   oTopBar:AddItem(MenuItem( "&Sair", {||.t.} , K_ALT_F4, , 999))
+   oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
 ****
 
 ****
 
-   stor date() to DATE
-   DTF := date
-   set color to b*/w,w+/bg,b*/w,w+/bg,b*/w,b*/w
-   @ 24,00 clea to 42,131
-   @ 24,00 say logfan+'-'+trim(nmuser)
-   @ 24,20 say '|'
-   @ 24,22 say DATE()
-   @ 24,33 say '|'
-   SHOWTIME(24,35,.F.,"b*/w",.F.,.F.)
-   @ 24,44 say '|'
-   @ 24,46 say 'Terminal:'
-   @ 24,56 say CODTER
-   @ 24,60 say '|'
-   @ 24,62 say ''+NCOMP+''
-   @ 24,75 say '|'
-   @ 24,77 say drt
-
+   Date := Date()
+   DTF  := Date()
+   nRow := MaxRow()
+   //set color to b*/w,w+/bg,b*/w,w+/bg,b*/w,b*/w
+   //@ 24,00 clea to 42,131
+   Write(nRow,00, logfan+'-'+trim(nmuser))
+   Write(nRow,20, "|")
+   Write(nRow,22, Date())
+   Write(nRow,33, '|')
+   Write(nRow,33, '|')
+   Showtime(nRow, 35, false, "b*/w", false, false )
+   Write(nRow,44, '|')
+   Write(nRow,46, 'Terminal:' + oMenu:Terminal)
+   Write(nRow,60, '|')
+   Write(nRow,62, ''+NCOMP+'')
+   Write(nRow,75, '|')
+   Write(nRow,77, oMenu:Unidade)
    return ( oTopBar )
+   
+Function Encerra(nResult)
+*************************
+	ErrorBeep()
+	if conf("Pergunta: Deseja encerrar a execucao do sistema?")
+		nResult := 999
+      return 
+	end	
+	return
 
 function SetaAmbiente()
 	set key -41 to

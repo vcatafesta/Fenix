@@ -1,9 +1,9 @@
 CDT := ' '
 while CDT = ' '
-   Area(aDbfs[9])
+   Area(oMenu:aDbfs[9])
    descto := desc
    Unlock
-	Area(aDbfs[5])
+	Area(oMenu:aDbfs[5])
    count for ativo = 'A' to QCL
    Unlock
    Use
@@ -43,7 +43,7 @@ while CDT = ' '
          stor val(PEC) to reg
          nrpd()
          stor codnum to PEC
-         Area(aDbfs[5])
+         Area(oMenu:aDbfs[5])
          stor SIT to SLT  
          loca for codc = PEC
          if eof()
@@ -276,7 +276,7 @@ while CDT = ' '
                   rest scre from R_cli
                   retu
                else
-                  Area(aDbfs[5])
+                  Area(oMenu:aDbfs[5])
                   go reg5
                   repl restric with ' '
                   Unlock
@@ -352,7 +352,7 @@ while CDT = ' '
                         loop
                      endi   
                      if TY = 1
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl Ativo with 'A'
                         Unlock
@@ -364,7 +364,7 @@ while CDT = ' '
                         loop
                      endi
                      if TY = 2 
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl Ativo with ' '
                         Unlock
@@ -379,7 +379,7 @@ while CDT = ' '
                   if MN_CL = 2
                      @ 04,12 get ccliente pict '@!'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl cliente with Ccliente
                      Unlock
@@ -393,7 +393,7 @@ while CDT = ' '
                   if MN_CL = 3
                      @ 05,20 get Cexml
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl exml with Cexml
                      Unlock
@@ -407,7 +407,7 @@ while CDT = ' '
                   if MN_CL = 4
                      @ 06,16 get Crazao pict '@!'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl razao with Crazao
                      Unlock
@@ -422,7 +422,7 @@ while CDT = ' '
                      if Csit = 'EMPRESA'
                         @ 07,12 get ccnpj pict '99.999.999/9999-99'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl cnpj with Ccnpj
                         Unlock
@@ -433,7 +433,7 @@ while CDT = ' '
                      else
                         @ 07,07 get Ccpf pict '999.999.999-99'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl cpf with Ccpf
                         Unlock
@@ -449,7 +449,7 @@ while CDT = ' '
                      if Csit = 'EMPRESA'
                         @ 07,54 get cinscr pict '9999999999999999'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl inscr with Cinscr
                         Unlock
@@ -460,7 +460,7 @@ while CDT = ' '
                      else
                         @ 07,46 get Cinscrp pict '9999999999999999'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl inscrp with Cinscrp
                         Unlock
@@ -475,7 +475,7 @@ while CDT = ' '
                   if MN_CL = 7
                      @ 08,11 get Ccontato pict '@!'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl contato with Ccontato
                      Unlock
@@ -489,7 +489,7 @@ while CDT = ' '
                   if MN_CL = 8
                      @ 08,41 get Cfone1 pict '(99)9999-99999'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl fone1 with Cfone1
                      Unlock
@@ -503,7 +503,7 @@ while CDT = ' '
                   if MN_CL = 9
                      @ 08,60 get Cfone2 pict '(99)9999-99999'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl fone2 with Cfone2
                      Unlock
@@ -517,7 +517,7 @@ while CDT = ' '
                   if MN_CL = 10
                      @ 09,10 get Cmail
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl email with Cmail
                      Unlock
@@ -542,7 +542,7 @@ while CDT = ' '
                         endi
                         exit
                      endd
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl prazo with Cprazo, prazo2 with Cprazo2
                      Unlock
@@ -557,7 +557,7 @@ while CDT = ' '
                   if mn_cl = 12
                      @ 10,66 get Ccnae pict '9999-9/99'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl cnae with Ccnae
                      uNLOCK
@@ -571,7 +571,7 @@ while CDT = ' '
                   if MN_CL = 13            
                      @ 11,08 get Cobs pict '@!'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl obs with Cobs
                      Unlock
@@ -585,7 +585,7 @@ while CDT = ' '
                   if MN_CL = 14
                      @ 11,69 get Cvmin pict '9,999.99'
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl Vmin with Cvmin
                      Unlock
@@ -607,7 +607,7 @@ while CDT = ' '
                      @ 12,20 clea to 13,29
                      if DSC = 1
                         Ctpdesc := 'C'
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl tpdesc with Ctpdesc
                         Unlock
@@ -637,7 +637,7 @@ while CDT = ' '
                                  loop
                               endi
                            endi
-                           Area(aDbfs[5])
+                           Area(oMenu:aDbfs[5])
                            go reg5
                            repl dscnto with Cdesc
                            Unlock
@@ -652,7 +652,7 @@ while CDT = ' '
                      if DSC = 2
                         @ 12,42 clea to 12,77
                         Ctpdesc := 'E'
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl tpdesc with Ctpdesc
                         Unlock
@@ -708,7 +708,7 @@ while CDT = ' '
                      loop
                   endi   
                   stor ltrim(str(op_regap)) to Creg_apur
-                  Area(aDbfs[5])
+                  Area(oMenu:aDbfs[5])
                   go reg5
                   repl reg_apur with Creg_apur
                   Unlock
@@ -751,7 +751,7 @@ while CDT = ' '
                      loop
                   Endi
                   stor op_tpg to Ctpag
-                  Area(aDbfs[5])
+                  Area(oMenu:aDbfs[5])
                   go reg5
                   repl Tpag with Ctpag
                   Unlock
@@ -795,7 +795,7 @@ while CDT = ' '
                      desc_ctb := '9-NÇO Contribuinte'
                   Endi
                   stor ltrim(str(op_ctb)) to op_ctb
-                  Area(aDbfs[5])
+                  Area(oMenu:aDbfs[5])
                   go reg5
                   repl indie with subs(desc_ctb,1,1)
                   Unlock
@@ -824,7 +824,7 @@ while CDT = ' '
                         mn_cl11 := 0
                         cdr := '    '
                      endi
-                     Area(aDbfs[49])
+                     Area(oMenu:aDbfs[49])
                      loca for codr = cdr
                      if eof()
                         Unlock
@@ -837,7 +837,7 @@ while CDT = ' '
                      stor nrep to nmrep
                      Unlock
                      Use
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl codrp with cdr, nrepre with nmrep
                      uNLOCK
@@ -885,7 +885,7 @@ while CDT = ' '
                      if MN_Ed = 1
                         @ 17,14 get Cender pict '@!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl ender with Cender
                         Unlock
@@ -899,7 +899,7 @@ while CDT = ' '
                      if MN_Ed = 2
                         @ 17,63 get Cnroend pict '!!!!!!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl nroend with Cnroend
                         Unlock
@@ -913,7 +913,7 @@ while CDT = ' '
                      if MN_Ed = 3
                         @ 18,15 get Ccompl pict '@!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl compl with Ccompl
                         Unlock
@@ -927,7 +927,7 @@ while CDT = ' '
                      if MN_Ed = 4
                         @ 18,45 get Cbairro pict '@!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl bairro with Cbairro
                         Unlock
@@ -941,7 +941,7 @@ while CDT = ' '
                      if MN_Ed = 5
                         @ 18,67 get Ccep pict '99.999-999'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl cep with Ccep
                         Unlock
@@ -955,7 +955,7 @@ while CDT = ' '
                      if MN_Ed = 6
                         @ 19,08 say Cpais
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl paiis with Cpais
                         Unlock
@@ -977,13 +977,13 @@ while CDT = ' '
                               RE := ' '
                               loop
                            endi
-                           Area(aDbfs[40])
+                           Area(oMenu:aDbfs[40])
                            loca for estd = Cest
                            if eof()   
                               Unlock
                               Use
                               mdest()
-                              Area(aDbfs[5])
+                              Area(oMenu:aDbfs[5])
                               go reg5
                               stor est to Cest
                               Unlock
@@ -993,7 +993,7 @@ while CDT = ' '
                            endi
                            Unlock
                            Use
-                           Area(aDbfs[5])
+                           Area(oMenu:aDbfs[5])
                            go reg5
                            repl est with Cest
                            Unlock
@@ -1017,13 +1017,13 @@ while CDT = ' '
                               RC := ' '
                               loop
                            endi
-                           Area(aDbfs[40])
+                           Area(oMenu:aDbfs[40])
                            loca for cidade = Ccida .and. estd = Cest
                            if eof()
                               Unlock
                               Use
                               mdest()
-                              Area(aDbfs[5])
+                              Area(oMenu:aDbfs[5])
                               go reg5
                               stor cida to Ccida
                               Unlock
@@ -1033,7 +1033,7 @@ while CDT = ' '
                            endi
                            Unlock
                            Use
-                           Area(aDbfs[5])
+                           Area(oMenu:aDbfs[5])
                            go reg5
                            repl cida with Ccida
                            Unlock
@@ -1049,7 +1049,7 @@ while CDT = ' '
                      if MN_Ed = 9
                         @ 20,09 get Clinha pict '99'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl linha with Clinha
                         Unlock
@@ -1063,7 +1063,7 @@ while CDT = ' '
                      if MN_Ed = 10
                         @ 20,37 get Cdespacho pict '@!' 
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl despacho with Cdespacho
                         Unlock
@@ -1078,7 +1078,7 @@ while CDT = ' '
                         set confirm on
                         @ 22,25 get Cobssep pict '@!S59'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl obssep with Cobssep
                         Unlock
@@ -1136,7 +1136,7 @@ while CDT = ' '
                      if MN_Ed2 = 1
                         @ 17,14 get Cender2 pict '@!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl ender2 with Cender2
                         Unlock
@@ -1150,7 +1150,7 @@ while CDT = ' '
                      if MN_Ed2 = 2
                         @ 17,63 get Cnroend2 pict '!!!!!!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl nroend2 with Cnroend2
                         Unlock
@@ -1164,7 +1164,7 @@ while CDT = ' '
                      if MN_Ed2 = 3
                         @ 18,15 get Ccompl2 pict '@!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl compl2 with Ccompl2
                         Unlock
@@ -1178,7 +1178,7 @@ while CDT = ' '
                      if MN_Ed2 = 4
                         @ 18,45 get Cbairro2 pict '@!'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl bairro2 with Cbairro2
                         Unlock
@@ -1192,7 +1192,7 @@ while CDT = ' '
                      if MN_Ed2 = 5
                         @ 18,67 get Ccep2 pict '99.999-999'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl cep2 with Ccep2
                         Unlock
@@ -1206,7 +1206,7 @@ while CDT = ' '
                      if MN_Ed2 = 6
                         @ 19,08 say Cpais2
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl paiis2 with Cpais2
                         Unlock
@@ -1228,13 +1228,13 @@ while CDT = ' '
                               RE2 = ' '
                               loop
                            endi
-                           Area(aDbfs[40])
+                           Area(oMenu:aDbfs[40])
                            loca for estd = Cest2
                            if eof()   
                               Unlock
                               Use
                               mdest()
-                              Area(aDbfs[5])
+                              Area(oMenu:aDbfs[5])
                               go reg5
                               stor est2 to Cest2
                               Unlock
@@ -1244,7 +1244,7 @@ while CDT = ' '
                            endi
                            Unlock
                            Use
-                           Area(aDbfs[5])
+                           Area(oMenu:aDbfs[5])
                            go reg5
                            repl est2 with Cest2
                            Unlock
@@ -1268,13 +1268,13 @@ while CDT = ' '
                               RC2 := ' '
                               loop
                            endi
-                           Area(aDbfs[40])
+                           Area(oMenu:aDbfs[40])
                            loca for cidade = Ccida2 .and. estd = Cest2
                            if eof()
                               Unlock
                               Use
                               mdest()
-                              Area(aDbfs[5])
+                              Area(oMenu:aDbfs[5])
                               go reg5
                               stor cida2 to Ccida2
                               Unlock
@@ -1284,7 +1284,7 @@ while CDT = ' '
                            endi
                            Unlock
                            Use
-                           Area(aDbfs[5])
+                           Area(oMenu:aDbfs[5])
                            go reg5
                            repl cida2 with Ccida2
                            Unlock
@@ -1301,7 +1301,7 @@ while CDT = ' '
                         set confirm on
                         @ 21,15 get Chrrec pict '@!S69'
                         read
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl hrrec with Chrrec
                         Unlock
@@ -1409,7 +1409,7 @@ while CDT = ' '
                            MN_inf := 0
                            loop
                         endi
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl isest with 'S',justst with Cjustst
                         Unlock
@@ -1420,7 +1420,7 @@ while CDT = ' '
                      endi
                      if TY = 2 
                         Cisest :='N'
-                        Area(aDbfs[5])
+                        Area(oMenu:aDbfs[5])
                         go reg5
                         repl isest with ' '
                         Unlock
@@ -1436,7 +1436,7 @@ while CDT = ' '
                   if MN_inf = 2
                      @ 20,16 get Cnf pict '!' valid (Cnf $ 'SN')
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl nf with Cnf
                      Unlock
@@ -1450,7 +1450,7 @@ while CDT = ' '
                   if MN_inf = 3
                      @ 20,25 get Cprnf pict '!' valid (Cprnf $ 'SN')
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl prnf with Cprnf
                      Unlock
@@ -1464,7 +1464,7 @@ while CDT = ' '
                   if MN_inf = 4
                      @ 21,55 get Cpedcli pict '!' valid (Cpedcli $ 'SN')
                      read
-                     Area(aDbfs[5])
+                     Area(oMenu:aDbfs[5])
                      go reg5
                      repl pedcli with Cpedcli
                      Unlock
@@ -1792,7 +1792,7 @@ while CDT = ' '
                      rps :=0
                      cdr := '    '
                   endi
-                  Area(aDbfs[49])
+                  Area(oMenu:aDbfs[49])
                   loca for codr = cdr
                   if eof()
                      Unlock
@@ -1819,7 +1819,7 @@ while CDT = ' '
                loop
             endi
 ********************************************************
-            Area(aDbfs[5])
+            Area(oMenu:aDbfs[5])
             if FJ = 'E'
                loca for cnpj = Rcnpj
             else
@@ -1866,7 +1866,7 @@ while CDT = ' '
                restscreen(00,00,23,79,TELA)
                retu
             endi
-            Area(aDbfs[40])
+            Area(oMenu:aDbfs[40])
             loca for estd = RE
             if eof()   
                Unlock
@@ -1881,7 +1881,7 @@ while CDT = ' '
             @ 20,47 get Rcida pict '@!'
             read
             ET := '2'
-            Area(aDbfs[40])
+            Area(oMenu:aDbfs[40])
             loca for cidade = Rcida .and. estd = RE
             if eof()
                Unlock
@@ -1912,7 +1912,7 @@ while CDT = ' '
             restscreen(00,00,23,79,TELA)
             retu
          Endi
-         Area(aDbfs[5])
+         Area(oMenu:aDbfs[5])
          go bott
          stor CODC to cdc
          Unlock
@@ -1929,7 +1929,7 @@ while CDT = ' '
          endcase
          @ 04,20 get cod
          clea gets
-         Area(aDbfs[5])
+         Area(oMenu:aDbfs[5])
          appe blan
          repl cliente with rcliente,razao with Rrazao,ender with Render,bairro with Rbairro,cida with Rcida,est with Rest,cnpj with Rcnpj,cpf with Rcpf,inscr with Rinscr,inscrp with Rinscrp,fone1 with Rfone1,fone2 with Rfone2,prazo with Rprazo
          repl CEP with CCEP,email with Rmail,obs with Robs, dscnto with Rdesc, tpdesc with Rtpdesc, contato with Rcontato,cliente with Rcliente, prazo2 with Rprazo2

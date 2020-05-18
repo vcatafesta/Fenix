@@ -2,58 +2,58 @@
 
 function CorNormal()
 ********************
-	SetColor("w+/b")
+	setcolor("w+/b")
 	return nil
 
 function bcor()
 ***************
-   set color to w/b+
+   setcolor("w/b+")
 
 function icor()
-	set color to r+/R
+	setcolor("r+/r")
 
 function tcor()
 ***************
-	set color to w+/b
-
+	setcolor("w+/b")
 
 function cab()
 **************
-			oPrinter:TextOut( oPrinter:PrinterName + ": MaxRow() = " + hb_ntos( oPrinter:MaxRow() ) + "   MaxCol() = " + hb_ntos( oPrinter:MaxCol() ) )
-         oPrinter:SetColor( RED )
-         oPrinter:SetPrc(oPrinter:Prow()+3, Pcol()+25 )
-         oPrinter:SetFont('monotype corsiva',30,{-1,14}, 0, .T., .F.)
-         oPrinter:TextOut( "CLAMAR CONSERVAS NATURAIS" )
-         oPrinter:NewLine()
+	oPrinter:TextOut( oPrinter:PrinterName + ": MaxRow() = " + hb_ntos( oPrinter:MaxRow() ) + "   MaxCol() = " + hb_ntos( oPrinter:MaxCol() ) )
+	oPrinter:SetColor( RED )
+	oPrinter:SetPrc(oPrinter:Prow()+3, Pcol()+25 )
+	oPrinter:SetFont('monotype corsiva',30,{-1,14}, 0, .T., .F.)
+	oPrinter:TextOut( "CLAMAR CONSERVAS NATURAIS" )
+	oPrinter:NewLine()
 
+	oPrinter:UnderLine( .F. )
+	oPrinter:Italic( .F. )
+	oPrinter:SetFont( "Lucida Console", 8, { 3, -50 } )
 
-         oPrinter:UnderLine( .F. )
-         oPrinter:Italic( .F. )
-         oPrinter:SetFont( "Lucida Console", 8, { 3, -50 } )
+	oPrinter:NewLine()
+	oPrinter:TextOut("Impressao: "+dtoc(date()))
+	oPrinter:SetPrc(oPrinter:PROW(), Pcol()+30 )
+	oPrinter:TextOut("Pedido: ")
+	oPrinter:TextOut(NP)
+	oPrinter:NewLine()
 
-         oPrinter:NewLine()
-         oPrinter:TextOut("Impressao: "+dtoc(date()))
-         oPrinter:SetPrc(oPrinter:PROW(), Pcol()+30 )
-         oPrinter:TextOut("Pedido: ")
-         oPrinter:TextOut(NP)
-         oPrinter:NewLine()
-
-         nColFixed   := 2 * oPrinter:CharWidth
-         nColTTF     := 40 * oPrinter:CharWidth
-         nColCharSet := 60 * oPrinter:CharWidth
-         oPrinter:NewLine()
+	nColFixed   := 2 * oPrinter:CharWidth
+	nColTTF     := 40 * oPrinter:CharWidth
+	nColCharSet := 60 * oPrinter:CharWidth
+	oPrinter:NewLine()
 
 function mdsha()
 ****************
-set bell on
-TONE(200,5)
-ALERT(" ATEN€ÇO !!!;;SENHA INCORRETA ! ", , "W+/B")
-set bell off
-
+	set bell on
+	Tone(200,5)
+	Alert(" ATEN€ÇO !!!;;SENHA INCORRETA ! ", , "W+/B")
+	set bell off
+	return nil
+	
 function snh_adm()
 ******************
    STT := ' '
-   Do whil STT = ' '
+   
+   while Empty(STT)
       say := ' '
       save scre to tela
       @ 09,20 clea to 13,54
@@ -69,7 +69,8 @@ function snh_adm()
          say := 'X'
          retu
       endi
-      Area(oMenu:aDbfs[3])
+   
+	   Area(oMenu:aDbfs[3])
       loca for senha = SNA
       if eof()
          Unlock
@@ -78,74 +79,74 @@ function snh_adm()
          mdsha()
          STT := ' '
          loop
-      endi
+      end
       Unlock
       Use
-      retu
-   Endd
+      return
+   end
 
-
+   
 function nrpd()
 ***************
-public codnum
-if digt = '10'
-   if reg < 10
-      stor '000000000'+ltrim(str(reg)) to codnum
-   endi
-   if reg >= 10
-      stor '00000000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 99
-      stor '0000000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 999
-      stor '000000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 9999
-      stor '00000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 99999
-      stor '0000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 999999
-      stor '000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 9999999
-      stor '00'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 99999999
-      stor '0'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 999999999
-      stor ltrim(str(reg)) to codnum
-   endi
-endi
-if digt = '8'
-   if reg < 10
-      stor '0000000'+ltrim(str(reg)) to codnum
-   endi
-   if reg >= 10
-      stor '000000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 99
-      stor '00000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 999
-      stor '0000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 9999
-      stor '000'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 99999
-      stor '00'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 999999
-      stor '0'+ltrim(str(reg)) to codnum
-   endi
-   if reg > 9999999
-      stor ltrim(str(reg)) to codnum
-   endi
-endi
+	public codnum
+	if digt = '10'
+   	if reg < 10
+      	stor '000000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg >= 10
+      	stor '00000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99
+      	stor '0000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999
+      	stor '000000'+ltrim(str(reg)) to codnum
+   	endi
+   	if reg > 9999
+      	stor '00000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999
+      	stor '0000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999
+      	stor '000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999999
+      	stor '00'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999999
+      	stor '0'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999999
+      	stor ltrim(str(reg)) to codnum
+   	endi
+	endi
+	if digt = '8'
+	   if reg < 10
+	      stor '0000000'+ltrim(str(reg)) to codnum
+	   endi
+	   if reg >= 10
+	      stor '000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99
+	      stor '00000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999
+	      stor '0000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999
+      	stor '000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999
+	      stor '00'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999
+	      stor '0'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999999
+	      stor ltrim(str(reg)) to codnum
+   	endi
+	endi
 if digt = '6'
    if reg < 10
       stor '00000'+ltrim(str(reg)) to codnum
@@ -478,19 +479,16 @@ endd
 
 function mdsuces()
 ******************
-set bell on
-TONE(900,2)
-tone(900)
-ALERT(" DADOS REGISTRADOS COM;; SUCESSO !!! ", , "W+/B")
-set bell off
+	ErrorBeep()
+	alert(" DADOS REGISTRADOS COM;; SUCESSO !!! ", , "W+/B")
+	return nil
 
 function mdcli()
 ****************
-set bell on
-TONE(200,5)
-ALERT(" ATEN€ÇO !!!;;CLIENTE NÇO LOCALIZADO ", , "W+/B")
-set bell off
-
+	ErrorBeep()
+	Alert(" ATEN€ÇO !!!;;CLIENTE NÇO LOCALIZADO ", , "W+/B")
+	return nil
+	
 function mdanul()
 *****************
 set bell on
@@ -581,24 +579,24 @@ stor cadastro to Ycadastro
      stor ftv to Yftv
      stor nfv to Ynfv
      stor dvv to Ydvv
-stor compra to Ycompra
-stor regc to Yregc
-stor bxc to Ybxc
-stor edtc to Yedtc
-stor lstc to Ylstc
-stor estqc to Yestqc
-stor psqc to Ypsqc
-stor nfc to Ynfc
-stor etqc to Yetqc
-stor estoque to Yestoque
-stor plne to Yplne
-stor cnce to Ycnce
-stor edte to Yedte
-stor pere to Ypere
-stor rgpe to Yrgpe
-stor cheq to Ycheq
-stor dpe to Ydpe
-stor lja to Ylja
+	stor compra to Ycompra
+	stor regc to Yregc
+	stor bxc to Ybxc	
+		stor edtc to Yedtc
+	stor lstc to Ylstc
+	stor estqc to Yestqc
+	stor psqc to Ypsqc	
+	stor nfc to Ynfc
+	stor etqc to Yetqc
+	stor estoque to Yestoque
+	stor plne to Yplne
+	stor cnce to Ycnce
+	stor edte to Yedte
+	stor pere to Ypere
+	stor rgpe to Yrgpe
+	stor cheq to Ycheq
+	stor dpe to Ydpe
+	stor lja to Ylja
 stor fna to Yfna
 stor nfe to Ynfe
 stor nfen to Ynfen
@@ -608,15 +606,16 @@ Use
 retu
 
 function imp_cadc( Cpar1 )
-   LOCAL nPrn := 1
+**************************   
+   LOCAL nPrn     := 1
    LOCAL cBMPFile := "C:\hb32\clamar\imagem.bmp"
-   LOCAL GetList := {}
-   LOCAL aPrn := win_printerList()
+   LOCAL GetList  := {}
+   LOCAL aPrn     := win_printerList()
 
-   IF Empty( aPrn )
+   if Empty( aPrn )
       Alert( "Nao foi localizado nenhuma impressora instalada!!!" )
-   ELSE
-      DO WHILE nPrn != 0
+   else
+      while nPrn != 0
          vcTela = savescreen(07, 12, 23, 69)
          @ 08,13 to 22,68
          setcolor("n/w,w+/g")
@@ -626,12 +625,12 @@ function imp_cadc( Cpar1 )
          nPrn := AChoice(10,15,20,66,aPrn, .T.,, "myFuncao" )
          IF nPrn != 0
             PrnTest( aPrn[ nPrn ], cBMPFile, iif( HB_ISSTRING( cPar1 ) .AND. Lower( cPar1 ) == "ask", .T., NIL ) )
-         ENDIF
+         endif
          restscreen(07, 12, 23, 69,vcTela)
          exit
-      ENDDO
-   ENDIF
-   RETURN NIL
+      enddo
+   endif
+   return nil
 
 STATIC PROCEDURE PrnTest( cPrinter, cBMPFile, lAsk )
 
@@ -892,6 +891,7 @@ STATIC PROCEDURE PrintBitmap( oPrn, cBitFile )
    RETURN
 
 function myFuncao()
+*******************
    local vnRetorno
    do case
        case lastkey() = 19 .or. lastkey() = 4
@@ -905,22 +905,22 @@ function myFuncao()
        endcase
    return(vnRetorno)
 
-
-
 function psqrepre()
 *******************
-save scre to tela
+LOCAL Tela := SaveScreen()
 NMC := spac(15)
-do whil NMC = spac(15)
+
+while NMC = spac(15)
    @ 00,50 clea to 17,79
    @ 00,50 to 17,79
    @ 02,51 say 'Digite o Nome Representante:'
    @ 04,51 get NMC pict '!!!!!!!!!!!!!!!'
    read
-   if NMC = '     '
-      rest scre from tela
-      retu
+   if Empty(NMC)
+      Restela(Tela)
+      return
    endi
+   
    Area(oMenu:aDbfs[49])
    DBGOTOP()
    LOCATE FOR ALLTRIM(NMC)$NREP
@@ -1139,8 +1139,7 @@ function caduser()
                      loop
                   endi
                endd
-rest scre from caduser
-
+	rest scre from caduser
 
 function login()
 ****************
@@ -1165,58 +1164,23 @@ function login()
 			end
 			loop
 		end
-      Log := cLogin
-		Area("usuario")
-		loca for fantazia = LOG .and. senha = SNA
-		if eof()
-			Unlock
-			Use
-			@ 20,22 say '* Usuario nao Cadastrado!' get R
-			read
-			Area("cadadm")
-			CadAdm->(DbGotop())
-			while !eof()
-				if cadbloq = 'B'   
-					Unlock
-					Use
-					R := 'X'
-					exit
-				else
-					@ 20,22 say '* Cadastrar Usu rio? <S/N>' get R pict '!'
-					read
-					if R # 'S'
-						Unlock
-						Use
-						quit
-					endi
-					stor SNA to SHA
-					stor LOG to LOGFan
-					Unlock
-					Use
-					caduser()
-				end
-			end
-			if R = 'X'
-				R = ' '
-				loop
-			end
-		end
-		
+      Log    := cLogin
       Sha    := Sna
-		LogFan := CodUsu
-		nMuser := Fantazia
-		Unlock
-		Use
+		LogFan := Usuario->CodUsu
+		nMuser := Usuario->Fantazia
+		//Unlock
+		//Use
 		
 		Area(oMenu:aDbfs[9])
 		Descto := Desc
-		Unlock
+		//Unlock
 		
 		Area("cadprod") // oMenu:aDbfs[11])
 		CadProd->(DbGoTop())
 		
 		if CadProd->(TravaArq())
-			while Cadprod->(!Eof())
+			Mensagem("Aguarde, Atualizando valores")
+         while Cadprod->(!Eof())
 				desc_t         := 0
 				des_prc        := 0
 				vpreco         := 0
@@ -1228,9 +1192,9 @@ function login()
 			end			
 		end	
 		CadProd->(Libera())
-		Unlock
-		Use
-		return
+		//Unlock
+		//Use
+		return nil
 	end
 
 function MaBox(nRow, nCol, nRow1, nCol1, cColor)
@@ -1292,32 +1256,31 @@ function Mensagem( String, Color, nLine )
 
 Function ColorSet( pfore, pback, pUns )
 ***************************************
-	IF pfore == nil 
+	if pfore == nil 
 		 pfore := Standard()
 		 pback := Enhanced()
-	ELSEIF pfore < 0 
+	elseif pfore < 0 
 		 pfore := Standard()
 		 pback := Enhanced()
-	ELSE
+	else
 		 pback := Roloc(pfore)
-	ENDIF
+	endif
 	return( nil )
 	
 function m_frame()
-		return B_SINGLE_DOUBLE
+	return B_SINGLE_DOUBLE
 	
 	
 function cor()
-		return 31
+	return 31
 	
 Function MS_Box( nRow, nCol, nRow1, nCol1, cFrame, nCor)
 ********************************************************
-LOCAL nComp 	 := ( nCol1 - nCol )-1
-DEFAU cFrame TO M_Frame()
-DEFAU nCor	 TO Cor()
-
-return(Hb_DispBox( nRow, nCol, nRow1, nCol1, cFrame + " ", nCor))
-
+	LOCAL nComp 	 := ( nCol1 - nCol )-1
+	DEFAU cFrame TO M_Frame()
+	DEFAU nCor	 TO Cor()
+	return(Hb_DispBox( nRow, nCol, nRow1, nCol1, cFrame + " ", nCor))
+	
 Function Roloc(nColor)
 **********************
 LOCAL cColor  := ColorIntToStr(nColor)
@@ -1619,7 +1582,7 @@ LOCAL cScreen	        := SaveScreen()
 LOCAL Arq_Ant          := Alias()
 LOCAL Ind_Ant          := IndexOrd()
 
-Area(oMenu:aDbfs[23]) //usuario
+Area("usuario")
 ( Usuario->(Order( USUARIO_FANTAZIA )), Usuario->(DbGoTop()))
 IF Usuario->(Eof()) .OR. Usuario->(!DbSeek("ADMIN"))
    //GravaSenhaAdmin(OK)
