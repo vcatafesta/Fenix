@@ -227,10 +227,10 @@ function lstcli()
    	l := 2
    	dct := -1
    
-   	Area(oMenu:aDbfs[5])
-   index on dscnto to I5
-   set index to I5
-   do whil .not. eof()
+   	Area("cadcli")
+   	index on dscnto to I5
+	   set index to I5
+	   while !eof()
       if Pest # '  '
          if est # Pest
             skip
@@ -1168,11 +1168,12 @@ function login()
 			end
 			loop
 		end
-      Log    := cLogin
-      Sha    := Sna
-		LogFan := Usuario->CodUsu
-		nMuser := Usuario->Fantazia
-		//Unlock
+      Log           := cLogin
+      Sha           := Sna
+		LogFan        := Usuario->CodUsu
+		nMuser        := Usuario->Fantazia
+		oMenu:Usuario := Usuario->Fantazia
+      //Unlock
 		//Use
 		
 		Area(oMenu:aDbfs[9])

@@ -8,6 +8,8 @@ CLASS TMenu
 		  VAR Unidade
 		  VAR Terminal
 		  VAR Comp
+        VAR nMUser
+        VAR Usuario
 	 Export:
 		  METHOD New CONSTRUCTOR
 		  METHOD Limpa
@@ -19,13 +21,15 @@ METHOD New( cAlias )
 	Self:aDbfs		:= {}
 	Self:Unidade	:= "C"
 	Self:Terminal	:= ""
+   Self:nMUser    := ""
+   Self:Usuario   := ""
 	Self:Comp		:= "SERVIDOR"
 	
 	return( Self )
 
 METHOD Limpa()
 	setcolor("")
-	cls
+	Scroll(01,00, MaxRow()-1, MaxCol()-1)
 	return( Self )
 
 function TMenuNew()

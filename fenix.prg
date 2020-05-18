@@ -6,7 +6,6 @@ function main()
    LOCAL oPull
 
    Public Logfan	:= spac(4)
-   Public NMuser
    Public CT_cli 	:= ' '
    Public cdtr 	:= ' '
    Public rcb_V 	:= ' '
@@ -131,7 +130,6 @@ function main()
 	if logfan = Space(4)
 		login()
 		*Logfan := 'LOGFAN'
-		*NMuser := 'NMUSER/...'
    end
 
    Ctr_User()
@@ -451,16 +449,15 @@ function Rodape()
    
    nSetColor(31)
 	Write(nRow, 00, Space(MaxCol()),31)
-   Write(nRow,00, logfan+'-'+trim(nmuser))
+   Write(nRow,00, logfan + ':' + Alltrim(oMenu:Usuario ))
    Write(nRow,20, "|")
    Write(nRow,22, Date())
    Write(nRow,33, '|')
-   Write(nRow,33, '|')
-   Showtime(nRow, 35, false, "b*/w", false, false )
+   Showtime(nRow, 35, false, "w+/b", false, false )
    Write(nRow,44, '|')
    Write(nRow,46, 'Terminal:' + oMenu:Terminal)
    Write(nRow,60, '|')
-   Write(nRow,62, ''+NCOMP+'')
+   Write(nRow,62, oMenu:Comp)
    Write(nRow,75, '|')
    Write(nRow,77, oMenu:Unidade)
    return nil

@@ -1,13 +1,28 @@
-CDT := ' '
-while CDT = ' '
-   Area(oMenu:aDbfs[9])
-   descto := desc
-   Unlock
-	Area(oMenu:aDbfs[5])
+function cadastro()
+	LOCAL nChoice := 0	
+	CDT := Space(1)
+
+while CDT = Space(1)
+  	Area("desc")
+   descto := Desc->desc
+
+	Area("cadcli")
    count for ativo = 'A' to QCL
-   Unlock
-   Use
+   //unlock
+   //Use
+   
    Tela := savescreen(00,00,23,79)
+   
+   oMenu:Limpa()
+   aMenu := {"Pesquisa", "Cadastrar", "Listagem"}
+   nChoice := FazMenu( 10, 10, aMenu)
+	Do Case
+	Case nChoice = 0
+		return
+	Case nChoice = 1
+		
+   Endcase   
+   
    @ 00,00 clea to 23,79
    @ 03,23 to 05,48 doub
    TEF := '* CADASTRO DE CLIENTES *'
@@ -47,8 +62,8 @@ while CDT = ' '
          stor SIT to SLT  
          loca for codc = PEC
          if eof()
-            unlock
-            use
+            //// unlock
+            //use
             mdcli()
             Z1 := 'N'
             PEC := '    '
@@ -111,8 +126,8 @@ while CDT = ' '
          store isest to Cisest
          Rpais = 'BRASIL'
          store recno() to reg5
-         UNLOCK
-         USE
+         //// unlock
+         //USE
          if Z1 = 'N'
             loop
          endi
@@ -279,8 +294,8 @@ while CDT = ' '
                   Area(oMenu:aDbfs[5])
                   go reg5
                   repl restric with ' '
-                  Unlock
-                  Use
+                  //// unlock
+                  //Use
                   rest scre from R_cli
                   mdsuces()
                endi
@@ -355,8 +370,8 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl Ativo with 'A'
-                        Unlock
-                        Use
+                        //// unlock
+                        //Use
                         set color to b+/w
                         @ 02,10 say 'ATIVO'
                         tcor()
@@ -367,8 +382,8 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl Ativo with ' '
-                        Unlock
-                        Use
+                        //// unlock
+                        //Use
                         set color to b+/w
                         @ 03,10 say 'INATIVO'
                         tcor()
@@ -382,8 +397,8 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl cliente with Ccliente
-                     Unlock
-                     Use
+                     //// unlock
+                     //Use
                      set color to b+/w      
                      @ 04,12 say ccliente
                      tcor()
@@ -396,8 +411,8 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl exml with Cexml
-                     Unlock
-                     Use
+                     //// unlock
+                     //Use
                      set color to b+/w
                      @ 05,20 say Cexml
                      tcor()
@@ -410,8 +425,8 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl razao with Crazao
-                     Unlock
-                     Use
+                     //// unlock
+                     //Use
                      set color to b+/w
                      @ 06,16 say Crazao
                      tcor()
@@ -425,8 +440,8 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl cnpj with Ccnpj
-                        Unlock
-                        Use
+                        //// unlock
+                        //Use
                         set color to b+/w
                         @ 07,12 say Ccnpj
                         tcor()
@@ -436,7 +451,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl cpf with Ccpf
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 07,07 say Ccpf
@@ -452,7 +467,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl inscr with Cinscr
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 07,54 say Cinscr
@@ -463,7 +478,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl inscrp with Cinscrp
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 07,46 say Cinscrp
@@ -478,7 +493,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl contato with Ccontato
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 08,11 say Ccontato
@@ -492,7 +507,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl fone1 with Cfone1
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 08,41 say Cfone1
@@ -506,7 +521,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl fone2 with Cfone2
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 08,60 say Cfone2
@@ -520,7 +535,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl email with Cmail
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 09,10 say Cmail
@@ -545,7 +560,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl prazo with Cprazo, prazo2 with Cprazo2
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 10,09 say Cprazo
@@ -560,7 +575,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl cnae with Ccnae
-                     uNLOCK
+                     // unlock
                      uSE
                      set color to b+/w
                      @ 10,66 say Ccnae
@@ -574,7 +589,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl obs with Cobs
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 11,08 say Cobs
@@ -588,7 +603,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl Vmin with Cvmin
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 11,69 say Cvmin
@@ -610,7 +625,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl tpdesc with Ctpdesc
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 12,21 say 'COMUM'
@@ -640,7 +655,7 @@ while CDT = ' '
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl dscnto with Cdesc
-                           Unlock
+                           // unlock
                            Use
                            tcor()
                            @ 12,67 say Cdesc
@@ -655,7 +670,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl tpdesc with Ctpdesc
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 12,21 say 'ESPECIAL'
@@ -711,7 +726,7 @@ while CDT = ' '
                   Area(oMenu:aDbfs[5])
                   go reg5
                   repl reg_apur with Creg_apur
-                  Unlock
+                  // unlock
                   Use
                   rest scre from regap
                   set color to b+/w
@@ -754,7 +769,7 @@ while CDT = ' '
                   Area(oMenu:aDbfs[5])
                   go reg5
                   repl Tpag with Ctpag
-                  Unlock
+                  // unlock
                   Use
                   rest scre from tpg
                   set color to b+/w
@@ -798,7 +813,7 @@ while CDT = ' '
                   Area(oMenu:aDbfs[5])
                   go reg5
                   repl indie with subs(desc_ctb,1,1)
-                  Unlock
+                  // unlock
                   Use
                   rest scre from tpg
                   set color to b+/w
@@ -827,7 +842,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[49])
                      loca for codr = cdr
                      if eof()
-                        Unlock
+                        // unlock
                         Use
                         mddad()
                         mn_cl11 := 0
@@ -835,12 +850,12 @@ while CDT = ' '
                      endi
                      stor codr to cdr
                      stor nrep to nmrep
-                     Unlock
+                     // unlock
                      Use
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl codrp with cdr, nrepre with nmrep
-                     uNLOCK
+                     // unlock
                      uSE
                      rest scre from tl
                      set color to b+/w
@@ -888,7 +903,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl ender with Cender
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 17,14 say Cender
@@ -902,7 +917,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl nroend with Cnroend
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 17,63 say Cnroend
@@ -916,7 +931,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl compl with Ccompl
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 18,15 say Ccompl
@@ -930,7 +945,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl bairro with Cbairro
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 18,45 say Cbairro
@@ -944,7 +959,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl cep with Ccep
-                        Unlock
+                        // unlock
                         use
                         set color to b+/w
                         @ 18,67 say Ccep
@@ -958,7 +973,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl paiis with Cpais
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 19,08 say Cpais
@@ -980,23 +995,23 @@ while CDT = ' '
                            Area(oMenu:aDbfs[40])
                            loca for estd = Cest
                            if eof()   
-                              Unlock
+                              // unlock
                               Use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor est to Cest
-                              Unlock
+                              // unlock
                               Use
                               RE := ' '
                               loop
                            endi
-                           Unlock
+                           // unlock
                            Use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl est with Cest
-                           Unlock
+                           // unlock
                            Use
                            set color to b+/w
                            @ 19,26 say Cest
@@ -1020,23 +1035,23 @@ while CDT = ' '
                            Area(oMenu:aDbfs[40])
                            loca for cidade = Ccida .and. estd = Cest
                            if eof()
-                              Unlock
+                              // unlock
                               Use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor cida to Ccida
-                              Unlock
+                              // unlock
                               Use
                               RC := ' '
                               loop
                            endi
-                           Unlock
+                           // unlock
                            Use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl cida with Ccida
-                           Unlock
+                           // unlock
                            Use
                            set color to b+/w
                            @ 19,47 say Ccida
@@ -1052,7 +1067,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl linha with Clinha
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 20,09 say Clinha
@@ -1066,7 +1081,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl despacho with Cdespacho
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 20,37 say Cdespacho
@@ -1081,7 +1096,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl obssep with Cobssep
-                        Unlock
+                        // unlock
                         Use
                         set confirm off
                         set color to b+/w
@@ -1139,7 +1154,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl ender2 with Cender2
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 17,14 say Cender2
@@ -1153,7 +1168,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl nroend2 with Cnroend2
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 17,63 say Cnroend2
@@ -1167,7 +1182,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl compl2 with Ccompl2
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 18,15 say Ccompl2
@@ -1181,7 +1196,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl bairro2 with Cbairro2
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 18,45 say Cbairro2
@@ -1195,7 +1210,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl cep2 with Ccep2
-                        Unlock
+                        // unlock
                         use
                         set color to b+/w
                         @ 18,67 say Ccep2
@@ -1209,7 +1224,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl paiis2 with Cpais2
-                        Unlock
+                        // unlock
                         Use
                         set color to b+/w
                         @ 19,08 say Cpais2
@@ -1231,23 +1246,23 @@ while CDT = ' '
                            Area(oMenu:aDbfs[40])
                            loca for estd = Cest2
                            if eof()   
-                              Unlock
+                              // unlock
                               Use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor est2 to Cest2
-                              Unlock
+                              // unlock
                               Use
                               RE2 := ' '
                               loop
                            endi
-                           Unlock
+                           // unlock
                            Use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl est2 with Cest2
-                           Unlock
+                           // unlock
                            Use
                            set color to b+/w
                            @ 19,26 say Cest2
@@ -1271,23 +1286,23 @@ while CDT = ' '
                            Area(oMenu:aDbfs[40])
                            loca for cidade = Ccida2 .and. estd = Cest2
                            if eof()
-                              Unlock
+                              // unlock
                               Use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor cida2 to Ccida2
-                              Unlock
+                              // unlock
                               Use
                               RC2 := ' '
                               loop
                            endi
-                           Unlock
+                           // unlock
                            Use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl cida2 with Ccida2
-                           Unlock
+                           // unlock
                            Use
                            set color to b+/w
                            @ 19,47 say Ccida2
@@ -1304,7 +1319,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl hrrec with Chrrec
-                        Unlock
+                        // unlock
                         Use
                         set confirm off
                         set color to b+/w
@@ -1412,7 +1427,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl isest with 'S',justst with Cjustst
-                        Unlock
+                        // unlock
                         Use
                         mdsuces()
                         MN_inf := 0
@@ -1423,7 +1438,7 @@ while CDT = ' '
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl isest with ' '
-                        Unlock
+                        // unlock
                         Use
                         @ 10,21 clea to 15,59
                         set color to b+/w
@@ -1439,7 +1454,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl nf with Cnf
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 20,16 say Cnf
@@ -1453,7 +1468,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl prnf with Cprnf
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 20,25 say Cprnf
@@ -1467,7 +1482,7 @@ while CDT = ' '
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl pedcli with Cpedcli
-                     Unlock
+                     // unlock
                      Use
                      set color to b+/w
                      @ 21,55 say Cpedcli
@@ -1795,7 +1810,7 @@ while CDT = ' '
                   Area(oMenu:aDbfs[49])
                   loca for codr = cdr
                   if eof()
-                     Unlock
+                     // unlock
                      Use
                      mddad()
                      rps := 0
@@ -1803,7 +1818,7 @@ while CDT = ' '
                   endi
                   stor codr to cdr
                   stor nrep to nmrep
-                  unlock
+                  // unlock
                   use
                   rest scre from tl
                   @ 14,53 get cdr
@@ -1827,7 +1842,7 @@ while CDT = ' '
             endi
             if eof()
             else
-               Unlock
+               // unlock
                Use
                TONE(200,5)
                If ALERT("Ja Existe Cadastro com Esse CNPJ;Voce nao pode continuar !;", {"ALTERAR", "SAIR"} , "B/GR+,r") ==2
@@ -1837,7 +1852,7 @@ while CDT = ' '
                   loop
                endi
             endi
-            Unlock
+            // unlock
             Use
             exit
          endi
@@ -1869,14 +1884,14 @@ while CDT = ' '
             Area(oMenu:aDbfs[40])
             loca for estd = RE
             if eof()   
-               Unlock
+               // unlock
                Use
                mdest()
                RE := '  '
                loop
             endi
             stor estd to Rest
-            Unlock
+            // unlock
             Use
             @ 20,47 get Rcida pict '@!'
             read
@@ -1884,7 +1899,7 @@ while CDT = ' '
             Area(oMenu:aDbfs[40])
             loca for cidade = Rcida .and. estd = RE
             if eof()
-               Unlock
+               // unlock
                Use
                mdest()
                Rcida := spac(30)
@@ -1892,7 +1907,7 @@ while CDT = ' '
                RE := '  '
                loop
             endi
-            Unlock
+            // unlock
             Use
             exit
          endd
@@ -1915,7 +1930,7 @@ while CDT = ' '
          Area(oMenu:aDbfs[5])
          go bott
          stor CODC to cdc
-         Unlock
+         // unlock
          Use
          do case
             case val(cdc)+1 < 10
@@ -1936,7 +1951,7 @@ while CDT = ' '
          repl Ativo with 'A', nroend with Rnroend, compl with Rcompl, paiis with Rpais, linha with Rlinha,exml with Rexml, usuario with logfan, indie with Rindie
          repl nf with Rnf, prnf with Rprnf, hrrec with Rhrrec, data with DT, sit with FJ, codc with cod, tpag with Rtpag, Vmin with Rvmin, despacho with Rdespacho
          repl reg_apur with Creg_apur, indie with subs(desc_ctb,1,1), cnae with Rcnae, codrp with cdr, nrepre with nmrep,obssep with Robssep
-         unlock
+         // unlock
          use
          mdsuces()
          restscreen(00,00,23,79,TELA)
