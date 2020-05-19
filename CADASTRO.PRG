@@ -1,35 +1,35 @@
 #include "fenix.ch"
 
 function cadastro()
+*******************
 	LOCAL nChoice := 0	
    LOCAL cScreen := SaveScreen()
-	CDT := Space(1)
-
-	Area("desc")
+	LOCAL aMenu   := {" Cadastrar ", " Pesquisar ", " Listar "}
+	
+   Area("desc")
    descto := Desc->desc
 	Area("cadcli")
    Qcl := Cadcli->(Lastrec())
 	
    while true
 		oMenu:Limpa()
-	   aMenu := {"Pesquisa", "Cadastrar", "Listagem"}
-   	nChoice := FazMenu( 10, 10, aMenu)
+   	nChoice := FazMenu( 10, 10, aMenu )
 		Do Case
 		Case nChoice = 0
    		Restela( cScreen )
-			return
+			return nil
 		Case nChoice = 1
-      	ClientesPesquisa()
-		Case nChoice = 2
       	ClientesInclusao()
+		Case nChoice = 2
+      	ClientesPesquisa()
 		Case nChoice = 3
    		LstCli()
-	   Endcase   
+	   Endcase
 	enddo
 
 Function ClientesPesquisa()
 ***************************
-	oMenu:Limpa()      
+      oMenu:Limpa()
       TT := 0
       cdtr := 'X'
       psqcli()
@@ -43,27 +43,27 @@ Function ClientesPesquisa()
          read
          if PEC = '    '
             restscreen(00,00,23,79,TELA)
-            return 
+            return
          endi
          Z1 := ' '
          stor val(PEC) to reg
          nrpd()
          stor codnum to PEC
          Area(oMenu:aDbfs[5])
-         stor SIT to SLT  
+         stor SIT to SLT
          loca for codc = PEC
          if eof()
-            //// unlock
-            //use
+            //unlock
+            ////use
             mdcli()
             Z1 := 'N'
             PEC := '    '
             loop
          endi
-         store recno() to regcad
-         store cnae to Ccnae
-         store data to cdata
-         store sit to Csit
+         store recno()  to regcad
+         store cnae     to Ccnae
+         store data     to cdata
+         store sit      to Csit
          store codc to Ccodc
          store cliente to Ccliente
          store razao to Crazao
@@ -86,7 +86,7 @@ Function ClientesPesquisa()
          store email to Cmail
          store exml to Cexml
          store cep to ccep
-   
+
          store ender2 to Cender2
          store nroend2 to Cnroend2
          store compl2 to Ccompl2
@@ -95,7 +95,7 @@ Function ClientesPesquisa()
          store est2 to Cest2
          store cep2 to ccep2
          store hrrec to Chrrec
-   
+
          store contato to Ccontato
          store tpdesc to Ctpdesc
          store dscnto to Cdesc
@@ -117,8 +117,7 @@ Function ClientesPesquisa()
          store isest to Cisest
          Rpais = 'BRASIL'
          store recno() to reg5
-         //// unlock
-         //USE
+
          if Z1 = 'N'
             loop
          endi
@@ -128,7 +127,7 @@ Function ClientesPesquisa()
          @ 00,30 say TEF
          tcor()
          @ 03,02 say 'Status:'
-         @ 03,40 say 'Data Cadastro:' 
+         @ 03,40 say 'Data Cadastro:'
          @ 04,42 say 'C¢digo do Cliente:'
          @ 04,02 say 'Fantasia:'
          @ 05,02 say 'E-mail para XML:'
@@ -147,7 +146,7 @@ Function ClientesPesquisa()
          @ 10,02 say 'Prazo:'
          @ 10,12 say '/'
          @ 10,17 say 'Dias.'
-         @ 10,60 say 'Cnae:' 
+         @ 10,60 say 'Cnae:'
          @ 11,02 say 'Obs.:'
          @ 11,54 say 'Pedido M¡nimo:'
          @ 12,02 say 'Tipo de Cobran‡a:'
@@ -156,7 +155,7 @@ Function ClientesPesquisa()
             @ 12,73 say '%'
          endi
          @ 13,02 say 'Regime de Apura‡Æo:'
-         @ 14,02 say 'Tipo Contrbte:'      
+         @ 14,02 say 'Tipo Contrbte:'
          @ 13,50 say 'Pagamento:'
          @ 14,39 say 'Representante:'
          @ 14,53 say '-'
@@ -172,19 +171,19 @@ Function ClientesPesquisa()
             @ 03,10 say 'Inativo'
          Endi
          @ 04,12 say ccliente
-         @ 06,16 say crazao 
+         @ 06,16 say crazao
          if Csit = 'EMPRESA'
-            @ 07,12 say ccnpj 
-            @ 07,54 say cinscr 
+            @ 07,12 say ccnpj
+            @ 07,54 say cinscr
          else
-            @ 07,07 say CCPF 
+            @ 07,07 say CCPF
             @ 07,46 say Cinscrp
          endi
          @ 08,11 say Ccontato
-         @ 08,41 say Cfone1 
+         @ 08,41 say Cfone1
          @ 08,60 say Cfone2
          @ 09,10 say Cmail
-         @ 10,09 say Cprazo 
+         @ 10,09 say Cprazo
          @ 10,13 say Cprazo2
          @ 10,66 say Ccnae
          @ 14,53 say Ccodrp
@@ -234,7 +233,7 @@ Function ClientesPesquisa()
          @ 18,02 say 'Complemento:'
          @ 18,37 say 'Bairro:'
          @ 18,62 say 'CEP:'
-         @ 19,02 say 'Pa¡s:' 
+         @ 19,02 say 'Pa¡s:'
          @ 19,18 say 'Estado:'
          @ 19,39 say 'Cidade:'
          @ 20,02 say 'Linha:'
@@ -249,7 +248,7 @@ Function ClientesPesquisa()
          @ 18,67 say CCEP
          @ 19,08 say Cpais
          @ 19,26 say Cest
-         @ 19,47 say Ccida 
+         @ 19,47 say Ccida
          @ 20,09 say Clinha
          @ 20,37 say Cdespacho
          @ 22,25 say Cobssep
@@ -286,7 +285,7 @@ Function ClientesPesquisa()
                   go reg5
                   repl restric with ' '
                   //// unlock
-                  //Use
+                  ////use
                   rest scre from R_cli
                   mdsuces()
                endi
@@ -318,7 +317,7 @@ Function ClientesPesquisa()
                MN_cl := 0
                do whil MN_cl = 0
                   @ 03,02 prompt 'Status:'
-                  @ 03,40 say 'Data Cadastro:' 
+                  @ 03,40 say 'Data Cadastro:'
                   @ 04,42 say 'C¢digo do Cliente:'
                   @ 04,02 prompt 'Fantasia:'
                   @ 05,02 prompt 'E-mail para XML:'
@@ -342,7 +341,7 @@ Function ClientesPesquisa()
                   @ 12,02 prompt 'Tipo de Cobran‡a:'
                   @ 13,02 prompt 'Regime de Apura‡Æo:'
                   @ 13,50 prompt 'Pagamento:'
-                  @ 14,02 prompt 'Tipo Contrbte:'      
+                  @ 14,02 prompt 'Tipo Contrbte:'
                   @ 14,39 prompt 'Representante:'
                   @ 15,72 prompt 'VOLTAR'
                   menu to mn_cl
@@ -356,25 +355,25 @@ Function ClientesPesquisa()
                      if say = 'X'
                         MN_cl := 0
                         loop
-                     endi   
+                     endi
                      if TY = 1
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl Ativo with 'A'
                         //// unlock
-                        //Use
+                        ////use
                         set color to b+/w
                         @ 02,10 say 'ATIVO'
                         tcor()
                         MN_cl := 0
                         loop
                      endi
-                     if TY = 2 
+                     if TY = 2
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl Ativo with ' '
                         //// unlock
-                        //Use
+                        ////use
                         set color to b+/w
                         @ 03,10 say 'INATIVO'
                         tcor()
@@ -389,8 +388,8 @@ Function ClientesPesquisa()
                      go reg5
                      repl cliente with Ccliente
                      //// unlock
-                     //Use
-                     set color to b+/w      
+                     ////use
+                     set color to b+/w
                      @ 04,12 say ccliente
                      tcor()
                      MN_cl := 0
@@ -403,7 +402,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl exml with Cexml
                      //// unlock
-                     //Use
+                     ////use
                      set color to b+/w
                      @ 05,20 say Cexml
                      tcor()
@@ -417,7 +416,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl razao with Crazao
                      //// unlock
-                     //Use
+                     ////use
                      set color to b+/w
                      @ 06,16 say Crazao
                      tcor()
@@ -432,7 +431,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl cnpj with Ccnpj
                         //// unlock
-                        //Use
+                        ////use
                         set color to b+/w
                         @ 07,12 say Ccnpj
                         tcor()
@@ -443,7 +442,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl cpf with Ccpf
                         // unlock
-                        Use
+                        // //use
                         set color to b+/w
                         @ 07,07 say Ccpf
                         tcor()
@@ -459,7 +458,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl inscr with Cinscr
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 07,54 say Cinscr
                         tcor()
@@ -470,7 +469,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl inscrp with Cinscrp
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 07,46 say Cinscrp
                         tcor()
@@ -485,7 +484,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl contato with Ccontato
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 08,11 say Ccontato
                      tcor()
@@ -499,7 +498,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl fone1 with Cfone1
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 08,41 say Cfone1
                      tcor()
@@ -513,7 +512,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl fone2 with Cfone2
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 08,60 say Cfone2
                      tcor()
@@ -527,7 +526,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl email with Cmail
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 09,10 say Cmail
                      tcor()
@@ -552,7 +551,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl prazo with Cprazo, prazo2 with Cprazo2
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 10,09 say Cprazo
                      @ 10,13 say Cprazo2
@@ -567,21 +566,21 @@ Function ClientesPesquisa()
                      go reg5
                      repl cnae with Ccnae
                      // unlock
-                     uSE
+                     ////use
                      set color to b+/w
                      @ 10,66 say Ccnae
                      tcor()
                      MN_CL := 0
                      loop
                   endi
-                  if MN_CL = 13            
+                  if MN_CL = 13
                      @ 11,08 get Cobs pict '@!'
                      read
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl obs with Cobs
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 11,08 say Cobs
                      tcor()
@@ -595,7 +594,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl Vmin with Cvmin
                      // unlock
-                     Use
+                     ////use
                      set color to b+/w
                      @ 11,69 say Cvmin
                      tcor()
@@ -607,7 +606,7 @@ Function ClientesPesquisa()
                      set color to w/b+
                      @ 12,20 clea to 13,29
                      @ 12,21 prompt 'COMUM'
-                     @ 13,21 prompt 'ESPECIAL'      
+                     @ 13,21 prompt 'ESPECIAL'
                      menu to DSC
                      tcor()
                      @ 12,20 clea to 13,29
@@ -617,7 +616,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl tpdesc with Ctpdesc
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 12,21 say 'COMUM'
                         tcor()
@@ -631,7 +630,7 @@ Function ClientesPesquisa()
                            read
                            if Cdesc > descto
                               save scre to msg
-                              @ 12,20 clea to 13,55 
+                              @ 12,20 clea to 13,55
                               set color to w/r
                               n := ' '
                               @ 12,02 say 'ESSE DESCONTO EXEDE O LIMITE !!!' get n pict '!'
@@ -647,7 +646,7 @@ Function ClientesPesquisa()
                            go reg5
                            repl dscnto with Cdesc
                            // unlock
-                           Use
+                           ////use
                            tcor()
                            @ 12,67 say Cdesc
                            exit
@@ -662,7 +661,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl tpdesc with Ctpdesc
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 12,21 say 'ESPECIAL'
                         tcor()
@@ -712,13 +711,13 @@ Function ClientesPesquisa()
                      rest scre from regap
                      MN_CL := 0
                      loop
-                  endi   
+                  endi
                   stor ltrim(str(op_regap)) to Creg_apur
                   Area(oMenu:aDbfs[5])
                   go reg5
                   repl reg_apur with Creg_apur
                   // unlock
-                  Use
+                  ////use
                   rest scre from regap
                   set color to b+/w
                   @ 13,22 CLEA TO 13,39
@@ -761,7 +760,7 @@ Function ClientesPesquisa()
                   go reg5
                   repl Tpag with Ctpag
                   // unlock
-                  Use
+                  ////use
                   rest scre from tpg
                   set color to b+/w
                   @ 13,61 CLEA TO 13,71
@@ -805,7 +804,7 @@ Function ClientesPesquisa()
                   go reg5
                   repl indie with subs(desc_ctb,1,1)
                   // unlock
-                  Use
+                  ////use
                   rest scre from tpg
                   set color to b+/w
                   @ 14,17 clea to 14,37
@@ -834,7 +833,7 @@ Function ClientesPesquisa()
                      loca for codr = cdr
                      if eof()
                         // unlock
-                        Use
+                        ////use
                         mddad()
                         mn_cl11 := 0
                         loop
@@ -842,12 +841,12 @@ Function ClientesPesquisa()
                      stor codr to cdr
                      stor nrep to nmrep
                      // unlock
-                     Use
+                     ////use
                      Area(oMenu:aDbfs[5])
                      go reg5
                      repl codrp with cdr, nrepre with nmrep
                      // unlock
-                     uSE
+                     ////use
                      rest scre from tl
                      set color to b+/w
                      @ 14,53 say cdr
@@ -880,7 +879,7 @@ Function ClientesPesquisa()
                      @ 18,02 prompt 'Complemento:'
                      @ 18,37 prompt 'Bairro:'
                      @ 18,62 prompt 'CEP:'
-                     @ 19,02 prompt 'Pa¡s:' 
+                     @ 19,02 prompt 'Pa¡s:'
                      @ 19,18 prompt 'Estado:'
                      @ 19,39 prompt 'Cidade:'
                      @ 20,02 prompt 'Linha:'
@@ -895,7 +894,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl ender with Cender
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 17,14 say Cender
                         tcor()
@@ -909,7 +908,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl nroend with Cnroend
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 17,63 say Cnroend
                         tcor()
@@ -923,7 +922,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl compl with Ccompl
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 18,15 say Ccompl
                         tcor()
@@ -937,7 +936,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl bairro with Cbairro
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 18,45 say Cbairro
                         tcor()
@@ -951,7 +950,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl cep with Ccep
                         // unlock
-                        use
+                        ////use
                         set color to b+/w
                         @ 18,67 say Ccep
                         tcor()
@@ -965,7 +964,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl paiis with Cpais
                         // unlock
-                        Use
+                        ////use
                         set color to b+/w
                         @ 19,08 say Cpais
                         tcor()
@@ -985,25 +984,25 @@ Function ClientesPesquisa()
                            endi
                            Area(oMenu:aDbfs[40])
                            loca for estd = Cest
-                           if eof()   
+                           if eof()
                               // unlock
-                              Use
+                              ////use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor est to Cest
                               // unlock
-                              Use
+                              //use
                               RE := ' '
                               loop
                            endi
                            // unlock
-                           Use
+                           //use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl est with Cest
                            // unlock
-                           Use
+                           //use
                            set color to b+/w
                            @ 19,26 say Cest
                            tcor()
@@ -1027,23 +1026,23 @@ Function ClientesPesquisa()
                            loca for cidade = Ccida .and. estd = Cest
                            if eof()
                               // unlock
-                              Use
+                              //use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor cida to Ccida
                               // unlock
-                              Use
+                              //use
                               RC := ' '
                               loop
                            endi
                            // unlock
-                           Use
+                           //use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl cida with Ccida
                            // unlock
-                           Use
+                           //use
                            set color to b+/w
                            @ 19,47 say Ccida
                            tcor()
@@ -1059,7 +1058,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl linha with Clinha
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 20,09 say Clinha
                         tcor()
@@ -1067,13 +1066,13 @@ Function ClientesPesquisa()
                         loop
                      endi
                      if MN_Ed = 10
-                        @ 20,37 get Cdespacho pict '@!' 
+                        @ 20,37 get Cdespacho pict '@!'
                         read
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl despacho with Cdespacho
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 20,37 say Cdespacho
                         tcor()
@@ -1088,7 +1087,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl obssep with Cobssep
                         // unlock
-                        Use
+                        //use
                         set confirm off
                         set color to b+/w
                         @ 22,25 say Cobssep
@@ -1111,7 +1110,7 @@ Function ClientesPesquisa()
                   @ 18,02 say 'Complemento:'
                   @ 18,37 say 'Bairro:'
                   @ 18,62 say 'CEP:'
-                  @ 19,02 say 'Pa¡s:' 
+                  @ 19,02 say 'Pa¡s:'
                   @ 19,18 say 'Estado:'
                   @ 19,39 say 'Cidade:'
                   @ 21,02 say 'Recebimento:'
@@ -1123,7 +1122,7 @@ Function ClientesPesquisa()
                   @ 18,67 say CCEP2
                   @ 19,08 say Cpais
                   @ 19,26 say Cest2
-                  @ 19,47 say Ccida2 
+                  @ 19,47 say Ccida2
                   @ 21,15 say Chrrec
                   tcor()
                   MN_Ed2 := 0
@@ -1133,10 +1132,10 @@ Function ClientesPesquisa()
                      @ 18,02 prompt 'Complemento:'
                      @ 18,37 prompt 'Bairro:'
                      @ 18,62 prompt 'CEP:'
-                     @ 19,02 prompt 'Pa¡s:' 
+                     @ 19,02 prompt 'Pa¡s:'
                      @ 19,18 prompt 'Estado:'
                      @ 19,39 prompt 'Cidade:'
-                     @ 21,02 prompt 'Recebimento:'  
+                     @ 21,02 prompt 'Recebimento:'
                      @ 23,70 prompt 'VOLTAR'
                      menu to MN_ED2
                      if MN_Ed2 = 1
@@ -1146,7 +1145,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl ender2 with Cender2
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 17,14 say Cender2
                         tcor()
@@ -1160,7 +1159,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl nroend2 with Cnroend2
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 17,63 say Cnroend2
                         tcor()
@@ -1174,7 +1173,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl compl2 with Ccompl2
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 18,15 say Ccompl2
                         tcor()
@@ -1188,7 +1187,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl bairro2 with Cbairro2
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 18,45 say Cbairro2
                         tcor()
@@ -1202,7 +1201,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl cep2 with Ccep2
                         // unlock
-                        use
+                        //use
                         set color to b+/w
                         @ 18,67 say Ccep2
                         tcor()
@@ -1216,7 +1215,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl paiis2 with Cpais2
                         // unlock
-                        Use
+                        //use
                         set color to b+/w
                         @ 19,08 say Cpais2
                         tcor()
@@ -1236,25 +1235,25 @@ Function ClientesPesquisa()
                            endi
                            Area(oMenu:aDbfs[40])
                            loca for estd = Cest2
-                           if eof()   
+                           if eof()
                               // unlock
-                              Use
+                              //use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor est2 to Cest2
                               // unlock
-                              Use
+                              //use
                               RE2 := ' '
                               loop
                            endi
                            // unlock
-                           Use
+                           //use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl est2 with Cest2
                            // unlock
-                           Use
+                           //use
                            set color to b+/w
                            @ 19,26 say Cest2
                            tcor()
@@ -1278,23 +1277,23 @@ Function ClientesPesquisa()
                            loca for cidade = Ccida2 .and. estd = Cest2
                            if eof()
                               // unlock
-                              Use
+                              //use
                               mdest()
                               Area(oMenu:aDbfs[5])
                               go reg5
                               stor cida2 to Ccida2
                               // unlock
-                              Use
+                              //use
                               RC2 := ' '
                               loop
                            endi
                            // unlock
-                           Use
+                           //use
                            Area(oMenu:aDbfs[5])
                            go reg5
                            repl cida2 with Ccida2
                            // unlock
-                           Use
+                           //use
                            set color to b+/w
                            @ 19,47 say Ccida2
                            tcor()
@@ -1311,7 +1310,7 @@ Function ClientesPesquisa()
                         go reg5
                         repl hrrec with Chrrec
                         // unlock
-                        Use
+                        //use
                         set confirm off
                         set color to b+/w
                         @ 21,15 say Chrrec
@@ -1361,7 +1360,7 @@ Function ClientesPesquisa()
                   Endi
                   tcor()
                   @ 20,16 say CNF
-                  @ 20,25 say Cprnf 
+                  @ 20,25 say Cprnf
                   if Cpedcli # 'S'
                      Cpedcli := 'N'
                   endi
@@ -1391,7 +1390,7 @@ Function ClientesPesquisa()
                      if say = 'X'
                         MN_inf := 0
                         loop
-                     endi   
+                     endi
                      if TY = 1
                         Cisest :='S'
                         set color to b+/w
@@ -1419,18 +1418,18 @@ Function ClientesPesquisa()
                         go reg5
                         repl isest with 'S',justst with Cjustst
                         // unlock
-                        Use
+                        //use
                         mdsuces()
                         MN_inf := 0
                         loop
                      endi
-                     if TY = 2 
+                     if TY = 2
                         Cisest :='N'
                         Area(oMenu:aDbfs[5])
                         go reg5
                         repl isest with ' '
                         // unlock
-                        Use
+                        //use
                         @ 10,21 clea to 15,59
                         set color to b+/w
                         @ 10,50 say 'NAO'
@@ -1446,7 +1445,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl nf with Cnf
                      // unlock
-                     Use
+                     //use
                      set color to b+/w
                      @ 20,16 say Cnf
                      tcor()
@@ -1460,7 +1459,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl prnf with Cprnf
                      // unlock
-                     Use
+                     //use
                      set color to b+/w
                      @ 20,25 say Cprnf
                      tcor()
@@ -1474,7 +1473,7 @@ Function ClientesPesquisa()
                      go reg5
                      repl pedcli with Cpedcli
                      // unlock
-                     Use
+                     //use
                      set color to b+/w
                      @ 21,55 say Cpedcli
                      tcor()
@@ -1497,8 +1496,8 @@ Function ClientesPesquisa()
       endd
       restscreen(00,00,23,79,TELA)
       retu
-    
-   
+
+
 Function ClientesInclusao()
 ***************************
       oMenu:Limpa()
@@ -1570,7 +1569,7 @@ Function ClientesInclusao()
       set confirm on
       @ 02,00 to 02,79
       @ 02,02 say 'Cliente'
-      @ 04,02 say 'C¢digo do Cliente:' 
+      @ 04,02 say 'C¢digo do Cliente:'
       @ 04,28 get FJ
       @ 05,02 say 'Data Cadastro:' get date
       clea gets
@@ -1601,7 +1600,7 @@ Function ClientesInclusao()
          @ 13,02 say 'Regime de Apura‡Æo:'
          @ 13,23 say '-'
          @ 13,50 say 'Pagamento:'
-         @ 14,02 say 'Tipo Contrbte:'      
+         @ 14,02 say 'Tipo Contrbte:'
          @ 14,39 say 'Representante:'
          @ 14,57 say '-'
          read
@@ -1661,7 +1660,7 @@ Function ClientesInclusao()
                read
                if Rdesc > descto
                   save scre to msg
-                  @ 12,20 clea to 13,55 
+                  @ 12,20 clea to 13,55
                   set color to w/r
                   n := ' '
                   @ 12,02 say 'ESSE DESCONTO EXEDE O LIMITE !!!' get n pict '!'
@@ -1806,7 +1805,7 @@ Function ClientesInclusao()
                   loca for codr = cdr
                   if eof()
                      // unlock
-                     Use
+                     //use
                      mddad()
                      rps := 0
                      loop
@@ -1814,7 +1813,7 @@ Function ClientesInclusao()
                   stor codr to cdr
                   stor nrep to nmrep
                   // unlock
-                  use
+                  //use
                   rest scre from tl
                   @ 14,53 get cdr
                   @ 14,58 get nmrep
@@ -1838,7 +1837,7 @@ Function ClientesInclusao()
             if eof()
             else
                // unlock
-               Use
+               //use
                TONE(200,5)
                If ALERT("Ja Existe Cadastro com Esse CNPJ;Voce nao pode continuar !;", {"ALTERAR", "SAIR"} , "B/GR+,r") ==2
                   restscreen(00,00,23,79,TELA)
@@ -1848,7 +1847,7 @@ Function ClientesInclusao()
                endi
             endi
             // unlock
-            Use
+            //use
             exit
          endi
          @ 15,00 to 15,79
@@ -1858,9 +1857,9 @@ Function ClientesInclusao()
          @ 19,02 say 'Complemento:' get Rcompl pict '@!'
          @ 19,37 say 'Bairro:' get Rbairro pict '@!'
          @ 19,62 say 'CEP:' get CCEP pict '99.999-999'
-         @ 20,02 say 'Pa¡s:' 
+         @ 20,02 say 'Pa¡s:'
          @ 20,18 say 'Estado:'
-         @ 20,39 say 'Cidade:' 
+         @ 20,39 say 'Cidade:'
          read
          @ 20,08 get Rpais pict '@!'
          clea gets
@@ -1878,16 +1877,16 @@ Function ClientesInclusao()
             endi
             Area(oMenu:aDbfs[40])
             loca for estd = RE
-            if eof()   
+            if eof()
                // unlock
-               Use
+               //use
                mdest()
                RE := '  '
                loop
             endi
             stor estd to Rest
             // unlock
-            Use
+            //use
             @ 20,47 get Rcida pict '@!'
             read
             ET := '2'
@@ -1895,7 +1894,7 @@ Function ClientesInclusao()
             loca for cidade = Rcida .and. estd = RE
             if eof()
                // unlock
-               Use
+               //use
                mdest()
                Rcida := spac(30)
                @ 20,47 clea to 21,77
@@ -1903,20 +1902,20 @@ Function ClientesInclusao()
                loop
             endi
             // unlock
-            Use
+            //use
             exit
          endd
-         @ 21,12 say 'NF:' get RNF 
-         @ 21,19 say 'PRNF:' get Rprnf 
+         @ 21,12 say 'NF:' get RNF
+         @ 21,19 say 'PRNF:' get Rprnf
          clea gets
          @ 21,02 say 'Linha:' get Rlinha
          @ 21,27 say 'Despacho:' get Rdespacho pict '@!'
-         @ 22,02 say 'Recebimento:' get Rhrrec 
+         @ 22,02 say 'Recebimento:' get Rhrrec
          @ 23,02 say 'Observacao do Pedido:' get Robssep
          read
          set confirm off
          TONE(600)
-         If ALERT("Deseja Registrar o Cadastro?;;", {"SIM", "NÇO"} , "B/GR+,r") ==2
+         If conf("Deseja Registrar o Cadastro?")
             showtime()
             mdanul()
             restscreen(00,00,23,79,TELA)
@@ -1926,7 +1925,7 @@ Function ClientesInclusao()
          go bott
          stor CODC to cdc
          // unlock
-         Use
+         //use
          do case
             case val(cdc)+1 < 10
                stor '000'+subs(str(val(cdc)+1),10,1) to cod
@@ -1947,10 +1946,274 @@ Function ClientesInclusao()
          repl nf with Rnf, prnf with Rprnf, hrrec with Rhrrec, data with DT, sit with FJ, codc with cod, tpag with Rtpag, Vmin with Rvmin, despacho with Rdespacho
          repl reg_apur with Creg_apur, indie with subs(desc_ctb,1,1), cnae with Rcnae, codrp with cdr, nrepre with nmrep,obssep with Robssep
          // unlock
-         use
+         //use
          mdsuces()
          restscreen(00,00,23,79,TELA)
          retu
       endd
 
 
+function lstcli()
+*****************
+	
+   oMenu:Limpa()
+   Pest := Space(2)
+   Mabox(10, 10,12, 40, "LISTAGEM DE CLIENTES")
+   @ 11, 11 say 'Estado:' get Pest pict '@!' valid !Empty(Pest)
+   read
+   if LastKey() = ESC
+   	if conf("Pergunta: Deseja encerrar?")
+      	return nil
+      endif
+   endif
+	
+   ty := 0
+	while ty = 0
+   	OI  := 0
+   	l   := 2
+   	dct := -1
+
+   	Area("cadcli")
+   	index on dscnto to I5
+	   set index to I5
+	   while !eof()
+      if Pest # '  '
+         if est # Pest
+            DbSkip(1)
+            loop
+         endi
+      endi
+      if ativo # 'A' .OR. dscnto = dct
+         DbSkip(1)
+         loop
+      endi
+      @ l,01 say dscnto
+      stor DSCNTO to dct
+      l++
+      skip
+   end
+
+   @ 21,20 say 'Digite o Valor do Desconto:' get oi pict '9999.99'
+   read
+   @ 22,20 prompt 'IMPRIMIR TABELA'
+   @ 23,20 prompt 'SAIR'
+   MENU TO TY
+   @ 20,01 clea to 21,40
+   if TY # 1
+      retu
+   endi
+   Area(oMenu:aDbfs[5])
+   go top
+   ln := 2
+   SET DEVI TO PRINT
+   SET PRINT ON
+   @ 00,00 say '- Listagem de Clientes      '+'Estado de: '+Pest
+   do whil .not. eof()
+      if Pest # '  '
+         if est # Pest
+            skip
+            loop
+         endi
+      endi
+      if dscnto # oi
+         skip
+         loop
+      endi
+      if ativo # 'A'
+         skip
+         loop
+      endi
+      @ ln,00 say chr(15)
+      @ ln,02 say codc+'-'+cliente
+      @ ln,36 say fone1
+      @ ln,55 say contato
+      @ ln,75 say dscnto
+      @ ln+1,02 say email
+      skip
+      ln := ln+2
+      if ln>60
+         ejec
+         ln := 0
+         loop
+      endi
+   endd
+
+   set print off
+   set devi to scre
+   ejec
+   @ 21,02 say 'Gerando relat¢rio *.TXT  ....'
+   r := ' '
+   nm := dtos(date)+".txt"
+   set printer to &nm
+   set print on
+   set console off
+   ??'Listagem email clientes do estado: '+Pest
+   ?'Desconto desses: '+ltrim(str(oi))
+   ?
+   Area(oMenu:aDbfs[5])
+   go top
+   do whil .not. eof()
+      if Pest # '  '
+         if est # Pest
+            skip
+            loop
+         endi
+      endi
+      if dscnto # oi
+         skip
+         loop
+      endi
+      if ativo # 'A'
+         skip
+         loop
+      endi
+      if email = '     '
+         skip
+         loop
+      endi
+      ?trim(email)+';'
+      skip
+   endd
+   set console on
+   set print off
+   set printer to
+   @ 23,02 say '* Dados Gerado com SUCESSO !!!' get R
+   read
+
+   @ 02,00 clea to 23,79
+   TY := 0
+   loop
+endd
+
+function psqcli()
+*****************
+t:=0
+do whil t = 0
+   CCPF := spac(14)
+   CNP := spac(18)
+   RZ := spac(40)
+   MNOME:=SPACE(15)
+   Ccde:=spac(15)
+   Cender:=spac(40)
+   if cdtr = 'X'
+      @ 09,04 prompt 'NOME FANTASIA'
+      @ 10,04 prompt 'RAZAO SOCIAL'
+      @ 11,04 prompt 'CNPJ'
+      @ 12,04 prompt 'CPF'
+      @ 13,04 prompt 'CIDADE'
+      @ 14,04 prompt 'ENDERECO'
+      menu to TT
+   else
+      TT := 1
+   endi
+   @ 01,50 to 23,79
+   if TT = 1
+      @ 02,51 say "Digite o Nome do Cliente:"
+      @ 03,51 GET MNOME PICT "@!"
+   elseif TT = 2
+      @ 02,51 say "Digite a RazÆo Social:"
+      @ 03,51 GET RZ PICT "!!!!!!!!!!!!!!!!!!!!"
+   elseif TT = 3
+      @ 02,51 say "Digite o CNPJ:"
+      @ 03,51 GET CNP PICT "99.999.999/9999-99"
+   elseif TT = 4
+      @ 02,51 say "Digite o CPF:"
+      @ 03,51 GET CCPF PICT "999.999.999-99"
+   elseif TT = 5
+      @ 02,51 say "Digite a Cidade:"
+      @ 03,51 GET Ccde PICT "@!"
+   elseif TT = 6
+      @ 02,51 say "Digite Endereco:"
+      @ 03,51 GET Cender PICT "@!"
+   endi
+   READ
+   if TT = 0
+*      rest scre from tela
+      retu
+   endi
+   if TT = 1 .and. Mnome = '     '
+*      rest scre from tela
+      retu
+   elseif TT = 2 .and. RZ = '    '
+*      rest scre from tela
+      retu
+   elseif TT = 3 .and. CNP = '  '
+*      rest scre from tela
+      retu
+   elseif TT = 4 .and. CCPF = '   '
+*      rest scre from tela
+      retu
+   elseif TT = 5 .and. Ccde = '   '
+*      rest scre from tela
+      retu
+   endi
+   Area(oMenu:aDbfs[5])
+   DBGOTOP()
+   if TT = 1
+      LOCATE FOR ALLTRIM(MNOME)$CLIENTE
+   elseif TT = 2
+      LOCATE FOR ALLTRIM(RZ)$RAZAO
+   elseif TT = 3
+      LOCATE FOR ALLTRIM(CNP)$CNPJ
+   elseif TT = 4
+      LOCATE FOR ALLTRIM(CCPF)$CPF
+   elseif TT = 5
+      LOCATE FOR ALLTRIM(CCDE)$CIDA
+   elseif TT = 6
+      LOCATE FOR ALLTRIM(Cender)$ender
+   endi
+   IF EOF()
+       mdcli()
+       if cdtr = 'X'
+*          rest scre from tela
+       endi
+       t:=0
+       loop
+   ENDIF
+   CONTA:=0
+   ln := 3
+   @ 01,51 clea to 22,78
+   bcor()
+   @ 01,51 say 'C¢digo       Cliente        '
+   tcor()
+   DO WHIL .T.
+      CONTA++
+      if ativo # 'A'
+         icor()
+      endi
+      @ ln,51 SAY codc
+      @ ln,58 SAY subs(cliente,1,20)
+      if TT # 1
+         @ ln+1,51 say subs(razao,1,25)
+         if sit = 'EMPRESA'
+            @ ln+2,51 say cnpj
+            else
+            @ ln+2,51 say cpf
+         endi
+      endi
+      tcor()
+      if TT = 1
+         ln := ln + 1
+      else
+         ln := ln + 4
+      endi
+      if ln > 20
+         @ 22,51 say 'Tecle algo...'
+         inkey(10)
+*         @ 03,51 clea to 22,78
+         ln := 3
+      endi
+      IF EOF()
+         @ 22,51 SAY "Fim da Busca !"
+         inkey(10)
+*         rest scre from tela
+         retu
+      ENDIF
+      CONTINUE
+*      rest scre from tela
+      retu
+   ENDD
+*   rest scre from tela
+   retu
+   cdtr := ' '
+endd
