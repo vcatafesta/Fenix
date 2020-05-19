@@ -7,6 +7,8 @@
 -b
 -run
 
+
+
 #libs
 -lxhb
 -lhbwin
@@ -14,22 +16,25 @@
 -lhbgt
 -lhbnf
 
-
-
 {mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition  
+-cflag= -cpp -w0
 
-fenix
-cadastro
+fenix.prg
+cadastro.prg
 cadastro.prg
 funcoes.prg
 database.prg
+tambient.prg
 tindice.prg
 tmenu.prg
 tget.prg
+tini.prg
 getsys.prg
 getpsw.prg
+sixtools.prg
 
 hbmisc.hbc
 hbblink.hbc
 hboslib.hbc
 hbgzio.hbc
+hbmemio.hbc
