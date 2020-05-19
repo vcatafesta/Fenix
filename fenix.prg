@@ -132,9 +132,17 @@ function main()
 	VerArquivo()
 	UsaArquivo()
    oMenu:Limpa()
+	
 	login()
-
-   Area("dad_nfen")
+	
+	oMenu:StatusSup := "Fenix for Windows v1.0"
+	oMenu:StatusInf := AllTrim(oMenu:Usuario)
+	oMenu:StatusInf += "|"
+	oMenu:StatusInf += AllTrim(oMenu:Comp)
+	oMenu:StatusInf += "|"
+	oMenu:StatusInf += AllTrim(oMenu:Unidade)
+   
+	Area("dad_nfen")
    locate for dad_nfen->X = Space(1)
    if dad_nfen->(!eof())
       Alerta('Existe contra-nota pendente para serem emitidas')
@@ -448,14 +456,126 @@ function Rodape()
    Write(nRow,77, oMenu:Unidade)
    return nil
 
-Function Encerra(nResult)
-*************************
+def Encerra(nResult)
 	ErrorBeep()
 	if conf("Pergunta: Deseja encerrar a execucao do sistema?")
 		nResult := 999
-      return
-	end	
+		FechaTudo()
+		FChDir( oAmbiente:xBase )
+		SalvaMem()	
+	
+		oIni:Close()	
+		//oSci:Close()
+
+		F_Fim( "Fenix for Windows" + " " + "v1.0" )
+		SetMode(oAmbiente:AlturaFonteDefaultWindows, oAmbiente:LarguraFonteDefaultWindows)
+		Cls
+		DevPos( 24, 0 )
+		return( __Quit())
+	end
+	return nResult
+endef
+
+
+def F_Fim( Texto )
+***********************
+	LOCAL cMicrobras := oAmbiente:xProgramador
+				  Texto := Iif( Texto = NIL, "MICROBRAS", Texto )
+
+	SetColor("")
+	Cls
+	Alert( Texto + ";;Copyright (C)1992," + Str(Year(Date()),4) + ";" + cMicrobras + ";;Todos Direitos;Reservados", "W+/G")
 	return
+endef
+
+
+def SetaIni()		
+	oMenu:Frame 				 := oIni:ReadString( oAmbiente:xUsuario,  'frame',         oAmbiente:Frame )
+	oMenu:PanoFundo			 := oIni:ReadString( oAmbiente:xUsuario,  'panofundo',     oAmbiente:PanoFundo )
+	oMenu:CorMenu				 := oIni:ReadInteger( oAmbiente:xUsuario, 'cormenu',       oAmbiente:CorMenu )
+   oMenu:CorBarraMenu	    := oIni:ReadInteger( oAmbiente:xUsuario, 'corbarramenu',  oAmbiente:CorBarraMenu )
+	oMenu:CorMsg				 := oIni:ReadInteger( oAmbiente:xUsuario, 'cormsg',        oAmbiente:CorMsg )
+	oMenu:CorFundo 			 := oIni:ReadInteger( oAmbiente:xUsuario, 'corfundo',      oAmbiente:Corfundo )
+	oMenu:CorCabec 			 := oIni:ReadInteger( oAmbiente:xUsuario, 'corcabec',      oAmbiente:CorCabec )
+	oMenu:CorDesativada		 := oIni:ReadInteger( oAmbiente:xUsuario, 'cordesativada', oAmbiente:CorDesativada )
+	oMenu:CorBox				 := oIni:ReadInteger( oAmbiente:xUsuario, 'corbox',        oAmbiente:CorBox )
+	oMenu:CorCima				 := oIni:ReadInteger( oAmbiente:xUsuario, 'corcima',       oAmbiente:CorCima )
+	oMenu:Selecionado 		 := oIni:ReadInteger( oAmbiente:xUsuario, 'selecionado',   oAmbiente:Selecionado )
+	oMenu:CorAntiga			 := oIni:ReadInteger( oAmbiente:xUsuario, 'corantiga',     oAmbiente:CorAntiga )
+	oMenu:CorBorda 			 := oIni:ReadInteger( oAmbiente:xUsuario, 'corborda',      oAmbiente:CorBorda )
+	oMenu:CorAlerta			 := oIni:ReadInteger( oAmbiente:xUsuario, 'coralerta',     oAmbiente:CorAlerta )
+	oMenu:Fonte 				 := oIni:ReadInteger( oAmbiente:xUsuario, 'fonte',         oAmbiente:Fonte )
+	oMenu:FonteManualAltura  := oIni:ReadInteger( oAmbiente:xUsuario, 'FonteManualAltura', oAmbiente:FonteManualAltura )
+	oMenu:FonteManualLargura := oIni:ReadInteger( oAmbiente:xUsuario, 'FonteManualLargura', oAmbiente:FonteManualLargura )
+	oMenu:Sombra		 		 := oIni:ReadBool( oAmbiente:xUsuario,	  'sombra',        oAmbiente:Sombra )
+   oMenu:lManterPosicaoMenuVertical := oIni:ReadBool('sistema','manterposicaomenuvertical')
+	oMenu:CorLightBar        := oIni:ReadInteger( oAmbiente:xUsuario, 'CorLightBar',   oAmbiente:CorLightBar )
+	oMenu:CorHotKey          := oIni:ReadInteger( oAmbiente:xUsuario, 'CorHotKey',     oAmbiente:CorHotKey )
+	oMenu:CorHKLightBar      := oIni:ReadInteger( oAmbiente:xUsuario, 'CorHKLightBar', oAmbiente:CorHKLightBar)
+	oMenu:SetaSombra()
+
+	oAmbiente:Get_Ativo           := oIni:ReadBool( oAmbiente:xUsuario,    'get_ativo',     oAmbiente:Get_Ativo )
+	oAmbiente:Mostrar_Desativados := oIni:ReadBool( "sistema",'Mostrar_Desativados', oAmbiente:Mostrar_Desativados )
+	oAmbiente:Mostrar_Recibo      := oIni:ReadBool( "sistema",'Mostrar_Recibo', oAmbiente:Mostrar_Recibo )
+	oAmbiente:Frame               := oMenu:Frame
+	oAmbiente:PanoFundo     		:= oMenu:PanoFundo
+	oAmbiente:CorMenu 	      	:= oMenu:CorMenu
+   oAmbiente:CorBarraMenu 	     	:= oMenu:CorBarraMenu
+	oAmbiente:CorLightBar         := oMenu:CorLightBar
+	oAmbiente:CorHotKey           := oMenu:CorHotKey
+	oAmbiente:CorHKLightBar       := oMenu:CorHKLightBar
+	oAmbiente:CorMsg			      := oMenu:CorMsg
+	oAmbiente:CorFundo		      := oMenu:CorFundo
+	oAmbiente:CorCabec		      := oMenu:CorCabec
+	oAmbiente:CorDesativada       := oMenu:CorDesativada
+	oAmbiente:CorBox			      := oMenu:CorBox
+	oAmbiente:CorCima 		      := oMenu:CorCima
+	oAmbiente:Selecionado	      := oMenu:Selecionado
+	oAmbiente:CorAntiga		      := oMenu:CorAntiga
+	oAmbiente:CorBorda		      := oMenu:CorBorda
+	oAmbiente:CorAlerta		      := oMenu:CorAlerta
+	oAmbiente:Fonte			      := oMenu:Fonte
+	oAmbiente:FonteManualAltura   := oMenu:FonteManualAltura
+	oAmbiente:FonteManualLargura  := oMenu:FonteManualLargura
+	oAmbiente:Sombra			      := oMenu:Sombra
+   oAmbiente:lManterPosicaoMenuVertical := oMenu:lManterPosicaoMenuVertical
+	IF oAmbiente:Fonte > 1
+		Eval( oAmbiente:TabelaFonte[ oAmbiente:Fonte] )
+	EndIF
+	return( NIL)
+		
+	endef
+
+
+def SalvaMem()	
+	oIni:WriteString(  oAmbiente:xUsuario,	'frame',         oMenu:Frame )
+	oIni:WriteString(  oAmbiente:xUsuario,	'panofundo',     oMenu:PanoFundo )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'selecionado',   oMenu:Selecionado )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'cormenu',       oMenu:CorMenu )
+   oIni:WriteInteger( oAmbiente:xUsuario, 'corbarramenu',  oMenu:CorBarraMenu )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'CorLightBar',   oMenu:CorLightBar )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'CorHotKey',     oMenu:CorHotKey )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'CorHKLightBar', oMenu:CorHKLightBar)
+	oIni:WriteInteger( oAmbiente:xUsuario, 'corfundo',      oMenu:Corfundo )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'corcabec',      oMenu:CorCabec )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'cordesativada', oMenu:CorDesativada )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'corbox',        oMenu:CorBox )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'corcima',       oMenu:CorCima )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'corantiga',     oMenu:CorAntiga )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'corborda',      oMenu:CorBorda )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'fonte',         oMenu:Fonte )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'fonte',         oMenu:Fonte )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'FonteManualAltura', oMenu:FonteManualAltura )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'FonteManualLargura', oMenu:FonteManualLargura )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'coralerta',     oAmbiente:CorAlerta )
+	oIni:WriteInteger( oAmbiente:xUsuario, 'cormsg',        oAmbiente:CorMsg )
+	oIni:WriteBool(    oAmbiente:xUsuario, 'sombra',        oMenu:Sombra )
+	oIni:WriteBool(    oAmbiente:xUsuario, 'get_ativo',     oAmbiente:Get_Ativo )
+	//oAmbiente:ShowVar(true, nil, true)	
+	SetaIni()
+	return NIL
+endef
+
 
 function SetaAmbiente()
 	set key -41 to
