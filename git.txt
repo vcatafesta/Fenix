@@ -1,0 +1,11 @@
+git add
+git commit
+git push
+git pull
+git restore <file.ext>
+git checkout <file.ext>
+git reset --hard HEAD # isso deixa todos os arquivos na versão do seu ultimo commit da branch que vc está.
+1) Se você fez o commit, que eu acredito que não:
+	git reset --hard HEAD^
+2) Mas se você ainda não fez o commit
+	git reset --hard HEAD
