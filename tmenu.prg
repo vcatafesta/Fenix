@@ -1,36 +1,40 @@
 #include "fenix.ch"
 
-CLASS TMenu
-	 Export:
-		  VAR Row
+class TMenu from TAmbiente
+	exported:
 		  VAR Col
-		  VAR aDbfs
-		  VAR Unidade
-		  VAR Terminal
-		  VAR Comp
-        VAR nMUser
-        VAR Usuario
-	 Export:
-		  METHOD New CONSTRUCTOR
-		  METHOD Limpa
+		  
+	public:
+		  METHOD New 
+
+	public Menu1
 ENDCLASS
 
-METHOD New( cAlias )
-	Self:Row			:= 09
-	Self:Col			:= 15
-	Self:aDbfs		:= {}
-	Self:Unidade	:= "C"
-	Self:Terminal	:= ""
-   Self:nMUser    := ""
-   Self:Usuario   := ""
-	Self:Comp		:= "SERVIDOR"
+method New( oOwner ) class TMenu
+
+   ::New( oOwner )
+	//with Self
+	    *
+		 ::setvar()	
+       ::StatusSup      := "Fenix for Windows"
+       ::StatusInf      := ""
+		 ::Panos          := ::SetPano()
+		 ::Menu           := ::xMenu()
+       ::Disp           := ::xDisp()
+       ::Alterando      := FALSO
+       ::Ativo          := 1
+       ::nPos           := 1
+       ::NomeFirma      := "CLAMAR CONSERVAS"
+       ::CodiFirma      := '0001'
+       ::StSupArray     := { ::StatusSup }
+       ::StInfArray     := { ::StatusInf }
+       ::MenuArray      := { ::Menu }
+       ::DispArray      := { ::Disp }
+		 ::aDbfs				:= {}
+		 
+	//endwith
 	
-	return( Self )
+return(self)
 
-METHOD Limpa()
-	setcolor("")
-	Scroll(01,00, MaxRow()-1, MaxCol()-1)
-	return( Self )
-
-function TMenuNew()
+Function TMenuNew()
 	return( TMenu():New())

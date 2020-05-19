@@ -105,7 +105,7 @@ FUNCTION ReadModal( GetList, nPos )
 			if oGet:cType != "N" .AND. oGet:cType != "L" .AND. oGet:cType != "D"
 				if At("@S", oGet:picture) > 0    // Campo Senha?
 					oGet:lHideInput := .T.
-					oGet:cStyle     := ECHO_CHAR 
+					oGet:cStyle     := ECHO_CHAR
 					//ATail(GetList):reader := {|o| o:varPut(GetPsw(o))}
 				endif	
 			endif
@@ -516,7 +516,7 @@ STATIC FUNCTION GetReadVar( oGet )
 	LOCAL cName := UPPER( oGet:name )
 	LOCAL i
 
-	if !( oGet:subscript == NIL )	   
+	if !( oGet:subscript == NIL )	
 		FOR i := 1 TO LEN( oGet:subscript )			
 			if    valtype(oGet:subscript[i]) = "C"
 				cName += "[" + LTRIM( oGet:subscript[i]) + "]"
@@ -863,7 +863,7 @@ FUNCTION GetPostValidate(oGet, cAuxVar)
 
 		// S'87 compatibility
 		SETPOS( oGet:row, oGet:col + LEN( oGet:buffer ) )
-      
+
 		/*
 		if !(cAuxVar == NIL)
          oGet:Buffer := cAuxVar
@@ -957,7 +957,7 @@ function EventState()
                   return 0
                endif
             endif	
-			CASE K_CTRL_C 
+			CASE K_CTRL_C
 				nBits      := hb_gtInfo( HB_GTI_KBDSHIFTS )
 				lIsKeyCtrl := ( nBits == hb_BitOr( nBits, HB_GTI_KBD_CTRL ) )
 				if lIsKeyCtrl

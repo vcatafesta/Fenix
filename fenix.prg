@@ -1,5 +1,12 @@
 #include "fenix.ch"
 request SIXCDX
+REQUEST HB_CODEPAGE_PT850
+REQUEST HB_CODEPAGE_PTISO
+REQUEST HB_CODEPAGE_PT860
+REQUEST HB_CODEPAGE_UTF8
+REQUEST HB_LANG_EN
+REQUEST HB_LANG_PT
+static s_hMutex
 
 function main()
 ********************
@@ -17,8 +24,11 @@ function main()
    Public gerbol 	:= ' '
    Public z 		:= ' '
    Public fat 		:= ' '
-	public oMenu   := TMenuNew()
-	oMenu:aDbfs    := {"comp",;
+	public oAmbiente := TAmbiente():New()
+	public oMenu     := oAmbiente
+	public oIni		  := TIniNew("fenix.ini")
+	public oIndice	  := TIndiceNew()
+	oMenu:aDbfs      := {"comp",;
 					"cadmerc",;
 					"cadadm",;
 					"cadfor",;
@@ -114,35 +124,21 @@ function main()
 					"etqpre"}	
 	
 
-
+	hb_langSelect( "pt" ) 	
 	oMenu:Limpa()
   	SetaAmbiente()
 	//altd()
+	CriaArquivo()
 	VerArquivo()
 	UsaArquivo()
    oMenu:Limpa()
+	login()
 
-	//arq1()
-   Drt    := oMenu:Unidade
-	//CodTer := oMenu:Terminal
-	nComp  := oMenu:Comp
-
-	if logfan = Space(4)
-		login()
-		*Logfan := 'LOGFAN'
+   Area("dad_nfen")
+   locate for dad_nfen->X = Space(1)
+   if dad_nfen->(!eof())
+      Alerta('Existe contra-nota pendente para serem emitidas')
    end
-
-   Ctr_User()
-
-   Area(oMenu:aDbfs[17])
-   locate for X = ' '
-   if eof()
-      @ 40,01 say '                                                   '
-   else
-      @ 40,01 say 'Existe contra-nota pendente para serem emitidas !!!'
-   endi   
-   unlock
-   use
 
 	Area("cadadm")
    if oMenu:Comp = "SERVIDOR"
@@ -151,30 +147,20 @@ function main()
 			CadAdm->(Libera())
 		end
    else
-      loca for date() = datasis
+      locate for date() = datasis
       if eof()
-         Unlock
-         Use
          TONE(200,5)
          ALERT("ATENCAO !!!;Data do Sistema Incorreta !;Voce nao pode acessar.", , "W+/B")
          quit
-      else
-         Unlock
-         Use
       end
    end
-   public DRT
    Date := Date()
    Dif  := Date()
-   SET( _SET_EVENTMASK, INKEY_ALL )
-   SetBlink(.f.)
-   mSetCursor(.T.)
-   //SetMode(25,80)
    SetColor("")
    oMenu:Limpa()
    oPull := Monta_Menu()
-   
-	while MenuModal( oPull, 00, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
+
+	while MenuModal( oPull, 01, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
    return( nil )
 
 function Monta_Menu()
@@ -182,9 +168,9 @@ function Monta_Menu()
    local cCorBar  := "b*/w,w+/bg,b*/w,w+/bg,b*/w,b*/w"
    local cCorItem := "w+/bg,b*/w,w+/bg,b*/w,w/bg,w+/bg"
 	local nResult  := 0
-   
 
-   oTopBar := TopBar( 0,0, MaxCol())
+
+   oTopBar := TopBar( 01,00 , MaxCol())
    oTopBar:ColorSpec := cCorBar
 
    oPopUp := PopUp()
@@ -194,7 +180,7 @@ function Monta_Menu()
 
    oItem := MenuItem( "Cadastro de &Clientes" , {|| cadastro() } ,101)
    oPopUp:AddItem( oItem )
-   if Yclicad = 'B'   
+   if Yclicad = 'B'
       oItem:Enabled := .f.
    else
       oItem:Enabled := .T.
@@ -322,7 +308,7 @@ function Monta_Menu()
 
       oItem :=MenuItem( "&Baixa", {|| Alert("baixa()") })
       oPopUp:AddItem( oItem )
-       
+
       oItem :=MenuItem( "&Corrige", {|| Alert("edita()") })
       oPopUp:AddItem( oItem )
 
@@ -348,7 +334,7 @@ function Monta_Menu()
 
               oItem_M1 := MenuItem( "&Gerar Pre-Lote", {|| Alert("prelote()") })
               oPopUp_M:AddItem( oItem_M1 )
-              
+
               oItem_M2 := MenuItem( "&Concluir Estoque", {|| Alert("concluir estoque()") })
               oPopUp_M:AddItem( oItem_M2 )
 
@@ -364,7 +350,7 @@ function Monta_Menu()
       oPopUp_L :ColorSpec:= cCorItem
       oItem :=MenuItem( "&Listagem", oPopUp_L)
       oPopUp:AddItem( oItem )
- 
+
            oItem_L1 := MenuItem( "&Listagem ctas a Receber", {|| Alert("ctas receber()") })
            oPopUp_L:AddItem( oItem_L1 )
 
@@ -402,14 +388,14 @@ function Monta_Menu()
       oPopUp2 :ColorSpec:= cCorItem
       oItem := MenuItem( "&Registrar Entrada", {|| Alert("compras()") })
       oPopUp:AddItem( oItem )
-      if Ycompra = 'B'   
+      if Ycompra = 'B'
       else
-      endi      
+      endi
 
 
       oItem :=MenuItem( "&Baixa", {|| Alert("baixa()") })
       oPopUp:AddItem( oItem )
-       
+
       oItem :=MenuItem( "&Corrige", {|| Alert("edita()") })
       oPopUp:AddItem( oItem )
 
@@ -417,7 +403,7 @@ function Monta_Menu()
       oPopUp_LC :ColorSpec:= cCorItem
       oItem :=MenuItem( "&Listagem", oPopUp_LC)
       oPopUp:AddItem( oItem )
- 
+
            oItem_LC1 := MenuItem( "&Listagem ctas a Pagar", {|| Alert("ctas pagar()") })
            oPopUp_LC:AddItem( oItem_LC1 )
 
@@ -438,15 +424,15 @@ function Monta_Menu()
 	oPopUp  := PopUp()
    oPopUp :ColorSpec:= cCorItem
    oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
-   Rodape()
+   //Rodape()
    return ( oTopBar )
-   
+
 function Rodape()
-*****************   
+*****************
 	Date := Date()
    DTF  := Date()
    nRow := MaxRow()
-   
+
    nSetColor(31)
 	Write(nRow, 00, Space(MaxCol()),31)
    Write(nRow,00, logfan + ':' + Alltrim(oMenu:Usuario ))
@@ -461,29 +447,323 @@ function Rodape()
    Write(nRow,75, '|')
    Write(nRow,77, oMenu:Unidade)
    return nil
-   
+
 Function Encerra(nResult)
 *************************
 	ErrorBeep()
 	if conf("Pergunta: Deseja encerrar a execucao do sistema?")
 		nResult := 999
-      return 
+      return
 	end	
 	return
 
 function SetaAmbiente()
 	set key -41 to
-   SET BELL OFF
-   SET SAFE OFF
-   SET DATE BRIT
-   SET TALK OFF
    SET CENT ON
-   SET EXCL ON
-	SET DELE ON
    SET( _SET_EVENTMASK, INKEY_ALL )
    SetBlink(.f.)
    mSetCursor(.T.)
-   //SetMode(25,80)
-   setColor( "w+/b" )
-return nil
-   
+	Set Conf Off
+	Set Bell On
+	Set Scor Off
+	Set Wrap On
+	Set Dele On
+	Set Date Brit
+	Set Deci To 2
+	Set Print To
+	Set Fixed On
+	SetCancel( .F. )
+	//SetMode(28,132)
+	return nil
+
+function login()
+****************
+	LOCAL cScreen   := SaveScreen()
+	LOCAL R         := Space(1)
+	LOCAL cLogin    := Space(15)
+	LOCAL cPassword := Space(6)
+	LOCAL SNA       := "168935"
+	
+	Area("Usuario")
+	while true		
+		MaBox(09, 21, 14, 50, "LOGIN")
+		@ 11,23 say 'Usuario..:' get cLogin    pict "@!" valid UsuarioErrado( @cLogin )
+		@ 12,23 say 'Senha....:' get cPassword pict "@S" valid SenhaErrada( cLogin, cPassword )
+		read
+		if lastkey() = ESC
+			ErrorBeep()
+			if conf("Pergunta: Deseja encerrar?")
+				oMenu:Limpa()
+				DbCloseAll()
+				quit
+			end
+			loop
+		end
+      Log           := cLogin
+      Sha           := Sna
+		LogFan        := Usuario->CodUsu
+		nMuser        := Usuario->Fantazia
+		oMenu:Usuario := Usuario->Fantazia
+		Ctr_User()
+		
+		Area(oMenu:aDbfs[9])
+		Descto := Desc
+		
+		Area("cadprod") // oMenu:aDbfs[11])
+		CadProd->(DbGoTop())
+		
+		if CadProd->(TravaArq())
+			Mensagem("Aguarde, Atualizando valores")
+         while Cadprod->(!Eof())
+				desc_t         := 0
+				des_prc        := 0
+				vpreco         := 0
+				desc_t         := 100-descto
+				des_prc        := desc_t/100
+				vpreco         := precopl/des_prc
+				CadProd->Preco := vPreco
+				CadProd->(DbSkip(1))
+			end			
+		end	
+		CadProd->(Libera())
+		ResTela( cScreen )
+		return nil
+	end
+
+function snh_adm()
+******************
+   STT := ' '
+
+   while Empty(STT)
+      say := ' '
+      tela := SaveScreen()
+      @ 09,20 clea to 13,54
+      @ 09,20 to 13,54
+      SNA := SPAC(7)
+      @ 10,21 say '* DIGITE A SENHA ADMINISTRADOR:'
+      set color to w+/n,X
+      @ 12,33 get SNA
+      read
+      tcor()
+      rest scree from tela
+      if SNA = '      '
+         say := 'X'
+         retu
+      endi
+
+	   Area(oMenu:aDbfs[3])
+      loca for senha = SNA
+      if eof()
+         say := 'X'
+         mdsha()
+         STT := ' '
+         loop
+      end
+      return
+   end
+
+
+function nrpd()
+***************
+	public codnum
+	if digt = '10'
+   	if reg < 10
+      	stor '000000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg >= 10
+      	stor '00000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99
+      	stor '0000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999
+      	stor '000000'+ltrim(str(reg)) to codnum
+   	endi
+   	if reg > 9999
+      	stor '00000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999
+      	stor '0000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999
+      	stor '000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999999
+      	stor '00'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999999
+      	stor '0'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999999
+      	stor ltrim(str(reg)) to codnum
+   	endi
+	endi
+	if digt = '8'
+	   if reg < 10
+	      stor '0000000'+ltrim(str(reg)) to codnum
+	   endi
+	   if reg >= 10
+	      stor '000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99
+	      stor '00000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999
+	      stor '0000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999
+      	stor '000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999
+	      stor '00'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999
+	      stor '0'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999999
+	      stor ltrim(str(reg)) to codnum
+   	endi
+	endi
+if digt = '6'
+   if reg < 10
+      stor '00000'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor '0000'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99
+      stor '000'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 999
+      stor '00'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 9999
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99999
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+if digt = '5'
+   if reg < 10
+      stor '0000'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor '000'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99
+      stor '00'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 999
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 9999
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+if digt = '4'
+   if reg < 10
+      stor '000'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor '00'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 999
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+if digt = '2'
+   if reg < 10
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+
+	
+
+*==================================================================================================*		
+
+def CriaIndice( cDbf )
+	LOCAL cScreen						:= SaveScreen()
+	LOCAL nY 							:= 0
+	LOCAL lRetornaArrayDeArquivos := OK
+	LOCAL nTodos						:= 0
+	LOCAL nPos							:= 0
+	LOCAL cLocalDbf					:= ''
+	LOCAL cLocalNtx					:= ''
+	LOCAL aProc 						:= {}
+
+	Aadd( aProc, {"usuario",   {||Re_Usuario()}})
+
+	nTodos := Len( aProc )
+	//----------------------------------------------------------------//
+	Aeval( Directory( "*.$$$"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*.tmp"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*.bak"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*.mem"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "t0*.*"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "t1*.*"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "t2*.*"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*."),    { | aFile | Ferase( aFile[ F_NAME ] )})
+	//-----------------------------------------------------------------//
+
+	oReindexa := TIniNew("reindexa.ini")
+	cDbf		 := IF( cDbf != NIL, lower( cDbf ), NIL )
+	
+	if cDbf = NIL
+		Aeval( Directory( "*.nsx"), { | aFile | Ferase( aFile[ F_NAME ] )})
+		Aeval( Directory( "*.cdx"), { | aFile | Ferase( aFile[ F_NAME ] )})
+		Aeval( Directory( "*.ntx"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	endif
+	
+	if cDbf != NIL
+		nPos := Ascan( aProc,{ |oBloco|oBloco[1] = cDbf })
+		if nPos != 0
+			cLocalDbf := aProc[nPos,1] + '.dbf'
+			cLocalNtx := aProc[nPos,1] + '.' + CEXT
+			Ferase( cLocalNtx )
+			oReindexa:WriteBool('reindexando', cLocalDbf, FALSO )
+			Eval( aProc[ nPos, 2 ] )
+			oReindexa:WriteBool('reindexando', cLocalDbf, OK )
+			//ResTela( cScreen )
+			Mensagem("Aguarde, Fechando Arquivos.")
+			oReindexa:Close()
+			//ResTela( cScreen )
+			// FechaTudo()
+			return(nil)
+		endif
+	endif
+	FechaTudo()
+	//oIndice:Limpa()
+	for nY := 1 To nTodos
+		cDbf		 := aProc[ nY, 1 ]
+		cLocalDbf := cDbf + '.dbf'
+		
+		if AbreArquivo( cDbf )
+			oReindexa:WriteBool('reindexando', cLocalDbf, FALSO )
+			Eval( aProc[ nY, 2 ] )
+			oReindexa:WriteBool('reindexando', cLocalDbf, OK )
+		EndIF			
+	next
+	//ResTela( cScreen )
+	Mensagem("Aguarde, Fechando Arquivos.", WARNING, _LIN_MSG )
+	//ResTela( cScreen )
+	// FechaTudo()
+	oReindexa:Close()
+	return(nil)
+endef
+
+*==================================================================================================*		
+
+Proc Re_Usuario()
+****************
+	oIndice:DbfNtx("usuario")
+	oIndice:PackDbf("usuario")
+	oIndice:AddNtx("fantazia",  "USUARIO1", "USUARIO"  )
+	oIndice:CriaNtx()
+	Return	

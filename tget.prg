@@ -53,9 +53,9 @@ CREATE CLASS Get
    /* === End of CA-Cl*pper compatible TGet instance area === */
 
    EXPORTED:
-   VAR cType 
+   VAR cType
    VAR lHideInput     INIT .F.
-   VAR cStyle         INIT "*" 
+   VAR cStyle         INIT "*"
    VAR decPos         INIT 0   READONLY /* CA-Cl*pper NG says that it contains NIL, but in fact it contains zero. [vszakats] */
    VAR hasFocus       INIT .F. READONLY
    VAR original                READONLY

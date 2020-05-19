@@ -28,7 +28,7 @@ METHOD New( cAlias )
 	Self:Reindexando	:= .F.
 	Self:aNome_Campo	:= {}
 	Self:aNome_Ntx 	:= {}
-	Self:acTag			:= {}   
+	Self:acTag			:= {}
 	Self:Row 			:= 09
 	Self:Col 			:= 15
 	Self:Compactar 	:= .F.
@@ -47,13 +47,13 @@ METHOD DbfNtx( cAlias )
 ***********************
 	LOCAL bQuery
    LOCAL cTela := SaveScreen()
-   
+
 	Self:aNome_Campo	:= {}
 	Self:aNome_Ntx 	:= {}
 	Self:acTag			:= {}	
-   
+
 	if cAlias != NIL			
-      cAlias := Lower(cAlias)   
+      cAlias := Lower(cAlias)
 		if (oAmbiente:LetoAtivo)
 			if !Used()
 				if !NetUse( cAlias, MONO )			
@@ -64,7 +64,7 @@ METHOD DbfNtx( cAlias )
 		else
 			if !Used()
 				WA_USE((cAlias))
-				WA_LOCK((cAlias))            
+				WA_LOCK((cAlias))
 			endif
 		endif			
 		Sele (cAlias)		
@@ -102,10 +102,10 @@ METHOD PackDbf( cAlias )
 
 METHOD AddNtx( Nome_Campo, Nome_Ntx, cTag )
 
-   Nome_Campo := Lower(Nome_Campo)    
-   Nome_Ntx   := Lower(Nome_Ntx)    
-   cTag       := Lower(cTag)    
-   
+   Nome_Campo := Lower(Nome_Campo)
+   Nome_Ntx   := Lower(Nome_Ntx)
+   cTag       := Lower(cTag)
+
 	Aadd( Self:aNome_Campo, Nome_Campo )
 	Aadd( Self:aNome_Ntx,	Nome_Ntx   )
 	Aadd( Self:acTag, 		cTag		  )
@@ -120,7 +120,7 @@ METHOD CriaNtx()
 	PRIVA Nome_Ntx
 	PRIVA cTag
 
-	if Used() // 13:56 25/04/2018
+	if Used()
 		oMenu:Limpa()
 		MaBox( Self:Row, Self:Col, Self:Row+nLen+1, 42, Self:Alias )
 		
@@ -156,7 +156,7 @@ METHOD CriaNtx()
 					endif
 					//Index On &Nome_Campo. Tag &Nome_Ntx. To ( cTag ) Eval Odometer() Every 10
 				else
-					//Index On &("Nome_Campo") Tag &("Nome_Ntx") To ( cTag )               
+					//Index On &("Nome_Campo") Tag &("Nome_Ntx") To ( cTag )
 					Index On &Nome_Campo. Tag &Nome_Ntx. To ( cTag )
 					//Index On &Nome_Campo. Tag &Nome_Ntx. To ( cTag ) Eval Odometer() Every 10
 				endif
