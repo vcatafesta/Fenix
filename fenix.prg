@@ -426,6 +426,18 @@ function Monta_Menu()
 
       oItem :=MenuItem( "&Registra Vazilhames", {|| Alert("vazilhames()") })
       oPopUp:AddItem( oItem )
+
+	
+	// Ambiente
+	oPopUp := PopUp()
+   oPopUp :ColorSpec:= cCorItem
+   oTopBar:AddItem( MenuItem ( "&Ambiente", oPopUp, ,) )
+
+      oPopUp2 := PopUp()
+      oPopUp2 :ColorSpec:= cCorItem
+      oItem := MenuItem( "&Cor fundo", {|| SetaCorFundo() })
+      oPopUp:AddItem( oItem )
+      	
 *----------
 *SAIR
 *----------
@@ -476,6 +488,14 @@ def Encerra(nResult)
 	return nResult
 endef
 
+
+function SetaCorFundo()
+***********************
+	oMenu:Limpa()
+	oMenu:Setacor(3)
+	SalvaMem()
+	oMenu:Limpa()
+	return nil
 
 def F_Fim( Texto )
 ***********************
