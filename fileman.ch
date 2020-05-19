@@ -1,5 +1,5 @@
 /*****
-*  
+*
 *  Fileman.ch
 *  Include file for Fileman.prg
 *
@@ -61,4 +61,3 @@
 #define  FM_HORIZONTAL     2
 #define  FM_VERTICAL       4
 //#define  K_SPACE           32
-
