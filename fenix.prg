@@ -13,121 +13,27 @@ function main()
    LOCAL oPull
 
    Public Logfan	:= spac(4)
-   Public CT_cli 	:= ' '
-   Public cdtr 	:= ' '
-   Public rcb_V 	:= ' '
-   Public psb 		:= ' '
-   Public l9 		:= ' '
-   Public rt 		:= ' '
-   Public saibx 	:= ' '
-   Public cbc 		:= ' '
-   Public gerbol 	:= ' '
-   Public z 		:= ' '
-   Public fat 		:= ' '
-	public oAmbiente := TAmbiente():New()
-	public oMenu     := oAmbiente
-	public oIni		  := TIniNew("fenix.ini")
-	public oIndice	  := TIndiceNew()
-	oMenu:aDbfs      := {"comp",;
-					"cadmerc",;
-					"cadadm",;
-					"cadfor",;
-					"cadcli",;
-					"compras",;
-					"baixacom",;
-					"gastos",;
-					"desc",;
-					"arq_emb",;
-					"cadprod",;
-					"embals",;
-					"entrada",;
-					"estoque",;
-					"vendas",;
-					"baixaven",;
-					"dad_nfen",;
-					"clmntdet",;
-					"imposto",;
-					"bcdesc",;
-					"clafisc",;
-					"chec",;
-					"usuario",;
-					"frete",;
-					"ftmto",;
-					"bcntacom",;
-					"cadicms",;
-					"cfop",;
-					"bancnota",;
-					"cadclas",;
-					"cadfun",;
-					"cheq",;
-					"percmer",;
-					"pgfun",;
-					"hora",;
-					"demovi",;
-					"dpcarg",;
-					"cadlin",;
-					"crealin",;
-					"cdade",;
-					"sit_trib",;
-					"cadcons",;
-					"data_sem",;
-					"dialet",;
-					"justific",;
-					"controld",;
-					"opflh",;
-					"despesa",;
-					"represen",;
-					"venrepre",;
-					"cadesp",;
-					"cadhis",;
-					"lembre",;
-					"orcmto",;
-					"ctr_ent",;
-					"nfat",;
-					"vazil",;
-					"sldvaz",;
-					"ctrvaz",;
-					"comcx",;
-					"comvz",;
-					"regiao",;
-					"cmda",;
-					"estq_c",;
-					"pgfat",;
-					"bco",;
-					"abcprod",;
-					"ocor",;
-					"rgvaz",;
-					"ven_m",;
-					"abc_cli",;
-					"relcom",;
-					"devoluc",;
-					"etq_dv",;
-					"estorno",;
-					"frota",;
-					"ivt",;
-					"nfcomp",;
-					"cpom",;
-					"tblp",;
-					"cadfrete",;
-					"status",;
-					"perdas",;
-					"prlt",;
-					"carsal",;
-					"cbo",;
-					"cest",;
-					"log",;
-					"reajuste",;
-					"agplote",;
-					"imprped",;
-					"etiqueta",;
-					"etqenv",;
-					"etqpre"}	
-	
+   Public CT_cli 	   := ' '
+   Public cdtr 	   := ' '
+   Public rcb_V 	   := ' '
+   Public psb 		   := ' '
+   Public l9 		   := ' '
+   Public rt 		   := ' '
+   Public saibx 	   := ' '
+   Public cbc 		   := ' '
+   Public gerbol 	   := ' '
+   Public z 			:= ' '
+   Public fat 			:= ' '
+	public oAmbiente	:= TAmbiente():New()
+	public oMenu     	:= oAmbiente
+	public oIni		  	:= TIniNew("fenix.ini")
+	public oIndice	  	:= TIndiceNew()
 
 	hb_langSelect( "pt" ) 	
 	oMenu:Limpa()
   	SetaAmbiente()
 	//altd()
+	ArrayBancoDeDados()
 	CriaArquivo()
 	VerArquivo()
 	UsaArquivo()
@@ -437,7 +343,12 @@ function Monta_Menu()
       oPopUp2 :ColorSpec:= cCorItem
       oItem := MenuItem( "&Cor fundo", {|| SetaCorFundo() })
       oPopUp:AddItem( oItem )
-      	
+
+      oPopUp2 := PopUp()
+      oPopUp2 :ColorSpec:= cCorItem
+      oItem := MenuItem( "&Pano Fundo", {|| xSetaPano() })
+      oPopUp:AddItem( oItem )
+	   	
 *----------
 *SAIR
 *----------
@@ -446,6 +357,12 @@ function Monta_Menu()
    oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
    //Rodape()
    return ( oTopBar )
+	
+Function xSetaPano()
+********************
+	oMenu:SetaPano()
+	SalvaMem()
+	return nil	
 
 function Rodape()
 *****************

@@ -32,7 +32,7 @@ class TAmbiente
 		
 	EXPORTED:
 		VAR Ano2000
-		VAR Frame         INIT "+-+¶+-+¶"
+		VAR Frame         INIT "’Õ∏≥æÕ‘≥"
 		VAR Visual
 		VAR CorMenu
       VAR CorBarraMenu  INIT 15
@@ -260,7 +260,7 @@ method New()
 	::ModeMenu		 	    := ::SetModeMenu()
 	::Selecionado         := 10     // Pano de Fundo Selecionado
 	::PanoFundo           := ::Panos[10]
-	::Frame               := "+-+¶+-+¶"
+	::Frame         		 := "’Õ∏≥æÕ‘≥"
 	::Cormenu             := 31
 	::CorDesativada       := 8
 	::CorLightBar         := 124
@@ -455,15 +455,15 @@ endef
 
 method ConfAmbiente()
 	if ::Argumentos = 0
-		::Frame := "+--¶-¶+¶"
+		::Frame := "…–À« Ã»∂"
 	elseif ::Argumentos = 1
-		::Frame := "+--¶-¶+¶"
+		::Frame := "…–À« Ã»∂"
 	elseif ::Argumentos = 2
-		::Frame := "+--¶-¶+¶"
+		::Frame := "…–À« Ã»∂"
 	elseif ::Argumentos = 3
-		::Frame := "+-+¶+-+¶"
+		::Frame := "⁄ƒø≥Ÿƒ¿≥"
 	endif
-	::Frame := "+-+¶+-+¶"
+	::Frame := "⁄ƒø≥Ÿƒ¿≥"
 
 	M_Frame( ::Frame )
 	::xBase           := ( ::Drive )
@@ -516,10 +516,11 @@ endef
 
 method SetVar()
 	if ::Visual != NIL
-		::Frame  := "+--¶-¶+¶"
+		::Frame  := "…–À« Ã»∂"
 	else
-		::Frame  := "+-+¶+-+¶"
+		::Frame  := "⁄ƒø≥Ÿƒ¿≥"
 	endif	
+	
 	::Mostrar_Desativados := OK
 	::Mostrar_Recibo      := OK
 	::PosiAgeInd          := FALSO
