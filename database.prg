@@ -98,6 +98,28 @@ function ArrayBancoDeDados()
 					"etqpre"}	
 	return nil
 
+function AbreArea()
+*******************
+   LOCAL cScreen := SaveScreen()
+   LOCAL nTam    := Len(oMenu:aDbfs)
+   LOCAL nX
+	LOCAL cDbf
+
+   ErrorBeep()
+   Mensagem("Aguarde, Abrindo base de dados.")
+   FechaTudo()
+
+	//rddsetdefault("SIXCDX")
+	for nX := 1 to nTam
+		cDatabase := oMenu:aDbfs[nX]
+		cDbf      := oMenu:aDbfs[nX] + ".dbf"
+      if !UsaArquivo(cDatabase)
+	      MensFecha()
+	      return nil
+      endif
+   next
+   return nil  
+
 function VerArquivo()
 *********************
 	LOCAL nTam := Len(oMenu:aDbfs)
@@ -131,6 +153,93 @@ function VerArquivo()
 	oMenu:Limpa()	
 	return true
 
+*==================================================================================================*		
+
+def VerIndice()
+	LOCAL lReindexar := FALSO
+	LOCAL aIndice	  := ArrayIndices()
+	LOCAL cDbf
+	LOCAL cLocalDbf
+	LOCAL cIndice
+	LOCAL nTodos
+	LOCAL nX
+
+	oReindexa := TIniNew("reindexa.ini")
+	oMenu:Limpa()
+	nTodos := Len( aIndice )
+
+#ifdef FOXPRO
+	for nX := 1 To nTodos
+		cDbf		 := aIndice[nX,1]
+		cLocalDbf := cDbf + '.dbf'
+		cIndice	 := cDbf + '.' + CEXT
+		
+		if !ms_swap_file(cIndice)
+			//if !AbreArquivo( cDbf )
+			//	return( FALSO )
+			//EndIF
+			CriaIndice(cDbf)
+		else			   
+			/*
+			if !oReindexa:ReadBool('reindexando', cLocalDbf, FALSO )
+				ErrorBeep()
+				if Conf('Erro: Arquivo ' + cDbf + ' nao foi reindexado com sucesso. Reindexar agora ?')
+					if !AbreArquivo( cDbf )
+						return( FALSO )
+					endif
+				  CriaIndice( cDbf )
+				endif
+			endif
+			*/
+         if !AchaIndice(cDbf)
+            CriaIndice(cDbf)
+         endif
+		endif
+	next
+#else 
+	for nX := 1 To nTodos
+		cDbf		 := aIndice[nX,1]
+		cLocalDbf := cDbf + '.dbf'
+		nLen		 := Len(aIndice[nX])
+		
+		For nY := 2 To nLen
+			cIndice := aIndice[nX, nY ]
+			IF !File( cIndice + '.' + CEXT )
+				IF !AbreArquivo( cDbf )
+					Return( FALSO )
+				EndIF
+				CriaIndice( cDbf )
+				Exit
+			Else
+				IF !oReindexa:ReadBool('reindexando', cLocalDbf, FALSO )
+					IF !AbreArquivo( cDbf )
+						Return( FALSO )
+					EndIF
+					CriaIndice( cDbf )
+					Exit
+				EndIF
+			EndIF
+		Next
+	Next
+#endif
+   if oIndice:Reindexado
+      oReindexa:Close()
+      return true
+   endif
+   oReindexa:Close()
+   ErrorBeep()
+   if !Conf("Pergunta: Deseja entrar sem reindexar ?")
+      if MenuIndice()
+         CriaIndice()
+      else	
+         return false
+      endif
+   endif
+   return true
+endef
+
+
+/*
 function UsaArquivo(cDbf)
 *************************
 	LOCAL nTam := Len(oMenu:aDbfs)
@@ -169,12 +278,116 @@ function UsaArquivo(cDbf)
 	endif
 	return true
 
+*/
+
+*==================================================================================================*	
+
+def UsaArquivo( cArquivo, cAlias )
+*-----------------------------------*
+	STATI lJahAcessou := FALSO
+	LOCAL cScreen		:= SaveScreen()
+	LOCAL nY 			:= 0
+	LOCAL aArquivos	:= oMenu:aDbfs
+	LOCAL aIndices 	:= ArrayIndices()
+
+	nTodos	:= Len( aArquivos )
+	if !lJahAcessou
+		lJahAcessou := OK
+		Mensagem("Aguarde, Compartilhando o Arquivos. ", WARNING, _LIN_MSG )
+	endif
+	if cArquivo != NIL
+		cArquivo := Lower( cArquivo )
+		if cAlias = NIL
+			if DbfEmUso( cArquivo )
+				ResTela( cScreen )
+				return( OK )
+			endif
+		endif
+		nPos := Ascan( aIndices,{ |oBloco|oBloco[1] = cArquivo })
+		if NetUse( cArquivo, MULTI,, cAlias )
+			if nPos != 0
+				nLen := Len(aIndices[nPos])
+				#ifDEF FOXPRO
+				   DbSetIndex(aIndices[nPos,1] + INDEXEXT)					
+				#else
+					for nY := 2 To nLen
+						DbSetIndex( aIndices[nPos,nY] + INDEXEXT)
+					next
+				#endif
+		  endif
+		else
+			/*
+			Alerta("Erro: Arquivo nao localizado: " + cArquivo + ";" + ;					 
+					 Procname(2) + ":" + alltrim(str(Procline(2))) + ";" + ;					 
+					 Procname(1) + ":" + alltrim(str(Procline(1))) + ";" + ;					 
+			       Procname(0) + ":" + alltrim(str(Procline(0))) ;
+					 )
+			ResTela( cScreen )
+			return( FALSO )
+			*/
+			ResTela( cScreen )
+			return( OK )
+			
+		endif
+		ResTela( cScreen )
+		return( OK )
+	else
+	   For nX := 1 To nTodos
+			cArquivo := lower(aArquivos[nX])
+			if !DbfEmUso( cArquivo )
+				if NetUse( cArquivo, MULTI )
+					nPos := Ascan( aIndices,{ |oBloco|oBloco[1] = cArquivo })
+					if nPos != 0
+						#ifDEF FOXPRO
+							DbSetIndex( aIndices[nPos,1] + INDEXEXT)
+						#else
+							nLen := Len(aIndices[nPos])
+							For nY := 2 To nLen
+								DbSetIndex( aIndices[nX,nY] + INDEXEXT )
+							Next
+						#endif
+					endif
+				else
+					ResTela( cScreen )
+					return( FALSO )
+				endif
+			else
+				Alerta("Erro: Arquivo nao localizado: " + cArquivo )
+				ResTela( cScreen )
+				return( FALSO )
+			endif
+		Next
+		ResTela( cScreen )
+		return( OK )
+	endif
+endef
+
+
+*==================================================================================================*	
+
+static def DbfEmUso( cBcoDados )
+*------------------------*
+	LOCAL nArea := Select( cBcoDados )
+	if nArea = 0
+		return( FALSO )
+	endif
+	return( OK )
+endef	
+
+def MensFecha()
+*--------------*
+	Mensagem("Aguarde, Fechando Arquivos.", WARNING, _LIN_MSG )
+	FechaTudo()
+	Break
+	return
+endef	
+
 *==================================================================================================*	
 	
 def Area( cArea)
 ****************
 	DbSelectArea( cArea )
-	return NIl
+	return alias()
 	
 *==================================================================================================*		
 
@@ -221,7 +434,8 @@ def AbreArquivo( cArquivo )
 def ArrayArquivos()
 	LOCAL aArquivos := {}
 	Aadd( aArquivos, { "usuario.dbf",;
-	   	{{'CODUSU', 'C', 4, 0 },;
+	   	{{'ID',     '+', 4, 0 },;
+          {'CODUSU', 'C', 4, 0 },;
           {'FANTAZIA', 'C', 15, 0 },;
           {'SENHA', 'C', 6, 0 },;
           {'DTCAD', 'D', 8, 0 },;
@@ -487,7 +701,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'FUSO', 'C', 6, 0 },;
           {'DATASIS', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"CADCLAS.dbf",; 
+ Aadd( aArquivos, {"cadclas.dbf",; 
           {;
           {'CODS', 'C', 2, 0 },;
           {'NSUPR', 'C', 15, 0 },;
@@ -549,7 +763,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'RESTRIC', 'C', 1, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"CADCONS.dbf",; 
+ Aadd( aArquivos, {"cadcons.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODC', 'C', 4, 0 },;
@@ -572,7 +786,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'NF', 'C', 1, 0 },;
           {'PRNF', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"CADESP.dbf",; 
+ Aadd( aArquivos, {"cadesp.dbf",; 
           {;
           {'COD', 'C', 3, 0 },;
           {'NME', 'C', 15, 0 };
@@ -608,7 +822,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'INDIE', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"CADFRETE.dbf",; 
+ Aadd( aArquivos, {"cadfrete.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'SIT', 'C', 13, 0 },;
@@ -641,6 +855,8 @@ Aadd( aArquivos, {"abcprod.dbf",;
           }})
  Aadd( aArquivos, {"cadfun.dbf",; 
           {;
+          {'ID', 'N', 8, 0 },;
+          {'CODUSU', 'C', 4, 0 },;
           {'DTAADM', 'D', 8, 0 },;
           {'DTADM', 'D', 8, 0 },;
           {'DTANAC', 'D', 8, 0 },;
@@ -681,12 +897,12 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'EXP1', 'N', 3, 0 },;
           {'EXP2', 'N', 3, 0 };
           }})
- Aadd( aArquivos, {"CADHIS.dbf",; 
+ Aadd( aArquivos, {"cadhis.dbf",; 
           {;
           {'COD', 'C', 3, 0 },;
           {'NME', 'C', 15, 0 };
           }})
- Aadd( aArquivos, {"CADICMS.dbf",; 
+ Aadd( aArquivos, {"cadicms.dbf",; 
           {;
           {'NOMECID', 'C', 20, 0 },;
           {'ABRCID', 'C', 2, 0 },;
@@ -700,7 +916,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'LTRA_EST', 'C', 1, 0 },;
           {'MSG', 'C', 120, 0 };
           }})
- Aadd( aArquivos, {"CADLIN.dbf",; 
+ Aadd( aArquivos, {"cadlin.dbf",; 
           {;
           {'CODL', 'C', 4, 0 },;
           {'LINHA', 'C', 40, 0 },;
@@ -781,32 +997,32 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'HORA', 'C', 8, 0 },;
           {'CADATV', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"CARSAL.dbf",; 
+ Aadd( aArquivos, {"carsal.dbf",; 
           {;
           {'CODG', 'C', 4, 0 },;
           {'CARGO', 'C', 30, 0 },;
           {'CBO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"CBO.dbf",; 
+ Aadd( aArquivos, {"cbo.dbf",; 
           {;
           {'CBO', 'N', 8, 0 },;
           {'DESCRICAO', 'C', 200, 0 };
           }})
- Aadd( aArquivos, {"CDADE.dbf",; 
+ Aadd( aArquivos, {"cdade.dbf",; 
           {;
           {'CODCIDA', 'C', 7, 0 },;
           {'CIDADE', 'C', 30, 0 },;
           {'ESTD', 'C', 2, 0 },;
           {'PAIS', 'C', 6, 0 };
           }})
- Aadd( aArquivos, {"CEST.dbf",; 
+ Aadd( aArquivos, {"cest.dbf",; 
           {;
           {'CEST', 'C', 9, 0 },;
           {'NCM', 'C', 10, 0 },;
           {'DATACAD', 'D', 8, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"CFOP.dbf",; 
+ Aadd( aArquivos, {"cfop.dbf",; 
           {;
           {'COD', 'C', 4, 0 },;
           {'NTREZA', 'C', 50, 0 },;
@@ -823,18 +1039,33 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'MSG', 'C', 231, 0 },;
           {'ALIQUOTA', 'N', 6, 2 };
           }})
- Aadd( aArquivos, {"CHEC.dbf",; 
+ Aadd( aArquivos, {"chec.dbf",; 
           {;
           {'NUM', 'N', 5, 0 },;
           {'DESC', 'C', 35, 0 };
           }})
- Aadd( aArquivos, {"clafisc.dbf",; 
+Aadd( aArquivos, {"cheq.dbf",; 
+          {;
+          {'NUM', 'N', 5, 0 },;
+          {'DESC', 'C', 35, 0 };
+          }})
+Aadd( aArquivos, {"demovi.dbf",; 
+          {;
+          {'NUM', 'N', 5, 0 },;
+          {'DESC', 'C', 35, 0 };
+          }})
+Aadd( aArquivos, {"tblp.dbf",; 
+          {;
+          {'NUM', 'N', 5, 0 },;
+          {'DESC', 'C', 35, 0 };
+          }})
+Aadd( aArquivos, {"clafisc.dbf",; 
           {;
           {'COMP', 'C', 15, 0 },;
           {'TERMINAL', 'C', 2, 0 },;
           {'UNIDADE', 'C', 2, 0 };
           }})
- Aadd( aArquivos, {"CLMNTCOD.dbf",; 
+ Aadd( aArquivos, {"clmntcod.dbf",; 
           {;
           {'C', 'C', 1, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -848,7 +1079,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'VENCTO', 'C', 10, 0 },;
           {'USUARIO', 'C', 10, 0 };
           }})
- Aadd( aArquivos, {"CLMNTDET.dbf",; 
+ Aadd( aArquivos, {"clmntdet.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -859,11 +1090,11 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'OBS', 'C', 10, 0 },;
           {'LOTE', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"CMDA.dbf",; 
+ Aadd( aArquivos, {"cmda.dbf",; 
           {;
           {'NRCMANDA', 'C', 10, 0 };
           }})
- Aadd( aArquivos, {"COMCX.dbf",; 
+ Aadd( aArquivos, {"comcx.dbf",; 
           {;
           {'NRFAT', 'C', 10, 0 },;
           {'CODVZ', 'C', 4, 0 },;
@@ -909,7 +1140,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'NROBX', 'C', 12, 0 };
           }})
- Aadd( aArquivos, {"COMVZ.dbf",; 
+ Aadd( aArquivos, {"comvz.dbf",; 
           {;
           {'NRFAT', 'C', 10, 0 },;
           {'CODVZ', 'C', 4, 0 },;
@@ -918,12 +1149,12 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'X', 'C', 1, 0 },;
           {'FN', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"CONTADOR.dbf",; 
+ Aadd( aArquivos, {"contador.dbf",; 
           {;
           {'QUANTIA', 'C', 15, 0 },;
           {'NRO', 'C', 3, 0 };
           }})
- Aadd( aArquivos, {"CONTROLD.dbf",; 
+ Aadd( aArquivos, {"controld.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'DSEMA', 'C', 15, 0 },;
@@ -936,23 +1167,23 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'ALM1', 'C', 5, 0 },;
           {'ALM2', 'C', 5, 0 };
           }})
- Aadd( aArquivos, {"CPOM.dbf",; 
+ Aadd( aArquivos, {"cpom.dbf",; 
           {;
           {'CONTROLE', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"CREALIN.dbf",; 
+ Aadd( aArquivos, {"crealin.dbf",; 
           {;
           {'CODL', 'C', 4, 0 },;
           {'SETOR', 'C', 2, 0 };
           }})
- Aadd( aArquivos, {"CTRVAZ.dbf",; 
+ Aadd( aArquivos, {"ctrvaz.dbf",; 
           {;
           {'NRFAT', 'C', 10, 0 },;
           {'CODVZ', 'C', 4, 0 },;
           {'VAZIL', 'C', 15, 0 },;
           {'QDE', 'N', 9, 2 };
           }})
- Aadd( aArquivos, {"CTR_ENT.dbf",; 
+ Aadd( aArquivos, {"ctr_ent.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'NRO', 'N', 9, 0 },;
@@ -963,7 +1194,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'PEDIDO', 'C', 10, 0 },;
           {'DTREC', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"DAD_NFEN.dbf",; 
+ Aadd( aArquivos, {"dad_nfen.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -983,17 +1214,17 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'STRIB', 'C', 3, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"DATA_SEM.dbf",; 
+ Aadd( aArquivos, {"data_sem.dbf",; 
           {;
           {'DIA_SEM', 'C', 9, 0 },;
           {'ING_DAY', 'C', 9, 0 };
           }})
- Aadd( aArquivos, {"DESC.dbf",; 
+ Aadd( aArquivos, {"desc.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'DESC', 'N', 6, 2 };
           }})
- Aadd( aArquivos, {"DESPESA.dbf",; 
+ Aadd( aArquivos, {"despesa.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'NOME', 'C', 15, 0 },;
@@ -1004,7 +1235,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'OBS', 'C', 15, 0 },;
           {'VENCTO', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"DEVOLUC.dbf",; 
+ Aadd( aArquivos, {"devoluc.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODC', 'C', 4, 0 },;
@@ -1033,7 +1264,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'IMPRESSO', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"DEVOLUCA.dbf",; 
+ Aadd( aArquivos, {"devoluca.dbf",; 
           {;
           {'NRODEV', 'C', 10, 0 },;
           {'DATA', 'D', 8, 0 },;
@@ -1052,7 +1283,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 15, 0 },;
           {'TERM', 'C', 2, 0 };
           }})
- Aadd( aArquivos, {"DIALET.dbf",; 
+ Aadd( aArquivos, {"dialet.dbf",; 
           {;
           {'CODFC', 'C', 4, 0 },;
           {'DIASEM', 'C', 15, 0 },;
@@ -1062,13 +1293,13 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'ALMCO1', 'C', 5, 0 },;
           {'ALMCO2', 'C', 5, 0 };
           }})
- Aadd( aArquivos, {"DPCARG.dbf",; 
+ Aadd( aArquivos, {"dpcarg.dbf",; 
           {;
           {'CODCG', 'C', 4, 0 },;
           {'CARGO', 'C', 30, 0 },;
           {'PISO', 'N', 9, 2 };
           }})
- Aadd( aArquivos, {"EMBALS.dbf",; 
+ Aadd( aArquivos, {"embals.dbf",; 
           {;
           {'CODEB', 'C', 4, 0 },;
           {'DESCR', 'C', 15, 0 },;
@@ -1077,7 +1308,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'NCM', 'C', 10, 0 },;
           {'DESCFAT', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"ENTRADA.dbf",; 
+ Aadd( aArquivos, {"entrada.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1112,7 +1343,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'DATAIN', 'D', 8, 0 },;
           {'HORA', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"ESTORNO.dbf",; 
+ Aadd( aArquivos, {"estorno.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1124,7 +1355,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'CONTROL', 'C', 10, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"ESTQ_C.dbf",; 
+ Aadd( aArquivos, {"estq_c.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODM', 'C', 5, 0 },;
@@ -1137,7 +1368,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'REGIAO', 'C', 2, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"ETIQUETA.dbf",; 
+ Aadd( aArquivos, {"etiqueta.dbf",; 
           {;
           {'LOTE', 'C', 6, 0 },;
           {'PRELOTE', 'C', 9, 0 },;
@@ -1157,7 +1388,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'CXPROD', 'C', 47, 0 },;
           {'INGR', 'C', 120, 0 };
           }})
- Aadd( aArquivos, {"ETQENV.dbf",; 
+ Aadd( aArquivos, {"etqenv.dbf",; 
           {;
           {'NF', 'N', 9, 0 },;
           {'SERIE', 'N', 3, 0 },;
@@ -1174,7 +1405,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'EST', 'C', 2, 0 },;
           {'CEP', 'C', 10, 0 };
           }})
- Aadd( aArquivos, {"ETQPRE.dbf",; 
+ Aadd( aArquivos, {"etqpre.dbf",; 
           {;
           {'PRELOTE', 'C', 9, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1191,7 +1422,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'CODBPRO', 'C', 12, 0 },;
           {'CODBCX', 'C', 13, 0 };
           }})
- Aadd( aArquivos, {"ETQ_DV.dbf",; 
+ Aadd( aArquivos, {"etq_dv.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1203,20 +1434,20 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'TPO', 'C', 1, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"FPRO.dbf",; 
+ Aadd( aArquivos, {"fpro.dbf",; 
           {;
           {'P', 'C', 22, 0 },;
           {'S', 'C', 6, 0 },;
           {'DRENADO', 'C', 7, 0 };
           }})
- Aadd( aArquivos, {"FRETE.dbf",; 
+ Aadd( aArquivos, {"frete.dbf",; 
           {;
           {'DESP', 'N', 9, 2 },;
           {'TAS', 'N', 9, 2 },;
           {'PEDG', 'N', 9, 2 },;
           {'TX_GRIS', 'N', 9, 2 };
           }})
- Aadd( aArquivos, {"FROTA.dbf",; 
+ Aadd( aArquivos, {"frota.dbf",; 
           {;
           {'CDCAR', 'C', 2, 0 },;
           {'DATACP', 'D', 8, 0 },;
@@ -1235,7 +1466,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'VLVDA', 'N', 15, 2 },;
           {'VNCLICEN', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"FTMTO.dbf",; 
+ Aadd( aArquivos, {"ftmto.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'VENCIMTO', 'D', 8, 0 },;
@@ -1259,7 +1490,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'NTERM', 'C', 2, 0 },;
           {'STATUS', 'C', 15, 0 };
           }})
- Aadd( aArquivos, {"GASTOS.dbf",; 
+ Aadd( aArquivos, {"gastos.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'GASTO', 'C', 30, 0 },;
@@ -1267,7 +1498,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'UNIT', 'N', 9, 2 },;
           {'OBS', 'C', 30, 0 };
           }})
- Aadd( aArquivos, {"HORA.dbf",; 
+ Aadd( aArquivos, {"hora.dbf",; 
           {;
           {'CODFUN', 'C', 4, 0 },;
           {'NFUNC', 'C', 30, 0 },;
@@ -1293,7 +1524,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'TERMINAL', 'C', 2, 0 },;
           {'NROENV', 'C', 12, 0 };
           }})
- Aadd( aArquivos, {"HORA5.dbf",; 
+ Aadd( aArquivos, {"hora5.dbf",; 
           {;
           {'FUNC', 'C', 22, 0 },;
           {'DATA', 'D', 8, 0 },;
@@ -1306,7 +1537,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'HORA7', 'C', 5, 0 },;
           {'HORA8', 'C', 5, 0 };
           }})
- Aadd( aArquivos, {"HORADEL.dbf",; 
+ Aadd( aArquivos, {"horadel.dbf",; 
           {;
           {'FUNC', 'C', 22, 0 },;
           {'DATA', 'D', 8, 0 },;
@@ -1319,7 +1550,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'HORA7', 'C', 5, 0 },;
           {'HORA8', 'C', 5, 0 };
           }})
- Aadd( aArquivos, {"IMPOSTO.dbf",; 
+ Aadd( aArquivos, {"imposto.dbf",; 
           {;
           {'APARTIR', 'D', 8, 0 },;
           {'ALQ', 'N', 5, 2 },;
@@ -1334,7 +1565,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'DATA', 'D', 8, 0 },;
           {'HORA', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"IMPRPED.dbf",; 
+ Aadd( aArquivos, {"imprped.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'HORA', 'C', 8, 0 },;
@@ -1343,7 +1574,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'RAZAO', 'C', 40, 0 },;
           {'USUARIO', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"IVT.dbf",; 
+ Aadd( aArquivos, {"ivt.dbf",; 
           {;
           {'SIGLA', 'C', 2, 0 },;
           {'NCM', 'C', 10, 0 },;
@@ -1351,7 +1582,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'IVAAJUS', 'N', 6, 2 },;
           {'OIVA', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"JUSTIFIC.dbf",; 
+ Aadd( aArquivos, {"justific.dbf",; 
           {;
           {'CODFC', 'C', 4, 0 },;
           {'DATA', 'D', 8, 0 },;
@@ -1368,7 +1599,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'NOCO', 'C', 14, 0 };
           }})
- Aadd( aArquivos, {"LEMBRE.dbf",; 
+ Aadd( aArquivos, {"lembre.dbf",; 
           {;
           {'COD', 'C', 3, 0 },;
           {'CODC', 'C', 4, 0 },;
@@ -1376,13 +1607,13 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'L2', 'C', 60, 0 },;
           {'BX', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"LOG.dbf",; 
+ Aadd( aArquivos, {"log.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'HORA', 'C', 8, 0 },;
           {'DESCR', 'C', 140, 0 };
           }})
- Aadd( aArquivos, {"NFAT.dbf",; 
+ Aadd( aArquivos, {"nfat.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1396,7 +1627,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'IMPRES', 'C', 1, 0 },;
           {'NROBX', 'C', 12, 0 };
           }})
- Aadd( aArquivos, {"NFCOMP.dbf",; 
+ Aadd( aArquivos, {"nfcomp.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODC', 'C', 4, 0 },;
@@ -1415,7 +1646,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'X', 'C', 1, 0 },;
           {'DTBAIXA', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"NPD.dbf",; 
+ Aadd( aArquivos, {"npd.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1446,7 +1677,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'NROBX', 'C', 12, 0 };
           }})
- Aadd( aArquivos, {"NRP.dbf",; 
+ Aadd( aArquivos, {"nrp.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1477,7 +1708,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'NROBX', 'C', 12, 0 };
           }})
- Aadd( aArquivos, {"OCOR.dbf",; 
+ Aadd( aArquivos, {"ocor.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'NOCO', 'C', 14, 0 },;
@@ -1524,7 +1755,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'C5', 'C', 79, 0 },;
           {'DTFIN', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"OPFLH.dbf",; 
+ Aadd( aArquivos, {"opflh.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODO', 'C', 4, 0 },;
@@ -1569,7 +1800,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'PCOMIS', 'N', 5, 2 },;
           {'IMPRES', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"PERCMER.dbf",; 
+ Aadd( aArquivos, {"percmer.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODM', 'C', 5, 0 },;
@@ -1581,7 +1812,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'MOTIVO', 'C', 45, 0 },;
           {'CODEN', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"PERDAS.dbf",; 
+ Aadd( aArquivos, {"perdas.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1597,7 +1828,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'DATAIN', 'D', 8, 0 },;
           {'HORA', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"PGCOM.dbf",; 
+ Aadd( aArquivos, {"pgcom.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'NROPDC', 'C', 10, 0 },;
@@ -1605,7 +1836,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'VL', 'N', 11, 2 },;
           {'VNC', 'D', 8, 0 };
           }})
- Aadd( aArquivos, {"PGFAT.dbf",; 
+ Aadd( aArquivos, {"pgfat.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1634,7 +1865,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'DTINC', 'D', 8, 0 },;
           {'HORAINC', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"PRLT.dbf",; 
+ Aadd( aArquivos, {"prlt.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1646,7 +1877,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'HORA', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"PROT.dbf",; 
+ Aadd( aArquivos, {"prot.dbf",; 
           {;
           {'DATAPROT', 'D', 8, 0 },;
           {'DATAPED', 'D', 8, 0 },;
@@ -1659,7 +1890,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'NROBAIXA', 'C', 12, 0 },;
           {'PAGO', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"REAJUSTE.dbf",; 
+ Aadd( aArquivos, {"reajuste.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODP', 'C', 5, 0 },;
@@ -1670,12 +1901,12 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'HORA', 'C', 8, 0 };
           }})
- Aadd( aArquivos, {"REGIAO.dbf",; 
+ Aadd( aArquivos, {"regiao.dbf",; 
           {;
           {'CODR', 'C', 2, 0 },;
           {'REGIAO', 'C', 15, 0 };
           }})
- Aadd( aArquivos, {"RELCOM.dbf",; 
+ Aadd( aArquivos, {"relcom.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1739,12 +1970,12 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'USUARIO', 'C', 4, 0 },;
           {'CODFUN', 'C', 4, 0 };
           }})
- Aadd( aArquivos, {"SIT_TRIB.dbf",; 
+ Aadd( aArquivos, {"sit_trib.dbf",; 
           {;
           {'COD', 'C', 3, 0 },;
           {'DESCRICAO', 'C', 75, 0 };
           }})
- Aadd( aArquivos, {"SLDVAZ.dbf",; 
+ Aadd( aArquivos, {"sldvaz.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1757,7 +1988,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'NFAT', 'C', 10, 0 },;
           {'DESC_FAT', 'C', 10, 0 };
           }})
- Aadd( aArquivos, {"STATUS.dbf",; 
+ Aadd( aArquivos, {"status.dbf",; 
           {;
           {'NROPED', 'C', 10, 0 },;
           {'STATUS', 'C', 22, 0 },;
@@ -1819,7 +2050,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'LJA', 'C', 1, 0 },;
           {'FNA', 'C', 1, 0 };
           }})
- Aadd( aArquivos, {"VAZIL.dbf",; 
+ Aadd( aArquivos, {"vazil.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODF', 'C', 4, 0 },;
@@ -1895,7 +2126,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'CODR', 'C', 4, 0 },;
           {'USUARIO', 'C', 15, 0 };
           }})
- Aadd( aArquivos, {"VEN_M.dbf",; 
+ Aadd( aArquivos, {"ven_m.dbf",; 
           {;
           {'DATA', 'D', 8, 0 },;
           {'CODC', 'C', 4, 0 },;
@@ -2133,6 +2364,39 @@ endef
 
 *==================================================================================================*		
 
+def MenuIndice()
+	LOCAL cScreen := SaveScreen()
+	LOCAL aMenu   := {"Cancelar",;
+							"Sem grafico progresso (recomendado)",;
+							"Com grafico de progresso",;
+							"Com compactacao e sem grafico (periodicamente)",;
+							"Com compactacao e com grafico (periodicamente)"}
+
+	oMenu:Limpa()
+	M_Title("ESCOLHA O TIPO DE REINDEXACAO")
+	nChoice := FazMenu( 07, 15, aMenu, Cor())
+	IF nChoice = 0 .OR. nChoice = 1
+		oIndice:ProgressoNtx := false
+		ResTela( cScreen )
+		Return( FALSO )
+	ElseIF nChoice = 2
+	  oIndice:ProgressoNtx := false
+	  oIndice:Compactar    := false
+	ElseIF nChoice = 3
+	  oIndice:ProgressoNtx := true
+	  oIndice:Compactar    := false
+	ElseIF nChoice = 4
+	  oIndice:ProgressoNtx := false
+	  oIndice:Compactar    := true
+	ElseIF nChoice = 5
+	  oIndice:Compactar    := true
+	  oIndice:ProgressoNtx := true
+	EndIF
+	ResTela( cScreen )
+	Return( OK )
+endef
+
+
 Function NetUse( cBcoDados, lModo, nSegundos, cAlias )
 ******************************************************
 LOCAL cScreen := SaveScreen()
@@ -2181,12 +2445,12 @@ WHILE Restart
 		FChDir( oAmbiente:xBase )
 		SetColor("")
 		Cls
-		cStr1 := "#1 Se outra esta??o estiver usando o sistema, finalize-a. ;;"
-		cStr2 := "#2 Se outra esta??o estiver indexando, aguarde o t?rmino. ;;"
-		cStr3 := "#3 Se SHARE estiver instalado, aumente os par?metros de   ;"
+		cStr1 := "#1 Se outra estação estiver usando o sistema, finalize-a. ;;"
+		cStr2 := "#2 Se outra estação estiver indexando, aguarde o término. ;;"
+		cStr3 := "#3 Se SHARE estiver instalado, aumente os parâmetros de   ;"
 		cStr4 := "   travamento de arquivos. Ex.: SHARE /F:18810 /L:510.    ;;"
 		cStr5 := "#4 Em ambiente de rede NOVELL, verifique o arquivo NET.CFG;"
-		cStr6 := "   e se necess rio, acrescente a linha FILE HANDLES=127.  ;"
+		cStr6 := "   e se necessário, acrescente a linha FILE HANDLES=127.  ;"
 		Alert( cStr1 + cStr2 + cStr3 + cStr4 + cStr5 + cStr6, "W+/B")
 		Break
 		//Quit

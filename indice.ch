@@ -1,1 +1,3 @@
 #define USUARIO_FANTAZIA	1
+#define USUARIO_NOME		1
+#define USUARIO_CODUSU		2

@@ -33,17 +33,25 @@ function main()
 	oMenu:Limpa()
   	SetaAmbiente()
 	//altd()
+   RddSetDefault( RDDNAME )   
 	ArrayBancoDeDados()
 	CriaArquivo()
-	VerArquivo()
+	if !VerIndice()
+		Alert("ERRO Tente mais tarde.")
+		FChDir( oAmbiente:xBase )
+		SalvaMem()
+		SetMode(oAmbiente:AlturaFonteDefaultWindows, oAmbiente:LarguraFonteDefaultWindows)
+		Cls
+		Quit
+	endif
+	//VerArquivo()
 	UsaArquivo()
+	//Abrearea()
    oMenu:Limpa()
 	
 	login()
 	
 	oMenu:StatusSup := "Fenix for Windows v1.0"
-	oMenu:StatusInf := AllTrim(oMenu:Usuario)
-	oMenu:StatusInf += "|"
 	oMenu:StatusInf += AllTrim(oMenu:Comp)
 	oMenu:StatusInf += "|"
 	oMenu:StatusInf += AllTrim(oMenu:Unidade)
@@ -71,9 +79,9 @@ function main()
    Date := Date()
    Dif  := Date()
    SetColor("")
-   oMenu:Limpa()
+   
+	oMenu:Limpa()
    oPull := Monta_Menu()
-
 	while MenuModal( oPull, 01, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
    return( nil )
 
@@ -387,22 +395,19 @@ function Rodape()
 
 def Encerra(nResult)
 	ErrorBeep()
-	if conf("Pergunta: Deseja encerrar a execucao do sistema?")
-		nResult := 999
-		FechaTudo()
-		FChDir( oAmbiente:xBase )
-		SalvaMem()	
+	nResult := 999
+	FechaTudo()
+	FChDir( oAmbiente:xBase )
+	SalvaMem()	
 	
-		oIni:Close()	
-		//oSci:Close()
+	oIni:Close()	
+	//oSci:Close()
 
-		F_Fim( "Fenix for Windows" + " " + "v1.0" )
-		SetMode(oAmbiente:AlturaFonteDefaultWindows, oAmbiente:LarguraFonteDefaultWindows)
-		Cls
-		DevPos( 24, 0 )
-		return( __Quit())
-	end
-	return nResult
+	F_Fim( "Fenix for Windows" + " " + "v1.0" )
+	SetMode(oAmbiente:AlturaFonteDefaultWindows, oAmbiente:LarguraFonteDefaultWindows)
+	Cls
+	DevPos( 24, 0 )
+	return( __Quit())
 endef
 
 
@@ -541,7 +546,7 @@ function login()
 	LOCAL cPassword := Space(6)
 	LOCAL SNA       := "168935"
 	
-	Area("Usuario")
+	Area("usuario")
 	while true		
 		MaBox(09, 21, 14, 50, "LOGIN")
 		@ 11,23 say 'Usuario..:' get cLogin    pict "@!" valid UsuarioErrado( @cLogin )
@@ -550,20 +555,20 @@ function login()
 		if lastkey() = ESC
 			ErrorBeep()
 			if conf("Pergunta: Deseja encerrar?")
-				oMenu:Limpa()
-				DbCloseAll()
-				quit
+				Encerra()
 			end
 			loop
 		end
-      Log           := cLogin
-      Sha           := Sna
-		LogFan        := Usuario->CodUsu
-		nMuser        := Usuario->Fantazia
-		oMenu:Usuario := Usuario->Fantazia
+      Log           			:= cLogin
+      Sha          		 	:= Sna
+		LogFan        			:= Usuario->CodUsu
+		nMuser        			:= Usuario->Fantazia
+		oMenu:Usuario 			:= Usuario->Fantazia
+		oAmbiente:xUsuario	:= Usuario->Fantazia
 		Ctr_User()
 		
-		Area(oMenu:aDbfs[9])
+		
+		Area("desc")
 		Descto := Desc
 		
 		Area("cadprod") // oMenu:aDbfs[11])
@@ -586,6 +591,93 @@ function login()
 		ResTela( cScreen )
 		return nil
 	end
+
+function UsuarioErrado( cNome )
+******************************
+	LOCAL aRotinaInclusao  := {{||CadUser() }}
+	LOCAL aRotinaAlteracao := NIL // {{||AltSenha() }}
+	LOCAL cScreen	        := SaveScreen()
+	LOCAL Arq_Ant          := Alias()
+	LOCAL Ind_Ant          := IndexOrd()
+
+	Area("usuario")
+	( Usuario->(Order( USUARIO_FANTAZIA )), Usuario->(DbGoTop()))
+	IF Usuario->(Eof()) .OR. Usuario->(!DbSeek("ADMIN"))
+		GravaSenhaAdmin(OK)
+	Else
+		IF Empty(Usuario->Senha)
+			GravaSenhaAdmin(FALSO)
+		EndIF	
+	EndIF
+
+	IF Usuario->(!DbSeek( cNome ))
+		Usuario->(Escolhe( 00, 00, MaxRow(), "Fantazia", "USUARIO", aRotinaInclusao, NIL, aRotinaAlteracao, NIL, NIL, NIL ))
+		cNome := Usuario->Fantazia
+	EndIF
+
+	AreaAnt( Arq_Ant, Ind_Ant )
+	return( OK )
+
+	def SenhaErrada(cLogin, cPassWord)
+		LOCAL cSenha  := Usuario->( AllTrim( Senha ))
+		LOCAL Passe   := cPassword
+		
+		IF !Empty( Passe) .AND. cSenha == Passe
+			return true
+		EndIF
+		cPassword := Space(6)
+		ErrorBeep()
+		Alert("ERRO: Senha nao confere.")
+		return false
+	endef
+
+def GravaSenhaAdmin(lIncluirOuAlterar)
+	LOCAL Arq_Ant := Alias()
+	LOCAL Ind_Ant := IndexOrd()
+	LOCAL lDone   := FALSO
+	LOCAL cPasse
+	LOCAL cSim
+
+	Area("Usuario")
+	(Usuario->(Order( USUARIO_NOME )), Usuario->(DbGoTop()))
+	
+	if lIncluirOuAlterar              // Incluir
+		lDone := Usuario->(Incluiu())
+	else
+		lDone := Usuario->(TravaReg())		
+	endif
+	
+	while lDone
+		cPasse			 	:= MSEncrypt("280966")
+		cSim				 	:= MSEncrypt("S")
+		Usuario->CodUsu   := StrZero(Usuario->Id, 4)
+		Usuario->Fantazia := "ADMIN"
+		Usuario->Senha  	:= cPasse
+		Usuario->DtCad  	:= Date()		
+		lDone 				:= FALSO
+	EndDo	
+	Usuario->(Libera())
+	AreaAnt( Arq_Ant, Ind_Ant )
+	return lDone
+endef	
+
+def UsuarioCerto( cNome )
+	LOCAL Arq_Ant := Alias()
+	LOCAL Ind_Ant := IndexOrd()
+
+	Area("usuario")
+	Usuario->(Order( USUARIO_NOME ))
+	Usuario->(DbGoTop())
+	IF Usuario->(Eof())
+		GravaSenhaAdmin(OK)
+	EndIF
+	Return( OK )
+endef
+	
+def AbreUsuario()
+	Return( UsaArquivo("usuario") )
+endef	
+
 
 function snh_adm()
 ******************
@@ -821,6 +913,7 @@ Proc Re_Usuario()
 ****************
 	oIndice:DbfNtx("usuario")
 	oIndice:PackDbf("usuario")
-	oIndice:AddNtx("fantazia",  "USUARIO1", "USUARIO"  )
+	oIndice:AddNtx("fantazia",  "USUARIO1", "USUARIO")
+	oIndice:AddNtx("codusu",    "USUARIO2", "USUARIO")
 	oIndice:CriaNtx()
 	Return	

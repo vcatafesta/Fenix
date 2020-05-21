@@ -13,7 +13,8 @@
 #define RDDALTERNATIVO "DBFCDX"
 
 //#DEFINE FOXPRO
-#DEFINE DBFNSX
+//#DEFINE DBFNSX
+#DEFINE LETO
 //#DEFINE DBFNTX
 //#DEFINE DBFCDX
 //#DEFINE DBFMDX
@@ -21,11 +22,21 @@
 
 
 #IFDEF FOXPRO
-  #include <sixnsx.ch>
+  #include "sixnsx.ch"
   #define MEMOEXT  ".smt"
   #define INDEXEXT ".cdx"
   #define RDDNAME  "SIXNSX"
   #Define CEXT     "cdx"
+#ENDIF
+#IFDEF LETO
+  #include <hbsix.ch>
+  #include <dbinfo.ch>
+  #define FOXPRO
+  #define MEMOEXT  ".smt"  
+  #define INDEXEXT ".cdx"  
+  #define RDDNAME  "DBFNSX"
+  #define REQNAME  "DBFNSX"
+  #define CEXT     "cdx"    
 #ENDIF
 #IFDEF DBFNSX
   #include <hbsix.ch>

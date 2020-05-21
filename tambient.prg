@@ -114,9 +114,9 @@ class TAmbiente
 		VAR StatusSup    						INIT "Fenix for Windows"
 		VAR StatusInf    						INIT ""
 		VAR xUsuario  	  						INIT "ADMIN"
-		VAR NomeFirma 	  						INIT "VCATAFESTA@GMAIL.COM"
+		VAR NomeFirma 	  						INIT "CLAMAR CONSERVAS"
 		VAR Codifirma 	  						INIT '0001'
-		VAR xProgramador 						INIT "Vilmar Catafesta"
+		VAR xProgramador 						INIT "Vilmar Catafesta/Gabriel"
 		VAR Alterando 	  						INIT FALSO
 		VAR nPos      	  						INIT 1
 		VAR Ativo     	  						INIT 1
@@ -761,11 +761,11 @@ endef
 method StatInf( cMensagem )
 	LOCAL nTam  := MaxCol()+1
 	LOCAL nCol  := MaxRow()
-   LOCAL nPos  := ( nTam - Len(::Codifirma + ':' + ::xUsuario + '/' + ::NomeFirma ))
+   LOCAL nPos  := ( nTam - Len(::Codifirma + ':' + AllTrim(::xUsuario) + '/' + ::NomeFirma ))
 	
 	aPrint( nCol, 00 , "", nTam )
    aPrint( nCol, 00 , if( cMensagem = NIL, ::StatusInf, cMensagem), ::CorCabec, nTam )
-   aPrint( nCol, nPos,  ::Codifirma + ':' + ::xUsuario + '/' + ::NomeFirma, ::CorCabec )
+   aPrint( nCol, nPos,  ::Codifirma + ':' + Alltrim(::xUsuario) + '/' + ::NomeFirma, ::CorCabec )
 	return self
 endef
 
