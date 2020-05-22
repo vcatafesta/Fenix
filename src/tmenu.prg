@@ -1,4 +1,4 @@
-#include "fenix.ch"
+#include <fenix.ch>
 
 class TMenu from TAmbiente
 	exported:

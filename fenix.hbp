@@ -17,22 +17,24 @@
 -lhbnf
 
 {mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition  
+{win}-prgflag= -iinclude;
+{linux}-prgflag= -iinclude;
 -cflag= -cpp -w0
 
-fenix.prg
-cadastro.prg
-cadastro.prg
-funcoes.prg
-database.prg
-tambient.prg
-tindice.prg
-tmenu.prg
-tget.prg
-tini.prg
-tbrowse.prg
-getsys.prg
-getpsw.prg
-sixtools.prg
+src\fenix.prg
+src\cadastro.prg
+src\cadastro.prg
+src\funcoes.prg
+src\database.prg
+src\tambient.prg
+src\tindice.prg
+src\tmenu.prg
+src\tget.prg
+src\tini.prg
+src\tbrowse.prg
+src\getsys.prg
+src\getpsw.prg
+src\sixtools.prg
 
 hbmisc.hbc
 hbblink.hbc
