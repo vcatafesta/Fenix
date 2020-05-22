@@ -1,5 +1,358 @@
 #include "fenix.ch"
 
+function caduser()
+******************
+	LOCAL GetList   := {}
+	LOCAL Arq_Ant   := Alias()
+	LOCAL Ind_Ant   := IndexOrd()
+   LOCAL cScreen   := SaveScreen()
+   LOCAL cCep      
+   LOCAL cLogin    
+   LOCAL cPassword 
+   LOCAL BLQ 
+	LOCAL cNome
+	LOCAL cEnde
+	LOCAL cBair
+	LOCAL cCida
+	LOCAL cEsta
+	
+   oMenu:Limpa()
+   Area("cadfun")
+   Area("usuario")
+   while true
+	   cLogin      := space(15)
+      cPassword   := space(6)
+      cCep        := Space(9)       
+		cNome		   := Cadfun->(Space(FieldLen(FieldPos("nfunc"))))
+		cEnde		   := Cadfun->(Space(FieldLen(FieldPos("endrco"))))
+		cBair		   := Cadfun->(Space(FieldLen(FieldPos("bairro"))))
+		cCida		   := Cadfun->(Space(FieldLen(FieldPos("cdde"))))
+		cEsta		   := Cadfun->(Space(FieldLen(FieldPos("uf"))))
+		blq         := "B"
+		
+		MaBox(11, 10, 18, LastCol()-1, "CADASTRO DE USUARIO")
+		@ 12, 11 say 'Usuario...........:' get cLogin    Pict "@!" Valid VerificarUsuario( cLogin ) .AND. !Empty( cLogin )
+		@ 13, 11 say 'Senha.............:' get cPassword pict "@S"
+		@ 14, 11 say 'Nome Completo.....:' get cNome     pict "@!"
+		@ 15, 11 say 'CEP...............:' get cCep      pict "99999-999" valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
+		@ 15, 41 say 'Cidade.:'            get cCida     pict "@!"
+		@ 15, 76 say 'UF.:'                get cEsta     pict "@!"
+		@ 16, 11 say 'Endereço..........:' get cEnde     pict "@!"
+		@ 17, 11 say 'Bairro............:' get cBair     pict "@!"
+		read
+		if lastKey() = ESC
+			errorbeep()
+			if conf("Pergunta: Deseja retornar?")
+			   AreaAnt( Arq_Ant, Ind_Ant )		
+		      restela(cScreen)
+				return nil
+			endif
+			loop
+		endif
+		ErrorBeep()
+		if conf("Pergunta: Deseja gravar?")
+			if CadFun->(Incluiu())
+			   if Usuario->(Incluiu())
+				   cCodi := StrZero(Usuario->Id, 4)
+					Usuario->CodUsu   := cCodi
+					Usuario->Fantazia := cLogin
+					Usuario->Senha  	:= MSEncrypt(cPassword)
+					Usuario->DtCad  	:= Date()
+					repl cadastro with BLQ, venda with BLQ, regv with BLQ, bxv with BLQ, edtv with BLQ, estqv with BLQ
+					repl lstv with BLQ, psqv with BLQ, nfv with BLQ, compra with BLQ
+					repl regc with BLQ, bxc with BLQ, edtc with BLQ, lstc with BLQ
+					repl estqc with BLQ, psqc with BLQ, nfc with BLQ, etqc with BLQ
+					repl estoque with BLQ, plne with BLQ, cnce with BLQ, edte with BLQ,pere with BLQ
+					repl rgpe with BLQ, cheq with BLQ, dpe with BLQ, lja with BLQ, fna with BLQ
+					repl etqed with BLQ, ftv with BLQ, nfe with BLQ, nfsa with BLQ, nfen with BLQ, dvv with BLQ
+					repl clicad with BLQ, forcad with BLQ, mercad with BLQ, procad with BLQ, cfocad with BLQ
+					repl cdbcad with BLQ, estcad with BLQ, clacad with BLQ, muncad with BLQ, repcad with BLQ
+					repl tracad with BLQ, cescad with BLQ, embcad with BLQ
+					
+					CadFun->CodUsu := cCodi
+					CadFun->CodFun := cCodi
+					CadFun->Dtaadm := Date()
+					CadFun->Dtadm  := Date()
+					CadFun->Dtanac := Date()
+					CadFun->Endrco := cEnde
+					CadFun->Bairro := cBair
+					CadFun->Cdde   := cCida
+					CadFun->Uf     := cEsta
+				endif
+				CadFun->(Libera())
+				Usuario->(Libera())
+			endif			
+      endif
+	EndDo	
+
+*--------------------------------------------------------------------------*	
+def VerificarUsuario( cNome )
+	LOCAL Arq_Ant := Alias()
+	LOCAL Ind_Ant := IndexOrd()
+
+	Area("Usuario")
+	Usuario->(Order( USUARIO_NOME ))
+	IF Usuario->(DbSeek( cNome ))
+		ErrorBeep()
+		Alerta("Erro: Usuario Ja Registrado.")
+		Return( FALSO )
+	EndIF
+	Return( OK )
+endef
+*--------------------------------------------------------------------------*	
+
+
+Proc CepInclusao( lAlteracao )
+******************************
+LOCAL GetList		:= {}
+LOCAL cScreen		:= SaveScreen()
+LOCAL lModificar	:= FALSO
+LOCAL nOpcao		:= 0
+LOCAL cCep
+LOCAL cCida
+LOCAL cBair
+LOCAL cEsta
+LOCAL cString
+LOCAL cSwap
+LOCAL lSair
+
+if lAlteracao != NIL .AND. lAlteracao
+	lModificar := OK
+endif
+
+if !lModificar
+	if !PodeIncluir()
+		ResTela( cSCreen )
+		Return
+	endif
+endif
+
+Area("Cep")
+Cep->(Order( CEP_CEP ))
+WHILE OK
+	oMenu:Limpa()
+	if lModificar
+		cCep		 := Cep->Cep
+		cCida 	 := Cep->Cida
+		cBair 	 := Cep->Bair
+		cEsta 	 := Cep->Esta
+		cString	 := "ALTERACAO DE CEP"
+	Else
+		cCep		 := Space(09)
+		cCida 	 := Space(25)
+		cBair 	 := Space(25 )
+		cEsta 	 := Space(02)
+		cString := "INCLUSAO DE NOVO CEP"
+	endif
+	cSwap := cCep
+	lSair := FALSO
+	WHILE OK
+		MaBox( 06, 02, 11, 78, cString )
+		@ 07		 , 03 Say  "Novo Cep....:" Get cCep      Pict "99999-999" Valid CepCerto( @cCep, lModificar, cSwap )
+		@ Row()+1 , 03 Say  "Cidade......:" Get cCida     Pict "@!"
+		@ Row()+1 , 03 Say  "Bairro......:" Get cBair     Pict "@!"
+		@ Row()+1 , 03 Say  "Estado......:" Get cEsta     Pict "@!"
+		Read
+		if LastKey() = ESC
+			lSair := OK
+			Exit
+		endif
+		if lModificar
+			nOpcao := Alerta("Pergunta: Voce Deseja ? ", {" Alterar", " Cancelar ", "Sair "})
+		Else
+			nOpcao := Alerta("Pergunta: Voce Deseja ? ", {" Incluir", " Alterar ", "Sair "})
+		endif
+		if nOpcao = 1
+			if lModificar
+				if Cep->(TravaReg())
+					Cep->Cep 	  := cCep
+					Cep->Cida	  := cCida
+					Cep->Bair	  := cBair
+					Cep->Esta	  := cEsta
+					Cep->(Libera())
+					lSair := OK
+					Exit
+				endif
+			Else
+				if Cep->(Incluiu())
+					Cep->Cep 	  := cCep
+					Cep->Cida	  := cCida
+					Cep->Bair	  := cBair
+					Cep->Esta	  := cEsta
+					Cep->(Libera())
+					Exit
+				endif
+			endif
+
+		Elseif nOpcao = 2 // Alterar
+			Loop
+
+		Elseif nOpcao = 3 // Sair
+			lSair := OK
+			Exit
+
+		endif
+	EndDo
+	if lSair
+		ResTela( cScreen )
+		Exit
+
+	endif
+EndDo
+
+Function CepCerto( cCep, lModificar, cSwap )
+********************************************
+FIELD Cep, Cida, Bair
+
+if LastKey() = UP
+	Return( OK )
+endif
+
+if lModificar != NIL .AND. lModificar
+	if cCep == cSwap
+		Return( OK )
+	endif
+endif
+
+if Empty( cCep )
+	ErrorBeep()
+	Alerta("Erro: Entrada de Cep Invalido.")
+	Return( FALSO )
+endif
+Cep->(Order( CEP_CEP ))
+if Cep->(DbSeek( cCep ))
+	ErrorBeep()
+	Alerta("Erro: Cep Ja Registrado. " + Cep->( AllTrim( Cida)))
+	Return( FALSO )
+endif
+Return( OK )
+
+Function CepErrado( cCep, cCida, cEsta, cBair )
+***********************************************
+LOCAL aRotina			  := {{|| CepInclusao()}}
+LOCAL aRotinaAlteracao := {{|| CepInclusao( OK )}}
+LOCAL Ind_Ant			  := IndexOrd()
+LOCAL Arq_Ant			  := Alias()
+
+Area("Cep")
+Cep->(Order( CEP_CEP ))
+if (Lastrec() = 0 )
+	ErrorBeep()
+	if Conf(" Pergunta: Nenhum Cep Disponivel. Registrar ?")
+		CepInclusao()
+	endif
+	AreaAnt( Arq_Ant, Ind_Ant )
+	Return( FALSO )
+endif
+if Cep->(!DbSeek( cCep ))
+	Cep->(Order( CEP_CIDA ))
+	Cep->(Escolhe( 03, 01, 22, "Cep + '¦' + Cida + '!' + Esta + '!' + Bair ", "CEP        CIDADE                      UF BAIRRO", aRotina,, aRotinaAlteracao ))
+endif
+cCep	:= Cep->Cep
+cCida := Cep->Cida
+cEsta := Cep->Esta
+if Empty( cBair )
+	cBair := Cep->Bair
+endif
+AreaAnt( Arq_Ant, Ind_Ant )
+Return( OK )
+
+Proc CepPrint()
+***************
+LOCAL cScreen	  := SaveScreen()
+LOCAL aMenuArray := { " Video ", " Impressora " }
+LOCAL nChoice := 0
+
+M_Title("CONSULTA/IMPRESSAO DE CEP")
+nChoice := FazMenu( 10,10, aMenuArray, Cor())
+Do Case
+	Case nChoice = 0
+		ResTela( cScreen )
+		Return
+
+	Case nChoice = 1
+		CepVideo()
+
+	Case nChoice = 2
+		CepImpressora()
+
+EndCase
+
+Proc CepVideo()
+***************
+LOCAL cScreen := SaveScreen()
+LOCAL aCep	  := {}
+LOCAL cTela
+
+Area("Cep")
+Cep->(Order( CEP_CEP ))
+Cep->(DbGoTop())
+cTela := Mensagem("Aguarde ... ", Cor())
+
+WHILE !Eof() .AND. Rep_Ok()
+	 Aadd( aCep,  Cep->Cep + " " + Cep->Cida + " " + Cep->Esta + " " + Cep->Bair )
+	 Cep->(DbSkip(1))
+EndDo
+
+if Len( aCep ) != ZERO
+	ResTela( cTela )
+	cString := " CEP       CIDADE                    UF BAIRRO"
+	Print( 00, 00, cString + Space( 80 - Len(  cString )), Roloc(Cor()))
+	M_Title( "ESC Retorna ")
+	FazMenu( 01, 00, aCep, Cor())
+endif
+
+ResTela( cScreen )
+Return
+
+Proc CepImpressora()
+********************
+LOCAL cScreen := SaveScreen()
+LOCAL Tam	  := 80
+LOCAL Col	  := 58
+LOCAL Pagina  := 0
+LOCAL lSair   := FALSO
+
+if !InsTru80() .OR. !LptOk()
+	ResTela( cScreen )
+	Return
+endif
+
+Area("Cep")
+Cep->(Order( CEP_CEP ))
+Cep->(DbGoTop())
+Mensagem("Aguarde. Imprimindo.", Cor())
+PrintOn()
+SetPrc( 0, 0 )
+WHILE Cep->(!Eof()) .AND. Rel_Ok()
+
+  if Col >= 58
+	  Write( 00, 00, Linha1( Tam, @Pagina))
+	  Write( 01, 00, Linha2())
+	  Write( 02, 00, Linha3(Tam))
+	  Write( 03, 00, Linha4(Tam, SISTEM_NA2 ))
+	  Write( 04, 00, Padc( "LISTAGEM DE CEPS",Tam ) )
+	  Write( 05, 00, Linha5(Tam))
+	  Write( 06, 00, "CEP       CIDADE                    UF BAIRRO")
+	  Write( 07, 00, Linha5(Tam))
+	  Col := 8
+  endif
+
+  Qout( Cep, Cida, Esta, Bair )
+  Col := Col + 1
+  
+  if Col >= 58
+	  Write( Col, 0,	Repl( SEP, Tam ))
+	  __Eject()
+  endif
+
+  Cep->(DbSkip(1))
+EndDo
+__Eject()
+PrintOff()
+ResTela( cScreen )
+Return
+
 function cadastro()
 *******************
 	LOCAL nChoice := 0	
@@ -2217,3 +2570,160 @@ do whil t = 0
    retu
    cdtr := ' '
 endd
+
+
+function snh_adm()
+******************
+   STT := ' '
+
+   while Empty(STT)
+      say := ' '
+      tela := SaveScreen()
+      @ 09,20 clea to 13,54
+      @ 09,20 to 13,54
+      SNA := SPAC(7)
+      @ 10,21 say '* DIGITE A SENHA ADMINISTRADOR:'
+      set color to w+/n,X
+      @ 12,33 get SNA
+      read
+      tcor()
+      rest scree from tela
+      if SNA = '      '
+         say := 'X'
+         retu
+      endi
+
+	   Area(oMenu:aDbfs[3])
+      loca for senha = SNA
+      if eof()
+         say := 'X'
+         mdsha()
+         STT := ' '
+         loop
+      end
+      return
+   end
+
+
+function nrpd()
+***************
+	public codnum
+	if digt = '10'
+   	if reg < 10
+      	stor '000000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg >= 10
+      	stor '00000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99
+      	stor '0000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999
+      	stor '000000'+ltrim(str(reg)) to codnum
+   	endi
+   	if reg > 9999
+      	stor '00000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999
+      	stor '0000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999
+      	stor '000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999999
+      	stor '00'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999999
+      	stor '0'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999999
+      	stor ltrim(str(reg)) to codnum
+   	endi
+	endi
+	if digt = '8'
+	   if reg < 10
+	      stor '0000000'+ltrim(str(reg)) to codnum
+	   endi
+	   if reg >= 10
+	      stor '000000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99
+	      stor '00000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999
+	      stor '0000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999
+      	stor '000'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 99999
+	      stor '00'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 999999
+	      stor '0'+ltrim(str(reg)) to codnum
+   	endi
+	   if reg > 9999999
+	      stor ltrim(str(reg)) to codnum
+   	endi
+	endi
+if digt = '6'
+   if reg < 10
+      stor '00000'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor '0000'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99
+      stor '000'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 999
+      stor '00'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 9999
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99999
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+if digt = '5'
+   if reg < 10
+      stor '0000'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor '000'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99
+      stor '00'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 999
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 9999
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+if digt = '4'
+   if reg < 10
+      stor '000'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor '00'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 99
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg > 999
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+if digt = '2'
+   if reg < 10
+      stor '0'+ltrim(str(reg)) to codnum
+   endi
+   if reg >= 10
+      stor ltrim(str(reg)) to codnum
+   endi
+endi
+
+	
