@@ -95,7 +95,8 @@ function ArrayBancoDeDados()
 					"imprped",;
 					"etiqueta",;
 					"etqenv",;
-					"etqpre"}	
+					"etqpre",;	
+					"cep"}	
 	return nil
 
 function AbreArea()
@@ -2167,6 +2168,13 @@ Aadd( aArquivos, {"clafisc.dbf",;
           {;
           {'NNOTA', 'N', 10, 0 };
           }})
+Aadd( aArquivos, { "cep.dbf",;
+											 {{ "CEP",        "C", 09, 0 }, ;
+											  { "CIDA",       "C", 25, 0 }, ;
+											  { "ESTA",       "C", 02, 0 }, ;
+											  { "ATUALIZADO", "D", 08, 0 }, ;
+											  { "BAIR",       "C", 20, 0 }}})
+
 			 
 Return( aArquivos )
 
@@ -2358,7 +2366,8 @@ def ArrayIndices()
 *----------------*
 	LOCAL aArquivos := {}
 //	Aadd( aArquivos, { "chepre",    "chepre1","chepre2","chepre3","chepre4", "chepre5"})
-	Aadd( aArquivos, { "usuario",   "usuario1"})
+	Aadd( aArquivos, { "usuario",   "usuario1","usuario2"})
+	Aadd( aArquivos, { "cep",       "cep1","cep2"})
 	return( aArquivos )
 endef
 
@@ -2457,3 +2466,96 @@ WHILE Restart
 	EndIF
 EndDo
 Return( FALSO )
+
+*==================================================================================================*		
+
+def CriaIndice( cDbf )
+	LOCAL cScreen						:= SaveScreen()
+	LOCAL nY 							:= 0
+	LOCAL lRetornaArrayDeArquivos := OK
+	LOCAL nTodos						:= 0
+	LOCAL nPos							:= 0
+	LOCAL cLocalDbf					:= ''
+	LOCAL cLocalNtx					:= ''
+	LOCAL aProc 						:= {}
+
+	Aadd( aProc, {"usuario",   {||Re_Usuario()}})
+	Aadd( aProc, {"cep",       {||Re_Cep()}})
+
+	nTodos := Len( aProc )
+	//----------------------------------------------------------------//
+	Aeval( Directory( "*.$$$"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*.tmp"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*.bak"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*.mem"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "t0*.*"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "t1*.*"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "t2*.*"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	Aeval( Directory( "*."),    { | aFile | Ferase( aFile[ F_NAME ] )})
+	//-----------------------------------------------------------------//
+
+	oReindexa := TIniNew("reindexa.ini")
+	cDbf		 := IF( cDbf != NIL, lower( cDbf ), NIL )
+	
+	if cDbf = NIL
+		Aeval( Directory( "*.nsx"), { | aFile | Ferase( aFile[ F_NAME ] )})
+		Aeval( Directory( "*.cdx"), { | aFile | Ferase( aFile[ F_NAME ] )})
+		Aeval( Directory( "*.ntx"), { | aFile | Ferase( aFile[ F_NAME ] )})
+	endif
+	
+	if cDbf != NIL
+		nPos := Ascan( aProc,{ |oBloco|oBloco[1] = cDbf })
+		if nPos != 0
+			cLocalDbf := aProc[nPos,1] + '.dbf'
+			cLocalNtx := aProc[nPos,1] + '.' + CEXT
+			Ferase( cLocalNtx )
+			oReindexa:WriteBool('reindexando', cLocalDbf, FALSO )
+			Eval( aProc[ nPos, 2 ] )
+			oReindexa:WriteBool('reindexando', cLocalDbf, OK )
+			//ResTela( cScreen )
+			Mensagem("Aguarde, Fechando Arquivos.")
+			oReindexa:Close()
+			//ResTela( cScreen )
+			// FechaTudo()
+			return(nil)
+		endif
+	endif
+	FechaTudo()
+	//oIndice:Limpa()
+	for nY := 1 To nTodos
+		cDbf		 := aProc[ nY, 1 ]
+		cLocalDbf := cDbf + '.dbf'
+		
+		if AbreArquivo( cDbf )
+			oReindexa:WriteBool('reindexando', cLocalDbf, FALSO )
+			Eval( aProc[ nY, 2 ] )
+			oReindexa:WriteBool('reindexando', cLocalDbf, OK )
+		EndIF			
+	next
+	//ResTela( cScreen )
+	Mensagem("Aguarde, Fechando Arquivos.", WARNING, _LIN_MSG )
+	//ResTela( cScreen )
+	// FechaTudo()
+	oReindexa:Close()
+	return(nil)
+endef
+
+*==================================================================================================*		
+
+Proc Re_Usuario()
+****************
+	oIndice:DbfNtx("usuario")
+	oIndice:PackDbf("usuario")
+	oIndice:AddNtx("fantazia",  "USUARIO1", "USUARIO")
+	oIndice:AddNtx("codusu",    "USUARIO2", "USUARIO")
+	oIndice:CriaNtx()
+	Return	
+
+Proc Re_Cep()
+*************
+	oIndice:DbfNtx("cep")
+	oIndice:PackDbf("cep")
+	oIndice:AddNtx("Cep",  "CEP1", "CEP" )
+	oIndice:AddNtx("Cida", "CEP2", "CEP" )
+	oIndice:CriaNtx()
+	Return

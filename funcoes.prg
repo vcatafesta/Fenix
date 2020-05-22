@@ -526,6 +526,7 @@ rest scre from tela
 
 function caduser()
 ******************
+	LOCAL GetList   := {}
 	LOCAL Arq_Ant   := Alias()
 	LOCAL Ind_Ant   := IndexOrd()
    LOCAL cScreen   := SaveScreen()
@@ -550,14 +551,15 @@ function caduser()
 		cCida		 := Cadfun->(Space(FieldLen(FieldPos("cdde"))))
 		cEsta		 := Cadfun->(Space(FieldLen(FieldPos("uf"))))
 		blq       := "B"
-		MaBox(10, 10, 18, 79, "CADASTRO DE USUARIO")
-		@ 12, 11 say 'Usuario...........:' get cLogin    pict "@!"
+		
+		MaBox(11, 10, 18, 79, "CADASTRO DE USUARIO")
+		@ 12, 11 say 'Usuario...........:' get cLogin    Pict "@!" Valid VerificarUsuario( cLogin ) .AND. !Empty( cLogin )
 		@ 13, 11 say 'Senha.............:' get cPassword pict "@S"
 		@ 14, 11 say 'Nome Completo.....:' get cNome     pict "@!"
 		@ 15, 11 say 'Endereço..........:' get cEnde     pict "@!"
 		@ 16, 11 say 'Bairro............:' get cBair     pict "@!"
 		@ 17, 11 say 'Cidade............:' get cCida     pict "@!"
-		@ 17, 50 say 'Estado..:'           get cEsta     pict "@!"
+		@ 17, 60 say 'Estado..:'           get cEsta     pict "@!"
 		read
 		if lastKey() = ESC
 			errorbeep()
@@ -603,6 +605,23 @@ function caduser()
 			endif			
       endif
 	EndDo	
+
+*--------------------------------------------------------------------------*	
+def VerificarUsuario( cNome )
+	LOCAL Arq_Ant := Alias()
+	LOCAL Ind_Ant := IndexOrd()
+
+	Area("Usuario")
+	Usuario->(Order( USUARIO_NOME ))
+	IF Usuario->(DbSeek( cNome ))
+		ErrorBeep()
+		Alerta("Erro: Usuario Ja Registrado.")
+		Return( FALSO )
+	EndIF
+	Return( OK )
+endef
+*--------------------------------------------------------------------------*	
+
 
 *--------------------------------------------------------------------------*	
 def MaBox( nTopo, nEsq, nFundo, nDireita, Cabecalho, Rodape, lInverterCor )
