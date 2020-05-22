@@ -352,6 +352,11 @@
 #Translate FChDir  	 	 	 							=> FT_ChDir	
 #translate strcount       								=> GT_StrCount
 #translate isarray			 							=> hb_isarray
+#translate ischar			 								=> hb_ischar
+#translate isdate			 								=> hb_isdate
+#translate lastrow			 							=> maxrow
+#translate lastcol			 							=> maxcol
+
 #xtranslate alltrim(<xValue>)  						=> ltrim(rtrim(<xValue>))
 #translate ifNIL( <var>, <val> )        			=> if( <var> = NIL, <var> := <val>, <var> )
 #translate MS_DEFAULT( <var>, <val> )    			=> if( <var> = NIL, <var> := <val>, <var> )
