@@ -1,4 +1,4 @@
-#include "fenix.ch"
+﻿#include "fenix.ch"
 request SIXCDX
 REQUEST HB_CODEPAGE_PT850
 REQUEST HB_CODEPAGE_PTISO
