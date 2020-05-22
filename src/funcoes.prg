@@ -54,7 +54,7 @@ function mdsha()
 	Alert(" ATEN€ÇO !!!;;SENHA INCORRETA ! ", , "W+/B")
 	set bell off
 	return nil
-	
+
 
 function mdsuces()
 ******************
@@ -67,7 +67,7 @@ function mdcli()
 	ErrorBeep()
 	Alert(" ATEN€ÇO !!!;;CLIENTE NÇO LOCALIZADO ", , "W+/B")
 	return nil
-	
+
 function mdanul()
 *****************
 	set bell on
@@ -145,11 +145,11 @@ function ctr_user()
      stor dvv to Ydvv
 	stor compra to Ycompra
 	stor regc to Yregc
-	stor bxc to Ybxc	
+	stor bxc to Ybxc
 	stor edtc to Yedtc
 	stor lstc to Ylstc
 	stor estqc to Yestqc
-	stor psqc to Ypsqc	
+	stor psqc to Ypsqc
 	stor nfc to Ynfc
 	stor etqc to Yetqc
 	stor estoque to Yestoque
@@ -526,23 +526,23 @@ rest scre from tela
 
 
 
-*--------------------------------------------------------------------------*	
+*--------------------------------------------------------------------------*
 def MaBox( nTopo, nEsq, nFundo, nDireita, Cabecalho, Rodape, lInverterCor )
 *--------------------------------------------------------------------------*
 	LOCAL cPattern := " "
 	LOCAL pfore 	:= 31
-	LOCAL pback    := Roloc(31)	
+	LOCAL pback    := Roloc(31)
 	LOCAL cCor     := Roloc(31)
 	LOCAL pUns     := Roloc( pFore )
-	
+
 	hb_default(@nTopo, 0)
 	hb_default(@nEsq, 0)
 	hb_default(@nFundo,   maxrow())
 	hb_default(@nDireita, maxcol())
-	
-	if(nDireita > maxcol(), nDireita := maxcol(), nDireita)		
-	if(nFundo   > maxrow(), nFundo   := maxrow(), nFundo)	
-	
+
+	if(nDireita > maxcol(), nDireita := maxcol(), nDireita)
+	if(nFundo   > maxrow(), nFundo   := maxrow(), nFundo)
+
    DispBegin()
 	hb_DispBox( nTopo, nEsq, nFundo, nDireita, M_Frame() + cPattern, pfore )
 
@@ -550,7 +550,7 @@ def MaBox( nTopo, nEsq, nFundo, nDireita, Cabecalho, Rodape, lInverterCor )
 		aPrint( nTopo, nEsq+1, "Û", cCor, (nDireita-nEsq)-1)
 		aPrint( nTopo, nEsq+1, Padc( Cabecalho, ( nDireita-nEsq)-1), cCor )
 	endif
-	
+
 	if !(IsNil(Rodape))
 		aPrint( nFundo, nEsq+1, "Û", cCor, (nDireita-nEsq)-1)
 		aPrint( nFundo, nEsq+1, Padc( Rodape, ( nDireita-nEsq)-1), cCor )
@@ -562,8 +562,8 @@ endef
 
 function conf(cString)
 **********************
-	return(alert(cstring, {" Sim ", " Nao "}) == 1)	
-	
+	return(alert(cstring, {" Sim ", " Nao "}) == 1)
+
 function Alerta( cString, aArray )
 **********************************
 	aArray := IIF( aArray = NIL, { " Okay " }, aArray )
@@ -617,21 +617,21 @@ Function ColorSet( pfore, pback, pUns )
 		 pback := Roloc(pfore)
 	endif
 	return( nil )
-	
+
 function m_frame()
 	return B_SINGLE_DOUBLE
-	
-	
+
+
 function cor()
 	return 31
-	
+
 Function MS_Box( nRow, nCol, nRow1, nCol1, cFrame, nCor)
 ********************************************************
 	LOCAL nComp 	 := ( nCol1 - nCol )-1
 	DEFAU cFrame TO M_Frame()
 	DEFAU nCor	 TO Cor()
 	return(Hb_DispBox( nRow, nCol, nRow1, nCol1, cFrame + " ", nCor))
-	
+
 Function Roloc(nColor)
 **********************
 LOCAL cColor  := ColorIntToStr(nColor)
@@ -669,7 +669,7 @@ FUNCTION cSetColor(ColorStr)
 LOCAL nStd, ;
 		nEnh, ;
 		nUns
-		
+
 nStd := atoattr( strextract( ColorStr, ",", 1))
 nEnh := atoattr( strextract( ColorStr, ",", 2))
 nUns := atoattr( strextract( ColorStr, ",", 4))
@@ -695,7 +695,7 @@ return (ColorStrToInt(cColor))
 
 function attrtoa(nColor)
 ************************
-return (ColorIntToStr(nColor))		
+return (ColorIntToStr(nColor))
 
 //******************************************************************************
 
@@ -754,7 +754,7 @@ function ColorStandard( nStd )
    LOCAL nColor
    Return( nColor := ft_Color2N( xColor ) )
 
-	
+
 Function aMaxStrLen( xArray )
 *****************************
 LOCAL nTam    := Len(xArray)
@@ -766,7 +766,7 @@ For x := 1 To nTam
 	nLen := Len(xArray[x])
 	IF nMaxLen < nLen
 		nMaxLen := nLen
-	EndIF	
+	EndIF
 Next
 return( nMaxLen )
 
@@ -794,12 +794,12 @@ LOCAL nPos
 
 IF cChar == delims
    cChar := Repl("*",nLen)
-EndIF	
+EndIF
 
 IF nConta = 0 .AND. ocurrence > 0
    return(string)
 ENDIF
-	
+
 
 /*
 For x := 1 to nConta
@@ -809,7 +809,7 @@ For x := 1 to nConta
 	cString   := SubStr(cNewStr, nInicio+1, nFim-nInicio-1)
 	if !Empty(cString)
 	   Aadd( aArray, cString)
-	End		
+	End
 Next
 */
 
@@ -823,7 +823,7 @@ For x := 1 to nConta
 	nPosIni   := nPos+1
 	if !Empty(cString)
 	   Aadd( aArray, cString)
-	End		
+	End
 Next
 */
 
@@ -836,7 +836,7 @@ For x := 1 to nConta
 	Else
 		nFim     := aPos[x-1]
 	   cString  := SubStr(String, nFim+1, nInicio-nFim-1)
-	EndIF	
+	EndIF
 	Aadd( aArray, cString)
 Next
 
@@ -854,7 +854,7 @@ Function StrSwap( string, cChar, nPos, cSwap)
 	      aPos,;
 	      nX,;
 			nLen
-	
+
 	IF nConta > 0
       aPos := aStrPos(string, cChar)
 		nLen := Len(aPos)
@@ -862,7 +862,7 @@ Function StrSwap( string, cChar, nPos, cSwap)
 		   IF nPos <= nLen
 		      string := Stuff(string, aPos[nPos], Len(cChar), cSwap)
 		   EndIF
-		EndIF	
+		EndIF
 	EndIF
 return( string)
 
@@ -878,7 +878,7 @@ LOCAL x
 
 IF cChar == delims
    cChar := Repl("*",delims)
-EndIF	
+EndIF
 
 IF nConta = 0
    Return(aNum)
@@ -896,7 +896,7 @@ Return(aNum)
 
 function isnil(x)
 	return(HB_ISNIL(x))
-	
+
 Function FazMenu( nTopo, nEsquerda, aArray, Cor )
 *************************************************
 	LOCAL cFrame2	  := SubStr( M_Frame(), 2, 1 )
@@ -904,7 +904,7 @@ Function FazMenu( nTopo, nEsquerda, aArray, Cor )
 	LOCAL cTitulo    := "ESCOLHA UMA OPCAO"
 	LOCAL nTamTitle  := ( Len( cTitulo ) + 12 )
 	LOCAL nDireita   := ( nEsquerda + AmaxStrLen( aArray ) + 1 )
-	LOCAL cChar      :=  "?v?=??"
+	LOCAL cChar      :=   "¦v¦=¦¦"
 
 	IF ( nDireita - nEsquerda ) <  nTamTitle
 		nDireita := ( nEsquerda + nTamTitle )
@@ -918,12 +918,12 @@ Function FazMenu( nTopo, nEsquerda, aArray, Cor )
 	//nChoice := Mx_Choice( @nTopo, @nEsquerda, aArray, Cor )
 	nSetColor(Cor)
 	nChoice := Achoice( nTopo+1, nEsquerda+1, nFundo-1, nDireita-1, aArray)
-return( nChoice )	
+return( nChoice )
 
 
 Function ResTela( cScreen )
 ***************************
-Return( RestScreen( 0, 0, MaxRow(), MaxCol(),  cScreen ))	
+Return( RestScreen( 0, 0, MaxRow(), MaxCol(),  cScreen ))
 
 
 function order(Ordem)
@@ -932,8 +932,8 @@ function order(Ordem)
 	DbSetOrder( Ordem )
 	DbGoto( Recno())   // fixar bug
 	return( IndexOrd())
-	
-	
+
+
 function AreaAnt( Arq_Ant, Ind_Ant )
 ************************************
 	IF !Empty( Arq_Ant )
@@ -1166,7 +1166,7 @@ Do Case
 		Return(1)
 
 	OTHERWISE
-		IF Alias() = "RECEBER"			
+		IF Alias() = "RECEBER"
 		EndIF
 		Return(1)
 
@@ -1350,10 +1350,10 @@ function Write( Linha, Col, xString, nCor)
 	if nCor = nil
 		//SetColor(ColorIntToStr(Color_Ant))
 		DevPos( Linha, Col ) ; Qqout( xString )
-	else	
+	else
 		Print( Linha, Col, xString, nCor )
-      SetColor( Color_Ant)	
-   endif		
+      SetColor( Color_Ant)
+   endif
 	return nil
 
 function Print( row, col, string, attrib, length, cChar)
@@ -1367,10 +1367,10 @@ function Print( row, col, string, attrib, length, cChar)
 	if length > nLen
 		string += Repl(cChar,length-nlen)
 		nLen   := length
-	endif	
+	endif
 	SetColor(ColorIntToStr(attrib))
 	DevPos(row, col) ; DevOut(Left(string,nLen))
-	//hb_DispOutAt( row, col, Left(string,nLen))	
+	//hb_DispOutAt( row, col, Left(string,nLen))
 	SetColor( Color_Ant)
 	return NIL
 
@@ -1396,7 +1396,7 @@ function aPrint( row, col, string, attrib, length)
 	if length > nLen
 		string += Repl(Space(1),length-nlen)
 		nLen   := length
-	endif	
+	endif
 
 	dispbegin()
 	SetColor(ColorIntToStr(attrib))
@@ -1404,19 +1404,19 @@ function aPrint( row, col, string, attrib, length)
 	SetColor( Color_Ant)
 	dispend()
 	return NIL
-	
+
 def FechaTudo()
 *-------------------*
 	DbCloseAll()
-	return	
-endef	
+	return
+endef
 
 def AlertPy(string, cor, centralizar, nOK, cOk)
 *----------------------------------------------*
 	AlertaPy(string, cor, centralizar, nOK, cOk)
 	return nil
 endef
-	
+
 def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
 *--------------------------------------------------*
 	LOCAL nlinhas := 0
@@ -1429,7 +1429,7 @@ def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
 	LOCAL nRow1
 	LOCAL nCol1
    LOCAL nMax
-   LOCAL xTemp	
+   LOCAL xTemp
 
    hb_default(@string, "AlertaPy")
    //hb_default(@cor, 31)
@@ -1440,12 +1440,12 @@ def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
    nlinhas := strcount(';', string)
 	aString := StrSplit( string, ';', -1)
 	nLen    := amaxstrlen( aString)
-   nMax    := Len(aString)	     		
+   nMax    := Len(aString)
 
    if aPrompt == nil .or. len(aPrompt) == 0 .or. !IsArray(aPrompt)
 		aPrompt := {" Ok "}
 	endif
-	
+
 	// verifica se a string contem separador de linhas ;-;
 	for x := 1 To nMax
 		switch aString[x]
@@ -1453,15 +1453,15 @@ def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
 			case '-'; nSep++;	exit
 		endswitch
 	next
-	
+
 	if nSep == 0 // Sem linha horizontal
 		string  += ';-;'
 		nlinhas := strcount(';', string)
 		aString := StrSplit( string, ';', -1)
-		nLen    := amaxstrlen( aString)	
-	endif		
+		nLen    := amaxstrlen( aString)
+	endif
 
-   nMax    := Len(aString)	     		
+   nMax    := Len(aString)
 
    if !IsArray(Cor)
       xTemp := Cor
@@ -1477,60 +1477,60 @@ def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
 
    if nLen < 6
 		nLen = 6
-	endif	
+	endif
 
 	row     := (maxrow() / 2) - (nlinhas / 2) - 4
-	col     := (maxcol() - nLen) / 2	
-	cScreen := SaveScreen()	
+	col     := (maxcol() - nLen) / 2
+	cScreen := SaveScreen()
 	nrow    := row
 	ncol    := (col-2)
 	nrow1   := (row+4+nlinhas)
-	ncol1   := (col+nLen+1)	 	
-	
+	ncol1   := (col+nLen+1)
+
 	nTamPrompt := 0
-	nLenaPrompt := Len(aPrompt)	
+	nLenaPrompt := Len(aPrompt)
 	for k := 1 to nLenaPrompt
 		nTamPrompt += Len(aPrompt[k])
-	next	
-	
+	next
+
 	center  := (maxcol()/2) - (nTamPrompt/2)
-	
+
 //==================== 20/2 = 10
        //center
-	
+
     setcursor(0)
     box(nrow, ncol, nrow1, ncol1, "????", Cor[1])
-    for x := 1 To Len(aString)	
+    for x := 1 To Len(aString)
 	     cString := aString[x]
         if centralizar[x]
             ncol := (maxcol() - len(cString)) / 2
         else
             ncol := col
-		  endif		
+		  endif
 		  if cString == '-'
 			  LinhaHorizontal(row + 1, Col - 2, Col + nlen, cor[x])
-		  else	
+		  else
 				aprint(row + 1, ncol, cString, cor[x])
-		  endif		
+		  endif
         row := row + 1
-	 next	
+	 next
 	 if lOk
 		if nLenaPrompt = 1
 			aprint(row + 2, center, aPrompt[1], roloc(cor[1]))
 			inkey(0)
-			restela(cScreen) 	
-			return(cScreen) 	
-		else			
+			restela(cScreen)
+			return(cScreen)
+		else
 			//nSetColor(cor)
 			return( nRetval := aChoice( row, Col, row + 4, Col + nLen, aPrompt))
 		endif
 	 endif
-	 return(cScreen) 	
-endef	
+	 return(cScreen)
+endef
 
 *==================================================================================================*
 
-def LinhaHorizontal(nrow, ncol, nlen, ncor)	
+def LinhaHorizontal(nrow, ncol, nlen, ncor)
 	LOCAL nComp  := (nLen - nCol)
 	LOCAL cFrame := m_Frame()
 
@@ -1538,10 +1538,10 @@ def LinhaHorizontal(nrow, ncol, nlen, ncor)
 	//aprint(nRow, nCol + 1, replicate(substr(cFrame, 2, 1), nComp), nCor, 1)
 	aprint(nRow, nCol + 1, replicate(chr(196), nComp), nCor, 1)
 	aprint(nRow, nCol + nComp + 1, chr(180), nCor, 1)
-	return NIL	
+	return NIL
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def StrSplit( string, delims)
 	LOCAL nInicio := 1
@@ -1564,7 +1564,7 @@ def StrSplit( string, delims)
 	if nConta = 0
 		return { string }
 	endif
-		
+
 	aPos   := aStrPos(string, Delims)
 	nConta := Len(aPos)
 	For x := 1 to nConta
@@ -1574,180 +1574,180 @@ def StrSplit( string, delims)
 		else
 			nFim     := aPos[x-1]
 			cString  := SubStr(String, nFim+1, nInicio-nFim-1)
-		endif	
+		endif
 		Aadd( aArray, cString)
 	Next
 	return(aArray)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 
-def ms_swap_use(cBcoDados, lModo, cAlias)   	
+def ms_swap_use(cBcoDados, lModo, cAlias)
 	LOCAL cExt       := GetFileExtension(cBcoDados)
-	LOCAL cBcoSemExt := StrTran( cBcoDados, cExt)	
-	
+	LOCAL cBcoSemExt := StrTran( cBcoDados, cExt)
+
 	hb_default(@lModo, MONO)
-	hb_default(@cAlias, cBcoDados)	
+	hb_default(@cAlias, cBcoDados)
 	cBcoDados := Upper(cBcoDados)     // para compatibilidade em linux
 	cAlias    := Iif( cAlias = NIL, cBcoSemExt, cAlias )
-	
+
 	if (oAmbiente:Letoativo)
-		cBcoDados := oAmbiente:LetoPath + cBcoDados		
+		cBcoDados := oAmbiente:LetoPath + cBcoDados
 	endif
-	
+
 	if lModo
-		Use (cBcoDados) Shared Alias (cAlias) New	
+		Use (cBcoDados) Shared Alias (cAlias) New
 	else
-		Use (cBcoDados) Exclusive Alias (cAlias) New	
-	endif	
-	
+		Use (cBcoDados) Exclusive Alias (cAlias) New
+	endif
+
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_swap_dbcreate(cFile, aStru)
 	LOCAL cLocalFile := ms_swap_sep(cFile)
-	return DbCreate(cLocalFile, aStru)		
+	return DbCreate(cLocalFile, aStru)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_ferase(cFile)   	
+def ms_swap_ferase(cFile)
 	LOCAL cLocalFile := ms_swap_sep(cFile)
-	
+
 	return Ferase(cLocalFile)
-	
+
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_rename(cFile, cNewFile)   	
+def ms_swap_rename(cFile, cNewFile)
 	LOCAL cLocalFile := ms_swap_sep(cFile)
 	LOCAL cLocalNew  := ms_swap_sep(cNewFile)
-	
+
 	return msrename(cLocalFile, cLocalNew)
 
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_swap_sep(cFile)
 	LOCAL cOldFile := cFile
-	
+
 	if right(TrimStr(oAmbiente:xBase),1) == "/" .OR. ;
 	   right(TrimStr(oAmbiente:xBase),1) == "\"
 		cBase := left(oAmbiente:xBase, len(oAmbiente:xBase)-1)
 	else
-		cBase := oAmbiente:xBase	
-	endif		
+		cBase := oAmbiente:xBase
+	endif
 	if (oAmbiente:Letoativo)
 		_SEP_ := '/'
 	else
 		_SEP_ := DEF_SEP
 	endif
 	cFile := cBase + _SEP_ + cFile
-	
+
 /*
 	alert(;
 				oAmbiente:xBase + " : " + cBase + ";" + ;
 				cOldfile + ";" + ;
 				cfile    + ";" + ;
 				"SWAP_SEP : " + Procname(1) + '(' + strzero(procline(1),4) + ');' +	;
-				"SWAP_SEP : " + Procname(2) + '(' + strzero(procline(2),4) + ');' + ;	
-				"SWAP_SEP : " + Procname(3) + '(' + strzero(procline(3),4) + ');' + ;	
-				"SWAP_SEP : " + Procname(4) + '(' + strzero(procline(4),4) + ');' + ;	
-				"SWAP_SEP : " + Procname(5) + '(' + strzero(procline(5),4) + ');' + ;	
-				"SWAP_SEP : " + Procname(6) + '(' + strzero(procline(6),4) + ');' + ;	
+				"SWAP_SEP : " + Procname(2) + '(' + strzero(procline(2),4) + ');' + ;
+				"SWAP_SEP : " + Procname(3) + '(' + strzero(procline(3),4) + ');' + ;
+				"SWAP_SEP : " + Procname(4) + '(' + strzero(procline(4),4) + ');' + ;
+				"SWAP_SEP : " + Procname(5) + '(' + strzero(procline(5),4) + ');' + ;
+				"SWAP_SEP : " + Procname(6) + '(' + strzero(procline(6),4) + ');' + ;
 				"SWAP_SEP : " + Procname(7) + '(' + strzero(procline(7),4) + ')';
-			)	
+			)
 */
 
 	return(cFile)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_swap_dir(cFile)
 	LOCAL cBase := alltrim(oAmbiente:xRoot)
-	
+
 	if right(cBase, 1) == "/" .OR. right(cBase, 1) == "\"
-		cBase := left(cBase, len(cBase)-1)		
-	endif	
-	cBase += DEF_SEP					
-	return(cBase)	
+		cBase := left(cBase, len(cBase)-1)
+	endif
+	cBase += DEF_SEP
+	return(cBase)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_swap_file(cFile)
 	LOCAL cLocalFile := ms_swap_sep(cFile)
 
 	//alert(cLocalFile)
-	
+
 	return File(cLocalFile)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_fopen(cFile, modo)   	
+def ms_swap_fopen(cFile, modo)
 	LOCAL cLocalFile := ms_swap_sep(cFile)
 	LOCAL Handle
-	
+
 	return Fopen(cFile, Modo)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_fcreate(cFile, modo)   	
+def ms_swap_fcreate(cFile, modo)
 	LOCAL cLocalFile := ms_swap_sep(cFile)
 	LOCAL handle
-	
+
 	return Fcreate(cLocalFile, modo)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_ferror()   	
+def ms_swap_ferror()
    LOCAL nError
-	
+
 	return Ferror()
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_fclose(handle)   	
-	
+def ms_swap_fclose(handle)
+
 	return Fclose(handle)
 
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_fseek(handle, n, modo)   	
-	
+def ms_swap_fseek(handle, n, modo)
+
 	return fseek(handle, n, modo)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_swap_fwrite(handle, cbuffer)
 
 	return(fwrite(handle, cbuffer))
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_fread(Handle, cBuffer, nFileLen)   	
-	
+def ms_swap_fread(Handle, cBuffer, nFileLen)
+
 	return fread(Handle, @cBuffer, nFileLen)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_swap_extensao(cFile, cNewExt)   	  	
+def ms_swap_extensao(cFile, cNewExt)
 	LOCAL cOldExt  := GetFileExtension(cFile)
 	LOCAL cNewFile
    LOCAL nAt      := AT( ".", cFile )
@@ -1759,13 +1759,13 @@ def ms_swap_extensao(cFile, cNewExt)
    endif
 
 	cNewFile := Left(cFile, nAt)
-   cNewFile += cNewExt	
+   cNewFile += cNewExt
 	return cNewFile
-endef	
+endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_remove_extensao(cFile)   	  	
+def ms_remove_extensao(cFile)
 	LOCAL cOldExt  := GetFileExtension(cFile)
 	LOCAL cNewFile
    LOCAL nAt      := Rat( ".", cFile)
@@ -1778,11 +1778,11 @@ def ms_remove_extensao(cFile)
 
 	cNewFile := Left(cFile, nAt)
 	return cNewFile
-endef	
+endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ms_remove_path(cFile)	
+def ms_remove_path(cFile)
 	LOCAL cNewFile := ""
    LOCAL nPos
 
@@ -1791,22 +1791,22 @@ def ms_remove_path(cFile)
       cNewFile = SUBSTR(cFile, ++nPos, Len(cFile))
    endif
 	return cNewFile
-endef	
+endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def GetRoot(cstring)	
+def GetRoot(cstring)
 	LOCAL nLen    := len(cstring)
 	LOCAL sep     := DEF_SEP
 	LOCAL npos    := 0
-	
-	if (npos := rat( sep, cString)) > 0	
+
+	if (npos := rat( sep, cString)) > 0
 	  //alert(hb_strFormat("%s : %d", cstring, npos))
 	  return(left(cstring, --npos))
 	endif
 	return ""
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_mem_dbCreate(cFile, aStru, cAlias, _rddname)
 	 /*
@@ -1820,23 +1820,23 @@ def ms_mem_dbCreate(cFile, aStru, cAlias, _rddname)
 								  False   It is opened in the current area.
 	<cAlias> Name of database Alias
 	*/
-	
+
 	/*
-	//  usando normal pelo nome do alias	
+	//  usando normal pelo nome do alias
 	xAlias  := FaturaNew(FTempMemory(), "XALIAS")
-	nHandle := FTempMemory()	
-	xAlias  := FaturaNew(nHandle, "XALIAS")	
-	xNtx	  := FTempMemory()		
+	nHandle := FTempMemory()
+	xAlias  := FaturaNew(nHandle, "XALIAS")
+	xNtx	  := FTempMemory()
 	? 1, xALias
 	? 2, (xalias)
-	
+
 	Area("XALIAS"))
 	? alias()
-	Inde On Codigo To mem:(xNtx)	
+	Inde On Codigo To mem:(xNtx)
 	? xalias->(Recno())
-	? xAlias->Codigo 	
+	? xAlias->Codigo
 	ms_mem_dbclosearea(nHandle)
-	
+
 	// usando macro
 	xTemp  := FaturaNew(FTempMemory(),)
 	xTemp  := FaturaNew(FTempMemory(),"XTEMP")
@@ -1844,38 +1844,38 @@ def ms_mem_dbCreate(cFile, aStru, cAlias, _rddname)
 	xTemp  := FaturaNew()
 	Area((xTemp))
 	? (xTemp)->(Recno())
-	? (xTemp)->Codigo 	
+	? (xTemp)->Codigo
 	*/
-	
+
 	REQUEST HB_MEMIO
-	hb_default(@cFile, FTempMemory())	
-	hb_default(@cAlias, cFile)	
-	hb_default(@_rddname, nil)	// default sistema		
-	dbCreate( "mem:" + (cFile), aStru, _rddname, true, cAlias)	
+	hb_default(@cFile, FTempMemory())
+	hb_default(@cAlias, cFile)
+	hb_default(@_rddname, nil)	// default sistema
+	dbCreate( "mem:" + (cFile), aStru, _rddname, true, cAlias)
 	return Alias()
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def ms_mem_dbclosearea(cFile)
 	(cFile)->(DbCloseArea())
    dbDrop( "mem:" + (cFile))
-	return nil 	
-endef	
+	return nil
+endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def truefalse(xvar)
 	if xvar
 		return "true"
-	else		
+	else
 		return "false"
-	endif	
-endef	
+	endif
+endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def formatavar(xvar)	
+def formatavar(xvar)
 	switch valtype(xvar)
 		case "C"
 			return(trimstr(xvar))
@@ -1883,14 +1883,14 @@ def formatavar(xvar)
 			return(trimstr(xvar))
 		case "L"
 			return(truefalse(xvar))
-		case "D"	
-			return(dtoc(xvar))				
+		case "D"
+			return(dtoc(xvar))
 	endswitch
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
-def ValueAndTypeVar(xvar)	
+def ValueAndTypeVar(xvar)
 	switch valtype(xvar)
 		case "C"
 			AlertaPy("Tipo : C ; Valor : " + trimstr(xvar))
@@ -1901,42 +1901,42 @@ def ValueAndTypeVar(xvar)
 		case "L"
          AlertaPy("Tipo : L ; Valor : " + truefalse(xvar))
          exit
-		case "D"	
+		case "D"
          AlertaPy("Tipo : D ; Valor : " + dtoc(xvar))
          exit
-      case "U"	
+      case "U"
          AlertaPy("Tipo : U ; Valor : NIL")
          exit
 	endswitch
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def FTempMemory()
 *----------------*
-	LOCAL cFile := ""	
+	LOCAL cFile := ""
 	LOCAL nNumber
 	LOCAL cNumber
 	LOCAL snRandom := Seconds() / Exp(1)
    LOCAL nLimit   := 65535
-	
+
 	snRandom := Log( snRandom + Sqrt(2) ) * Exp(3)
-   snRandom := Val( Str(snRandom - Int(snRandom), 17, 15 ) ) 	
-	nNumber  := HB_RandomInt(snRandom, 999999)	
-	cNumber  := StrZero(nNumber, 7)	
-	cFile    := 'mem' + cNumber	
+   snRandom := Val( Str(snRandom - Int(snRandom), 17, 15 ) )
+	nNumber  := HB_RandomInt(snRandom, 999999)
+	cNumber  := StrZero(nNumber, 7)
+	cFile    := 'mem' + cNumber
 	return cFile
-endef	
-	
+endef
+
 def FTempRandomName( xCoringa, cDir )
 *+-----------------------------------+*
-	LOCAL cFile  := ""	
+	LOCAL cFile  := ""
 	LOCAL cExt
 	LOCAL nNumber
 	LOCAL cNumber
 	LOCAL snRandom := Seconds() / Exp(1)
    LOCAL nLimit   := 65535
-	
+
 	hb_default(@xCoringa, "t*.tmp")
    if at(".", xCoringa ) != 0
       cExt := "." + GetFileExtension(xCoringa)
@@ -1944,18 +1944,18 @@ def FTempRandomName( xCoringa, cDir )
       cExt := "." + xCoringa
    endif
 	snRandom := Log( snRandom + Sqrt(2) ) * Exp(3)
-   snRandom := Val( Str(snRandom - Int(snRandom), 17, 15 ) ) 	
-	nNumber  := HB_RandomInt(snRandom, 999999)	
-	cNumber  := StrZero(nNumber,7)	
+   snRandom := Val( Str(snRandom - Int(snRandom), 17, 15 ) )
+	nNumber  := HB_RandomInt(snRandom, 999999)
+	cNumber  := StrZero(nNumber,7)
 	cFile    := 't' + cNumber + cExt
 	return cFile
-endef		
+endef
 
 *----------------------------------------------------------------------------------------------------------------------*
 
 def GetFileExtension(cFile)
 	return(substr( cFile, at( ".", cFile ) + 1, 3 ))
-endef	
+endef
 
 *----------------------------------------------------------------------------------------------------------------------*
 
@@ -1963,16 +1963,16 @@ def FTempName( xCoringa, cDir )
 	LOCAL cTempFile := ""
 	LOCAL nConta    := 0
 	LOCAL cTela     := Mensagem("Aguarde, Criando Arquivo Temporario.")
-	
-	hb_default(@cDir, ms_swap_tmp())	
-	hb_default(@xCoringa, "t*.tmp")			
-	//Aeval( Directory( cDir + xCoringa), { | aFile | ms_swap_ferase( aFile[F_NAME])})	
+
+	hb_default(@cDir, ms_swap_tmp())
+	hb_default(@xCoringa, "t*.tmp")
+	//Aeval( Directory( cDir + xCoringa), { | aFile | ms_swap_ferase( aFile[F_NAME])})
 
 	cTempFile := cDir + FTempRandomName(xCoringa, cDir)
 	While !file(cTempFile) .AND. nConta <= 100
 		cTempFile := cDir + FTempRandomName(xCoringa, cDir)
 		nConta++
-	EndDo	
+	EndDo
 	restela(cTela)
 	return( cTempFile )
 endef
@@ -2017,7 +2017,7 @@ def FTempPorExt(cExt, cDir)
 endef
 
 *==================================================================================================*
-	
+
 def HB_TempName()
 *********************
    LOCAL nFileHandle
@@ -2029,25 +2029,25 @@ def HB_TempName()
      FClose( nFileHandle )
    endif
    return cFileName
-	
+
 def MS_TempName( xCoringa, cDir )
 *-------------------------------*
 	//return(FT_TEMPFIL( FCurdir()))
 	//return(HB_FTEMPCREATE())
 	//return(HB_FTEMPCREATEeX())
 	LOCAL nPos     := Rat(".", xCoringa)
-	LOCAL nLen     := Len(xCoringa)	
+	LOCAL nLen     := Len(xCoringa)
 	DEFAU cDir TO oAmbiente:xBaseTmp
 			xCoringa := AllTrim(xCoringa)
 			xCoringa := SubStr(xCoringa, nPos, 4)
-			
+
 	return(Upper(TempFile(cDir, xcoringa)))
 
-def nTrim( nVal)	
+def nTrim( nVal)
 *********************
 	return( Trim(ValToStr(nVal)))
-endef	
-		
+endef
+
 def xt_Random( nLimit )
 ****************************
    STATIC snRandom := Nil
@@ -2063,7 +2063,7 @@ def xt_Random( nLimit )
    if nDecimals > 0
       nDecimals := Len(cLimit)-nDecimals
    endif
-   return Round( nLimit * snRandom, nDecimals )		
+   return Round( nLimit * snRandom, nDecimals )
 
 Proc Sx_Filter( xStrTop, xStrBottom )
 *************************************
@@ -2098,7 +2098,7 @@ def Sx_Count()
 def lAnoBissexto( dData )
 	LOCAL nAno := Year( dData )
 	return( nAno % 4 == 0 .AND. nAno % 100 != 0)
-endef	
+endef
 
 def DaysInAMonth(dIni, nMes, lString)
 ******************************************
@@ -2112,9 +2112,9 @@ def DaysInAMonth(dIni, nMes, lString)
 	Result := aDias[nMes]
 	if (nMes = 2) .and. IsLeapYear(dIni)
 		Result := 29
-	endif	
+	endif
 	return(if(lString == true , strzero(result,2), result))
-	
+
 def NomeMesesDoAno(dIni, nMes, lAbreviado, lUpper)
 *******************************************************
 	LOCAL aStringMes := {"Janeiro","Fevereiro","Marco","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"}
@@ -2125,26 +2125,26 @@ def NomeMesesDoAno(dIni, nMes, lAbreviado, lUpper)
 	hb_default(@lAbreviado, FALSO)
 	hb_default(@lUpper, FALSO)
 
-	Result := aStringMes[nMes] 	
+	Result := aStringMes[nMes]
 	return(if(lUpper, upper(if(lAbreviado, Left(Result,3), Result)), Result))
 
 def LastDayOfMonth(dIni, nMes, lString)
 ********************************************
 	return(DaysInAMonth(dIni, nMes, lString))
-	
+
 def StringToData(cString)
 ******************************
 	hb_default(@cString, Dtoc(Date()))
 	return(cTod(cString))
 
-def DataToString(dData)	
+def DataToString(dData)
 ****************************
 	hb_default(@dData, Date())
 	return(Dtoc(dData))
 
 def FirstDayOfMonth(dIni, nMes, lString)
 *********************************************
-	LOCAL Result	
+	LOCAL Result
 	hb_default(@dIni, Date())
 	hb_default(@nMes, Month(dIni))
 	Result := 1
@@ -2194,24 +2194,24 @@ endef
 
 def ms_swap_tmp()
 	LOCAL cBase := alltrim(oAmbiente:xRoot)
-	
+
 	if right(cBase, 1) == "/" .OR. right(cBase, 1) == "\"
-		cBase := left(cBase, len(cBase)-1)		
-	endif	
-	cBase += DEF_SEP				
+		cBase := left(cBase, len(cBase)-1)
+	endif
+	cBase += DEF_SEP
 	cBase += "tmp"
-	cBase += DEF_SEP				
+	cBase += DEF_SEP
 	return(cBase)
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def DosShell(cComando)
       !( GetEnv( _SHELLENV_ ))
       return nil
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def Ascan2( aArray, Variavel, PosElem )
 ********************************************
@@ -2276,12 +2276,12 @@ def MS_Version()
       ? k , hb_Version( k )
    next k
    ? "-------------------------------------------------------------------"
-	
+
 
    return
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 *+-----------------------------------------------------------------------------------
 
@@ -2297,14 +2297,14 @@ def M_Message( cString, cCor)
 	return(NIL)
 endef
 
-*+-----------------------------------------------------------------------------------	
-	
+*+-----------------------------------------------------------------------------------
+
 def FTruncate()
 	return NIL
 endef
 
-*+-----------------------------------------------------------------------------------	
-	
+*+-----------------------------------------------------------------------------------
+
 def Shr
 	return nil
 endef
@@ -2319,7 +2319,7 @@ endef
 
 def m_title( cTitulo )
    LOCAL pTitulo := Static2
-	
+
    if (IsNil( cTitulo ))
       return Static2
    else
@@ -2351,14 +2351,14 @@ For x:= 0 To 255 step 16
 	nBrightGreen   := x + 10
 	nBrightCyan    := x + 11
 	nBrightRed     := x + 12
-	nBrightMagenta := x + 13	
+	nBrightMagenta := x + 13
 	nYellow        := x + 14
 	nBrightWhite   := x + 15
    Aadd( aPattern, { /* 01 */ nBlack,;
 							/* 02 */ nBlue,;
 							/* 03 */ nGreen,;
 							/* 04 */ nCyan,;
-							/* 05 */ nRed,;           						
+							/* 05 */ nRed,;
 							/* 06 */ nMagenta,;
 							/* 07 */ nBrown,;
 							/* 08 */ nWhite,;
@@ -2373,7 +2373,7 @@ For x:= 0 To 255 step 16
 next
 return ( aPattern )
 
-def AscanCor(nPos)	
+def AscanCor(nPos)
 ***********************
    LOCAL aPattern := AllColors()
    LOCAL nCor     := int(oAmbiente:CorMenu/16)+1
@@ -2424,14 +2424,14 @@ def Pattern()
       nBrightGreen   := x + 10
       nBrightCyan    := x + 11
       nBrightRed     := x + 12
-      nBrightMagenta := x + 13	
+      nBrightMagenta := x + 13
       nYellow        := x + 14
       nBrightWhite   := x + 15
       Aadd( aPattern, { /* 01 */ nCorIni,;
                         /* 02 */ nCorFim,;
                         /* 03 */ nCorHKLightBar,;
                         /* 04 */ nCorHotKey,;
-                        /* 05 */ nCorDesativada,;							
+                        /* 05 */ nCorDesativada,;
                         /* 06 */ nBlack,;
                         /* 07 */ nBlue,;
                         /* 08 */ nGreen,;
@@ -2445,14 +2445,14 @@ def Pattern()
                         /* 16 */ nBrightGreen,;
                         /* 17 */ nBrightCyan,;
                         /* 18 */ nBrightRed,;
-                        /* 19 */ nBrightMagenta,; 	
+                        /* 19 */ nBrightMagenta,;
                         /* 20 */ nYellow,;
                         /* 21 */ nBrightWhite})
    next
    return ( aPattern )
 endef
 
-Function AscanCorHKLightBar(nCor)	
+Function AscanCorHKLightBar(nCor)
 *********************************
 LOCAL aPattern := Pattern()
 LOCAL nX
@@ -2464,7 +2464,7 @@ For nX := 1 To Len( aPattern)
 next
 return( 0 )
 
-Function AscanCorHotKey(nCor)	
+Function AscanCorHotKey(nCor)
 ***************************
 LOCAL aPattern := Pattern()
 LOCAL nX
@@ -2476,7 +2476,7 @@ For nX := 1 To Len( aPattern)
 next
 return( 0 )
 
-Function AscanCorDesativada(nCor)	
+Function AscanCorDesativada(nCor)
 *********************************
 LOCAL aPattern := Pattern()
 LOCAL nX
@@ -2488,7 +2488,7 @@ For nX := 1 To Len( aPattern)
 next
 return( 0 )
 
-Function AscanCorMenu(nCor)	
+Function AscanCorMenu(nCor)
 ***************************
 LOCAL aPattern := Pattern()
 LOCAL nX
@@ -2500,7 +2500,7 @@ For nX := 1 To Len( aPattern)
 next
 return( 0 )
 
-Function AscanCorBlue(nCor)	
+Function AscanCorBlue(nCor)
 ***************************
 LOCAL aPattern := Pattern()
 LOCAL nX
@@ -2552,7 +2552,7 @@ def Spooler()
    LOCAL Arq_Ant     := Alias()
    LOCAL Ind_Ant     := IndexOrd()
    LOCAL cFile       := ""
-   LOCAL Files       := '*.txt'   
+   LOCAL Files       := '*.txt'
    LOCAL aMenuChoice := { " Limpar Spooler                 ",;
                           " Enviar Arquivo para Impressora ",;
                           " Visualizar Arquivo             ",;
@@ -2561,7 +2561,7 @@ def Spooler()
       oMenu:Limpa()
       M_Title("SPOOLER DE IMPRESSAO")
       nChoice := FazMenu( 05, 10, aMenuChoice )
-      
+
       do case
       case nChoice = 0
          if !Empty( Arq_Ant)
@@ -2573,40 +2573,40 @@ def Spooler()
       case nChoice = 1
          oAmbiente:cArquivo := ""
          oAmbiente:Spooler  := false
-         Alerta("Limpeza efetuada com sucesso")         
+         Alerta("Limpeza efetuada com sucesso")
          Loop
 
-      case nChoice = 2         
+      case nChoice = 2
          cFile := iif( Empty( oAmbiente:cArquivo), Space(len(FTempPorExt("txt", oAmbiente:xBaseTxt) + Space(10))), oAmbiente:cArquivo )
          MaBox( 15, 10, 17 , MaxCol()-1 )
          @ 16, 11 Say "Arquivo para Impressao : " Get cFile Pict "@!" valid PickTemp( @cFile)
          Read
          if LastKey() = 27
-            oAmbiente:cArquivo := ""            
+            oAmbiente:cArquivo := ""
             Loop
-         endif         
-         oAmbiente:cArquivo := TrimStr(cFile)         
-         Instru80(, oAmbiente:cArquivo )   
+         endif
+         oAmbiente:cArquivo := TrimStr(cFile)
+         Instru80(, oAmbiente:cArquivo )
          loop
 
       case nChoice = 3
-         cFile := iif( Empty( oAmbiente:cArquivo), Space(len(FTempPorExt("txt", oAmbiente:xBaseTxt) + Space(10))), oAmbiente:cArquivo )         
+         cFile := iif( Empty( oAmbiente:cArquivo), Space(len(FTempPorExt("txt", oAmbiente:xBaseTxt) + Space(10))), oAmbiente:cArquivo )
          MaBox( 15, 10, 17 , MaxCol()-1 )
          @ 16, 11 Say "Arquivo para Visualizar : " Get cFile Pict "@!" valid PickTemp( @cFile)
          Read
-         if LastKey() = 27            
+         if LastKey() = 27
             loop
-         endif		
-         oAmbiente:cArquivo := TrimStr(cFile)         
+         endif
+         oAmbiente:cArquivo := TrimStr(cFile)
          oAmbiente:Externo  := FALSO
-         oAmbiente:Spooler  := OK		
+         oAmbiente:Spooler  := OK
          #if defined( __PLATFORM__UNIX )
             M_View( 00, 00, MaxRow(), MaxCol(), oAmbiente:cArquivo, Cor())
          #else
             ShellRun("NOTEPAD " + oAmbiente:cArquivo )
-         #endif   
+         #endif
          CloseSpooler()
-         oAmbiente:Spooler := FALSO                  
+         oAmbiente:Spooler := FALSO
          loop
 
       case nChoice = 4
@@ -2614,7 +2614,7 @@ def Spooler()
       endcase
    enddo
    return
-endef      
+endef
 
 def _Instru80( Mode, nCorrente, nRowPos )
 ******************************************
@@ -2622,8 +2622,8 @@ def _Instru80( Mode, nCorrente, nRowPos )
 	LOCAL cPath     := FChdir()
    LOCAL aArryaPrn := {}
    LOCAL nIndex    := 0
-   
-   #define default    otherwise  
+
+   #define default    otherwise
    #define CTRL_PGDN  30
 
 	do case
@@ -2644,7 +2644,7 @@ def _Instru80( Mode, nCorrente, nRowPos )
 	case LastKey() = K_ENTER
 		return(1)
 
-   #define K_SH_ENTER 284   
+   #define K_SH_ENTER 284
 	case LastKey() = K_CTRL_RET .or. Lastkey() = K_SH_ENTER
       MudaImpressora(nCorrente, @aMenu)
 		return(2)
@@ -2654,20 +2654,20 @@ def _Instru80( Mode, nCorrente, nRowPos )
 
 	EndCase
 endef
-	
-*==================================================================================================*			
- 
-def CupsArrayPrinter()   
+
+*==================================================================================================*
+
+def CupsArrayPrinter()
    LOCAL aPrinter := {} //cupsGetDests()
    LOCAL aModelo  := {}
-   LOCAL aMenu    := {} 
+   LOCAL aMenu    := {}
    LOCAL aAction	:= { "PRONTA         ","FORA DE LINHA  ","DESLIGADA      ","SEM PAPEL      ", "NAO CONECTADA  "}
    LOCAL aComPort := { "DISPONIVEL     ","INDISPONIVEL   " }
    LOCAL aStatus  := RetPrinterStatus()
    LOCAL nIndex   := 0
-   LOCAL nPr      
+   LOCAL nPr
    MEMVAR cStr
-   
+
    aMenu := {  " LPT1 ¦ " + aAction[ aStatus[1]] + " ¦ " + oAmbiente:aLpt1[1,2],;
 					" LPT2 ¦ " + aAction[ aStatus[2]] + " ¦ " + oAmbiente:aLpt2[1,2],;
 					" LPT3 ¦ " + aAction[ aStatus[3]] + " ¦ " + oAmbiente:aLpt3[1,2],;
@@ -2680,24 +2680,24 @@ def CupsArrayPrinter()
 					" WEB BROWSER  ¦ ",;
 					" SPOOLER      ¦ ",;
 					" CANCELAR     ¦ ";
-            }   
-      
-   FOR EACH nPr IN aPrinter               
-      //? nPr:__enumIndex(), i
-      //nWidth := Max( nWidth, Len( nPr ) )         
-      nIndex++          
-      cStr := &( "oAmbiente:aLpd" + trimstr(nIndex))
-      Aadd( aMenu, " LPD" + TrimStr(nPr:__enumIndex()) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + nPr)                    
-      Aadd( aModelo, nPr)        
-   NEXT                       
-   return {aMenu, aModelo, aAction, aStatus, aPrinter}
-endef   
+            }
 
-*==================================================================================================*			   
+   FOR EACH nPr IN aPrinter
+      //? nPr:__enumIndex(), i
+      //nWidth := Max( nWidth, Len( nPr ) )
+      nIndex++
+      cStr := &( "oAmbiente:aLpd" + trimstr(nIndex))
+      Aadd( aMenu, " LPD" + TrimStr(nPr:__enumIndex()) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + nPr)
+      Aadd( aModelo, nPr)
+   NEXT
+   return {aMenu, aModelo, aAction, aStatus, aPrinter}
+endef
+
+*==================================================================================================*
 
 def SetarVariavel( aNewLpt )
 ****************************
-	LOCAL nPos       := 2   
+	LOCAL nPos       := 2
 	PUBLIC _CPI10	  := MsDecToChr( aNewLpt[1,++nPos] )
 	PUBLIC _CPI12	  := MsDecToChr( aNewLpt[1,++nPos] )
 	PUBLIC GD		  := MsDecToChr( aNewLpt[1,++nPos] )
@@ -2712,8 +2712,8 @@ def SetarVariavel( aNewLpt )
 	PUBLIC _SPACO1_8 := MsDecToChr( aNewLpt[1,++nPos] )
 	PUBLIC _SPACO1_6 := MsDecToChr( aNewLpt[1,++nPos] )
 	PUBLIC RESETA	  := MsDecToChr( aNewLpt[1,++nPos] )
-	return   
-endef   
+	return
+endef
 
 
 
@@ -2721,7 +2721,7 @@ def Instruim()
 *******************
    return( Instru80() )
 endef
-   
+
 def InstruEt()
 **************
    LOCAL cScreen := SaveScreen()
@@ -2744,7 +2744,7 @@ def InstruEt()
       return( false )
    endif
 endef
-   
+
 Proc CadastroImpressoras()
 **************************
 LOCAL GetList	  := {}
@@ -2869,17 +2869,17 @@ endif
 AreaAnt( Arq_Ant, Ind_Ant )
 return( lRetVal )
 
-*==================================================================================================*		
-	
+*==================================================================================================*
+
 def Instru80( nQualPorta, cArquivo )
    MEMVAR cStr
 	LOCAL cScreen				:= SaveScreen()
 	LOCAL Arq_Ant				:= Alias()
-	LOCAL Ind_Ant				:= IndexOrd()   
+	LOCAL Ind_Ant				:= IndexOrd()
    LOCAL aPrinter          := {}
 	LOCAL nChoice
 	LOCAL aNewLpt
-   LOCAL nTamJan           := 0                  
+   LOCAL nTamJan           := 0
 	LOCAL i						:= 0
 	LOCAL nStatus				:= 0
 	STATI nPortaDeImpressao := 1
@@ -2888,20 +2888,20 @@ def Instru80( nQualPorta, cArquivo )
 	PRIVA aAction				:= {}
 	PRIVA aComPort 			:= {}
    PRIVA aModelo           := {}
-   PRIVA nPr               := 0 
-   PRIVA nIndex            := 0    
+   PRIVA nPr               := 0
+   PRIVA nIndex            := 0
 	PRIVA aMenu
    PRIVA aModelo
-   
+
 	if len(oAmbiente:aLpt1) == 0 .or. len(oAmbiente:aLpd1) == 0
 		oPrinter:EscolheImpressoraUsuario()
 	endif
-	
+
 	if nQualPorta != NIL
 		nQualPorta := nPortaDeImpressao
 		return( true )
 	endif
-   
+
 	ErrorBeep()
 	while(true)
 		oMenu:Limpa()
@@ -2921,24 +2921,24 @@ def Instru80( nQualPorta, cArquivo )
          if Conf("Pergunta: Cancelar Impressao ?")
             lCancelou := OK
             return false
-         endif   
+         endif
 			Loop
-		endif	
-		
+		endif
+
       aNewLpt := oAmbiente:aLpt1
       switch nChoice
       case 1
       case 7
       case 8
-      case 9 
+      case 9
       case 11
          aNewLpt := oAmbiente:aLpt1
          exit
       case 2
          aNewLpt := oAmbiente:aLpt2
-         exit         
+         exit
       case 3
-         aNewLpt := oAmbiente:aLpt3 
+         aNewLpt := oAmbiente:aLpt3
          exit
       case 13
       case 14
@@ -2948,11 +2948,11 @@ def Instru80( nQualPorta, cArquivo )
       case 18
       case 19
       case 20
-      case 21         
+      case 21
          aNewLpt := &("oAmbiente:aLpd" + trimstr(nChoice-12))
          exit
       endswitch
-      
+
 		AreaAnt( Arq_Ant, Ind_Ant )
 		SetarVariavel( aNewLpt )
       oAmbiente:IsPrinter := nChoice
@@ -2985,12 +2985,12 @@ def Instru80( nQualPorta, cArquivo )
       case nChoice >= 13 .and. nChoice <= 21
          oAmbiente:CupsPrinter := aModelo[nChoice-12]
          nPortaDeImpressao     := nChoice
-         oAmbiente:lVisSpooler := false         
+         oAmbiente:lVisSpooler := false
          if !(Isnil(cArquivo))
             oAmbiente:cArquivo := cArquivo
             //cupsPrintFile( oAmbiente:CupsPrinter, cArquivo, "Macrosoft SCI for Linux")
             loop
-         endif   			
+         endif
 			return(SaidaParaRedeCups(cArquivo))
 		otherwise
 			nPortaDeImpressao     := Iif( nChoice = 0, 1, nChoice )
@@ -3006,9 +3006,9 @@ def Instru80( nQualPorta, cArquivo )
 		endcase
 	enddo
 	ResTela( cScreen )
-endef	
+endef
 
-*==================================================================================================*			
+*==================================================================================================*
 
 def PrintOn( lFechaSpooler )
 	LOCAL nQualPorta := 1
@@ -3019,9 +3019,9 @@ def PrintOn( lFechaSpooler )
 		AbreSpooler()
 	endif
 	Instru80( @nQualPorta )
-   
-	switch nQualPorta 
-   case 1	
+
+	switch nQualPorta
+   case 1
 		cSaida := "LPT1"
       exit
 	case 2
@@ -3037,15 +3037,15 @@ def PrintOn( lFechaSpooler )
 		cSaida := "COM2"
       exit
 	case 6
-		cSaida := "COM3"   
+		cSaida := "COM3"
       exit
 	endswitch
-   
+
    cSaida := cLpr += cSaida
 	if lFechaSpooler == nil
 		oMenu:StatInf()
 		oAmbiente:nRegistrosImpressos := 0
-	endif	
+	endif
 	Set Cons Off
 	Set Devi To Print
 	if !oAmbiente:Spooler
@@ -3059,8 +3059,8 @@ def PrintOn( lFechaSpooler )
 	return Nil
 endef
 
-*==================================================================================================*		
-	
+*==================================================================================================*
+
 def PrintOff()
 	PrintOn( true )
 	FPrint( RESETA )
@@ -3081,28 +3081,28 @@ def Rel_Ok(cMensagem)
 	LOCAL nCol	     := PCol()
    LOCAL lPrinter   := SET(_SET_PRINTER)
    LOCAL cDevice    := SET(_SET_DEVICE)
-   LOCAL lConsole   := SET(_SET_CONSOLE)   
+   LOCAL lConsole   := SET(_SET_CONSOLE)
 
    if lPrinter
       SET(_SET_PRINTER, false)
       SET(_SET_DEVICE, "SCREEN")
-      SET(_SET_CONSOLE, true)   
-   endif   
-	if inkey() == K_ESC   
+      SET(_SET_CONSOLE, true)
+   endif
+	if inkey() == K_ESC
 		ErrorBeep()
 		if Conf("Pergunta: Deseja cancelar a impressao ?") .or. !LptOk()
          CloseSpooler()
 			restela( cScreen )
 			break
 			return false
-		endif		
-		restela( cScreen )      
-	endif   
+		endif
+		restela( cScreen )
+	endif
 	if cMensagem != Nil
       oMenu:StatReg(cMensagem)
-	else	
+	else
       oMenu:StatReg("REG# " + StrTrim(++oAmbiente:nRegistrosImpressos))
-	endif   
+	endif
    if lPrinter
       SET(_SET_PRINTER, lPrinter)
       SET(_SET_DEVICE, cDevice)
@@ -3130,21 +3130,21 @@ def LptOk()
 			cMsg += "  e mapeamentos de rede, etc. Lembre-se que impressoras  "
 			cMsg += "  mapeadas sempre estarao com status de PRONTA devido ao "
 			cMsg += "  SPOOL de impressao da rede.                            "
-			
+
 			cMsg += ";2)Voce pode verificar status de online novamente. Escolha"
 			cMsg += " (TENTAR).                                               "
 			cMsg += ";3)Ao escolher a opcao (IMPRIMIR ASSIM MESMO) podera haver"
 			cMsg += "   um travamento completo do sistema.                    "
 			cMsg += ";4)Escolha (RETORNAR) para cancelar a impressão.          "
-			
-	if lMaluco 
+
+	if lMaluco
 		return( lMaluco)
 	endif
-   
-   switch oAmbiente:Isprinter 
+
+   switch oAmbiente:Isprinter
    case 1
    case 2
-   case 3   
+   case 3
 		nStatus := PrnStatus( oAmbiente:Isprinter )
 		if !oAmbiente:Spooler
 			cScreen := SaveScreen()
@@ -3157,7 +3157,7 @@ def LptOk()
 					if nStatus = -1
 						nStatus := 5
 					endif
-				endif	
+				endif
 				ErrorBeep()
 				nDecisao := Alerta( aAction[ nStatus] + cMsg, {"TENTAR", "IMPRIMIR ASSIM MESMO", "CANCELAR", "MAPEAR"} )
 				if nDecisao = 3 .OR. nDecisao = 0
@@ -3176,33 +3176,33 @@ def LptOk()
 					lMaluco  := FALSO
 					lRetorno := FALSO
 					exit
-				endif				
+				endif
 			EndDo
-			ResTela( cScreen )         
+			ResTela( cScreen )
 		endif
       exit
 	case 4
 	case 5
-	case 6   
+	case 6
 		nComPort := ( oAmbiente:IsPrinter - 4 )
 		lRetorno := ( nStatus := FIsPrinter( nComPort ))
       exit
    otherwise
       lRetorno := true
-      exit      
+      exit
    endswitch
 	return( lRetorno )
 endef
 
 *==================================================================================================*
-	
+
 def AbreSpooler()
 *----------------*
 	iif( oAmbiente:Spooler, Set( _SET_PRINTFILE, oAmbiente:cArquivo, false ), Set( _SET_PRINTFILE, "" ))
 	return NULL
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def CloseSpooler()
 ******************
@@ -3216,15 +3216,15 @@ def CloseSpooler()
 
    Set(_SET_PRINTFILE, "" )
    Set Print To
-   
+
    if oAmbiente:SendMail
       oAmbiente:externo     := false
       oAmbiente:Spooler     := false
       oAmbiente:lVisSpooler := false
       SendMail()
-      return nil   
+      return nil
    endif
-   
+
    if lexterno
       #if defined( __PLATFORM__UNIX )
          //ms_system("gnome-terminal --command '/opt/shell.sh'");
@@ -3232,7 +3232,7 @@ def CloseSpooler()
       #else
          cComando := 'firefox.exe ' + cTemp
          cComando := "C:\Program Files\Mozilla Firefox\firefox.exe " + cTemp
-         cComando := "chrome.exe " + cTemp		
+         cComando := "chrome.exe " + cTemp
          ShellRun("NOTEPAD " + cTemp )
          //ShellRun( cComando )
          /*
@@ -3243,7 +3243,7 @@ def CloseSpooler()
          i = SWPVIDMDE(OK)
          //i = SWPDISMSG(OK)
          i = SWPRUNCMD( cComando, 0, "", "")
-         */         
+         */
       #endif
       oAmbiente:externo := false
    else
@@ -3265,18 +3265,18 @@ def CloseSpooler()
    oAmbiente:Spooler     := false
    oAmbiente:lVisSpooler := false
    return nil
-endef   
+endef
 
 *==================================================================================================*
 
-def SaidaParaRedeCups()   
-	LOCAL cDir     := oAmbiente:xBaseTxt	
+def SaidaParaRedeCups()
+	LOCAL cDir     := oAmbiente:xBaseTxt
    LOCAL xArquivo := ""
-	
+
    xArquivo           := TrimStr(FTempPorExt('txt', cDir))
 	oAmbiente:cArquivo := xArquivo
    oAmbiente:Spooler  := true
-	Set Print To (xArquivo)	   	
+	Set Print To (xArquivo)
 	return true
 endef
 
@@ -3289,12 +3289,12 @@ endef
 
 def MsMemoEdit( cString, cTitulo, nTop, nLeft, nBottom, nRight )
    LOCAL cScreen := SaveScreen()
-           
+
    Mabox(nTop, nLeft, nBottom, nRight, cTitulo)
    cString = MemoEdit(cString, nTop+1, nLeft+1, nBottom-1, nRight-1)
    Restela(cScreen)
    return true
-endef   
+endef
 
 *==================================================================================================*
 
@@ -3303,13 +3303,13 @@ def SaidaParaEmail()
    LOCAL cScreen	:= SaveScreen()
 	LOCAL cDir     := oAmbiente:xBaseTxt
 	LOCAL xArquivo := ""
-	
-	oMenu:Limpa()	
-   xArquivo           := TrimStr(FTempPorExt('txt', cDir))	
+
+	oMenu:Limpa()
+   xArquivo           := TrimStr(FTempPorExt('txt', cDir))
    oAmbiente:SendMail := true
    oAmbiente:cArquivo := xArquivo
-	oAmbiente:Spooler  := true   
-	Set Print To (xArquivo)	
+	oAmbiente:Spooler  := true
+	Set Print To (xArquivo)
 	ResTela( cScreen )
 	return true
 endef
@@ -3327,7 +3327,7 @@ def SendMail()
    LOCAL cString
 	LOCAL i
 
-	oMenu:Limpa()		
+	oMenu:Limpa()
 	MaBox( 15, 00, 21, 79, "NOVA MENSAGEM")
 	@ 16, 01 Say "Para     : " Get cTo      Valid PickAviso(cTo, "Ooops!: Vai enviar para quem ?")
 	@ 17, 01 Say "De       : " Get cFrom    Valid if(Empty(cFrom),    ( ErrorBeep(), Alerta("Ooops!: Nao vai dizer o email de quem enviou ?"), false ), true )
@@ -3336,20 +3336,20 @@ def SendMail()
 	@ 20, 01 Say "Servidor : " Get xServer  Valid if(Empty(xServer),  ( ErrorBeep(), Alerta("Ooops!: Entre com o servidor!"), false ), true )
 	@ 23, 01                   Get cString  Valid MsMemoEdit( @cString, "CORPO DA MENSAGEM - CTRL+W GRAVAR", 22, 00, 30, 79, true, false)
 	Read
-	
+
 	if LastKey() = K_ESC
-      oAmbiente:SendMail := false     
-      oAmbiente:Spooler  := false         
+      oAmbiente:SendMail := false
+      oAmbiente:Spooler  := false
 		oAmbiente:cArquivo := ""
       ResTela(cScreen)
-      return false      
+      return false
 	endif
-   
+
 	cFrom 				 := AllTrim( cFrom )
 	cTo					 := AllTrim( cTo )
 	cSubject           := AllTrim( cSubject )
 	xServer				 := AllTrim( xServer )
-	
+
 	Mensagem('Aguarde, Enviando Email.')
 	/*
 	xString := 'mail.bat'
@@ -3358,9 +3358,9 @@ def SendMail()
 	xString += '  ' + cFrom
 	xString += '  ' + cTo
 	*/
-   
+
    #ifdef __PLATFORM__WINDOWS
-      xstring := 'mail.bat'      
+      xstring := 'mail.bat'
       i = SWPVIDMDE(OK)
       i = SWPDISMSG(OK)
       i = SWPFREEMS(640)
@@ -3369,17 +3369,17 @@ def SendMail()
       i = SWPADDENV(2048)
       i := SWPRUNCMD( xString , 100, "", "")
    #else
-      #if defined( __PLATFORM__UNIX )         
+      #if defined( __PLATFORM__UNIX )
          xString := 'echo "' + (cSubject) + '"'
          xString += ' | mutt -s ' + '"' + (cSubJect) + '"'
          xString += ' -a '      + oAmbiente:cArquivo
-         xString += ' -- '      + cTo         
+         xString += ' -- '      + cTo
          alert(xstring)
          ms_system( xString)
-      #endif   
-   #endif	
-   oAmbiente:SendMail := false     
-   oAmbiente:Spooler  := false         
+      #endif
+   #endif
+   oAmbiente:SendMail := false
+   oAmbiente:Spooler  := false
 	ResTela(cScreen)
    return true
 endef
@@ -3391,34 +3391,34 @@ def SaidaParaArquivo()
    LOCAL cScreen	:= SaveScreen()
 	LOCAL cDir     := oAmbiente:xBaseTxt
 	LOCAL xArquivo := ""
-	
+
 	oMenu:Limpa()
-	xArquivo := FTempPorExt('txt', cDir) + Space(10)	
+	xArquivo := FTempPorExt('txt', cDir) + Space(10)
 	MaBox( 15, 00, 17, MaxCol()-1 )
 	@ 16, 01 Say "Visualizar no Arquivo: " Get xArquivo Pict "@!"
 	Read
-	
+
 	if LastKey() = K_ESC
 		if Conf("Pergunta: Cancelar Impressao ?")
 			oAmbiente:cArquivo := ""
 			ResTela( cScreen )
 			return false
-		endif	
+		endif
 	endif
 	xArquivo           := StrTrim(xArquivo)
    oAmbiente:cArquivo := xArquivo
 	oAmbiente:Spooler  := true
    oAmbiente:externo  := true
-	Set Print To (xArquivo)	
+	Set Print To (xArquivo)
 	ResTela( cScreen )
 	return true
 endef
 
-*==================================================================================================*	
+*==================================================================================================*
 
 def SaidaParaSpooler()
    LOCAL GetList	:= {}
-	LOCAL cScreen	:= SaveScreen()	
+	LOCAL cScreen	:= SaveScreen()
 	LOCAL cDir     := oAmbiente:xBaseTxt
    LOCAL xArquivo := ""
 
@@ -3427,27 +3427,27 @@ def SaidaParaSpooler()
 	MaBox( 15, 00, 17, MaxCol()-1 )
 	@ 16, 01 Say "Visualizar no Arquivo: " Get xArquivo Pict "@!"
 	Read
-	
+
 	if LastKey() = K_ESC
 		oAmbiente:cArquivo := ""
 		ResTela( cScreen )
       return false
 	endif
-   
+
 	xArquivo           := StrTrim(xArquivo)
    oAmbiente:cArquivo := xArquivo
-	oAmbiente:Spooler  := true	
-	Set Print To (xArquivo)	
+	oAmbiente:Spooler  := true
+	Set Print To (xArquivo)
 	ResTela( cScreen )
    return true
 endef
 
 *==================================================================================================*
-	
+
 def SaidaParaHtml()
    LOCAL GetList	:= {}
-	LOCAL cScreen	:= SaveScreen()		
-	LOCAL cDir     := oAmbiente:xBaseHtm 
+	LOCAL cScreen	:= SaveScreen()
+	LOCAL cDir     := oAmbiente:xBaseHtm
    LOCAL xArquivo := ""
 
 	oMenu:Limpa()
@@ -3455,16 +3455,16 @@ def SaidaParaHtml()
    MaBox( 15, 00, 17, MaxCol()-1 )
 	@ 16, 01 Say "Visualizar no Arquivo: " Get xArquivo Pict "@!"
 	Read
-   
+
 	if LastKey() = K_ESC
 		oAmbiente:cArquivo := ""
 		ResTela( cScreen )
       return false
 	endif
-   
+
    xArquivo           := StrTrim(xArquivo)
    oAmbiente:cArquivo := xArquivo
-	oAmbiente:Spooler  := true	
+	oAmbiente:Spooler  := true
 	oAmbiente:externo  := true
 	Set Print To ( xArquivo )
 	ResTela( cScreen )
@@ -3480,7 +3480,7 @@ def SaidaParaUsb()
 	LOCAL cDir     := oAmbiente:xBaseTmp
 	LOCAL i
 
-	oMenu:Limpa()	
+	oMenu:Limpa()
 	xArquivo           := StrTrim(FTempPorExt('txt', cDir))
 	oAmbiente:Spooler  := FALSO
 	oAmbiente:cArquivo := xArquivo
@@ -3497,18 +3497,18 @@ def SaidaParaUsb()
 	i		  := SWPRUNCMD( xString, 0, "", "" )
 	ResTela( cScreen )
 	return true
-endef	
+endef
 
 *==================================================================================================*
 
-	
+
 def boxpy(nRow, nCol, nRow1, nCol1, cFrame, nCor, titulo)
     nComp = (nCol1 - nCol)
     center = maxcol() / 2
 
     for x := nRow TO nRow1
         aprint(x, nCol, space(nComp), nCor, nComp)
-    next		  
+    next
 
     aprint(nRow, nCol, left(cFrame, 1), nCor, 1)
     aprint(nRow, nCol + 1, replicate(substr(cFrame, 5, 1), nComp), nCor, 1)
@@ -3553,13 +3553,13 @@ Return(Repl( SEP, Tam ))
 def PickTemp(cFile)
    LOCAL cScreen := SaveScreen()
    LOCAL cDir    := oAmbiente:xBaseTxt + _SLASH_
-   LOCAL Files   := cDir + '*.txt'   
-   
+   LOCAL Files   := cDir + '*.txt'
+
    if !file(cFile)
-      oMenu:Limpa()      
-      M_Title( "Setas CIMA/BAIXO Move")			
+      oMenu:Limpa()
+      M_Title( "Setas CIMA/BAIXO Move")
       cFile := cDir + Mx_PopFile( 03, 10, 15, 61, Files, Cor())
-      if Empty( cFile )         
+      if Empty( cFile )
          ErrorBeep()
          Alerta("Erro: O Arquivo Nao Existe. ")
          ResTela(cScreen)
@@ -3602,9 +3602,9 @@ intWindowStyle
 lRet     := WshShell:Run("%comspec% /c " + cComando, intWindowStyle, .F.)
 WshShell := NIL
 return Iif( lRet = 0, .T., .F.)
-	
-*==================================================================================================*	
-	
+
+*==================================================================================================*
+
 def ShellExec( cComando )
 	LOCAL intWindowStyle := 0
 	LOCAL WshShell
@@ -3634,13 +3634,13 @@ def ShellExec( cComando )
 
 	//oExec := oShell:Run("%comspec% /c " + cComando, intWindowStyle, .F.)
 	oExec    := WshShell:Exec(cComando)
-	lRet     := oExec:Status 
+	lRet     := oExec:Status
 	WshShell := NIL
 	return Iif( lRet = 0, .T., .F.)
 endef
 
-*==================================================================================================*	
-	
+*==================================================================================================*
+
 def M_View( row, col, row1, col1, cFile, nCor )
 	MaBox(row, col, row1, col1)
 	FT_DFSetup(cFile, row+1, col+1, row1-1, col1-1, 1, nCor, Roloc(nCor),"EeQqXx", .T., 5, col1-1, 8196)
@@ -3649,20 +3649,20 @@ def M_View( row, col, row1, col1, cFile, nCor )
 	return NIL
 endef
 
-*==================================================================================================*		
+*==================================================================================================*
 
 def MX_PopFile( row, col, row1, col1, xCoringa, nColor)
 	LOCAL aFileList  := {}
-	LOCAL nChoice 
-	
+	LOCAL nChoice
+
    hb_default(@row, 02)
    hb_default(@col, 10)
    hb_default(@row1, MaxRow()-2)
    hb_default(@col1, Maxcol()-1)
    hb_default(@ncolor, 31)
-   
+
 	Aeval( Directory( xCoringa ), {|aDirectory|;
-								Aadd( aFileList,;								
+								Aadd( aFileList,;
 								PADR( aDirectory[F_NAME], 15 ) + ;
 								if( SUBSTR( aDirectory[F_ATTR], 1,1) == "D", "   <DIR>", ;
 								TRAN(       aDirectory[F_SIZE], "99,999,999 B"))  + "  " + ;
@@ -3674,8 +3674,8 @@ def MX_PopFile( row, col, row1, col1, xCoringa, nColor)
 	endif
 	return( AllTrim(left(aFileList[nChoice],15)))
 endef
-	
-*==================================================================================================*	
+
+*==================================================================================================*
 
 def MSDecToChr( cString )
 	LOCAL cNewString := ""
@@ -3691,7 +3691,7 @@ def MSDecToChr( cString )
 	return ( cNewString )
 endef
 
-*==================================================================================================*		
+*==================================================================================================*
 
 def Impressora()
 ****************
@@ -3709,7 +3709,7 @@ def Impressora()
       if  nChoice = 0
          ResTela( cScreen )
          return
-      else         
+      else
          MudaImpressora(nChoice)
       endif
    enddo
@@ -3718,10 +3718,10 @@ endef
 def RetPrinterStatus()
    LOCAL i := 0
    LOCAL aStatus := {}
-   
+
    for i := 1 to 3
       nStatus := PrnStatus(i)
-      if nStatus = 0 
+      if nStatus = 0
          nStatus := Iif(IsPrinter(i), 1, 2 )
       else
         if nStatus = -1
@@ -3729,41 +3729,41 @@ def RetPrinterStatus()
         else
            nStatus++
          endif
-      endif	
+      endif
       Aadd( aStatus, nStatus )
    next
    return aStatus
-endef      
-   
+endef
+
 def MudaImpressora( nCorrente, aMenu )
 **************************************
    LOCAL cCodi    := Space(02)
    LOCAL aPrinter := CupsArrayPrinter()
    LOCAL aModelo 	:= aPrinter[CUPS_MODELO]
 	LOCAL aAction	:= aPrinter[CUPS_ACTION]
-   LOCAL aStatus  := aPrinter[CUPS_STATUS]   
-   
+   LOCAL aStatus  := aPrinter[CUPS_STATUS]
+
    if IsNil( aMenu)
       aMenu := aPrinter[CUPS_MENU]
    endif
-   
+
 	if UsaArquivo("PRINTER")
 		PrinterErrada( @cCodi )
       aArrayPrn := {;
                      Printer->Codi,;
                      Printer->Nome, ;
-                     Printer->_Cpi10,; 
-                     Printer->_Cpi12,; 
-                     Printer->Gd,; 
-                     Printer->Pq,; 
-                     Printer->Ng,; 
-                     Printer->Nr,; 
-                     Printer->Ca,; 
-                     Printer->c18,; 
-                     Printer->LigSub,; 
-                     Printer->DesSub,; 
-                     Printer->_SaltoOff,; 
-                     Printer->_Spaco1_6,; 
+                     Printer->_Cpi10,;
+                     Printer->_Cpi12,;
+                     Printer->Gd,;
+                     Printer->Pq,;
+                     Printer->Ng,;
+                     Printer->Nr,;
+                     Printer->Ca,;
+                     Printer->c18,;
+                     Printer->LigSub,;
+                     Printer->DesSub,;
+                     Printer->_SaltoOff,;
+                     Printer->_Spaco1_6,;
                      Printer->_Spaco1_8,;
                      Printer->Reseta;
                   }
@@ -3774,9 +3774,9 @@ def MudaImpressora( nCorrente, aMenu )
          nIndex := nCorrente
          &("oAmbiente:aLpt" + trimstr(nIndex)) := {}
          Aadd( &("oAmbiente:aLpt" + trimstr(nIndex)), aArrayPrn)
-         cStr := &("oAmbiente:aLpt" + trimstr(nIndex))                           
+         cStr := &("oAmbiente:aLpt" + trimstr(nIndex))
          aMenu[nIndex] := " LPT" + trimstr(nIndex) + " ¦ " + aAction[aStatus[nIndex]] + " ¦ " + cStr[1,2]
-         exit                                                                     
+         exit
 		case 13
 		case 14
 		case 15
@@ -3789,11 +3789,11 @@ def MudaImpressora( nCorrente, aMenu )
          nIndex := ( nCorrente - 12 )
          &("oAmbiente:aLpd" + trimstr(nIndex)) := {}
 			Aadd( &("oAmbiente:aLpd" + trimstr(nIndex)), aArrayPrn)
-         cStr := &("oAmbiente:aLpd" + trimstr(nIndex))                           
-         aMenu[nCorrente] := " LPD" + TrimStr(nIndex) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + aModelo[nIndex]                                                                 
-         exit            			
+         cStr := &("oAmbiente:aLpd" + trimstr(nIndex))
+         aMenu[nCorrente] := " LPD" + TrimStr(nIndex) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + aModelo[nIndex]
+         exit
       endswitch
-		
+
 		Printer->(DbCloseArea())
 		if UsaArquivo("USUARIO")
 			if Usuario->(DbSeek( oAmbiente:xUsuario ))
@@ -3809,7 +3809,7 @@ def MudaImpressora( nCorrente, aMenu )
 					Usuario->Lpd6 := Iif( oAmbiente:aLpd6[1,1] = NIL, "", oAmbiente:aLpd6[1,1])
 					Usuario->Lpd7 := Iif( oAmbiente:aLpd7[1,1] = NIL, "", oAmbiente:aLpd7[1,1])
 					Usuario->Lpd8 := Iif( oAmbiente:aLpd8[1,1] = NIL, "", oAmbiente:aLpd8[1,1])
-					Usuario->Lpd9 := Iif( oAmbiente:aLpd9[1,1] = NIL, "", oAmbiente:aLpd9[1,1])               
+					Usuario->Lpd9 := Iif( oAmbiente:aLpd9[1,1] = NIL, "", oAmbiente:aLpd9[1,1])
 					Usuario->(Libera())
 				endif
 			endif
@@ -3836,8 +3836,8 @@ def PrinterErrada( cCodi )
    return( lRetVal )
 endef
 
-*==================================================================================================*	
-   
+*==================================================================================================*
+
 def PrinterDbedit()
 ************************
    LOCAL Arq_Ant	:= Alias()
@@ -3872,12 +3872,12 @@ def PrinterDbedit()
    oBrowse:Processa()
    ResTela( cScreen )
    return( nil )
-endef   
+endef
 
 def FPrint( cString )
 **************************
    return( DevOut( cString ) )
-endef   
+endef
 
 def Seta1( Row, Col )
 	LOCAL cString := "Use as Setas " + Chr( 27 ) + Chr( 24 ) + Chr( 25 ) + Chr( 26 )
@@ -3890,8 +3890,182 @@ def Seta1( Row, Col )
 endef
 
 def FecharTemp(cDbf, cNtx)
-*-------------------------*	
+*-------------------------*
 	ms_mem_dbclosearea(cDbf)
    dbdrop(cDbf)
 	return nil
 endef
+
+def FAdvance(nH)
+*---------------------*
+	LOCAL nSavePos
+	LOCAL nNumRead
+	LOCAL cBuffer
+	LOCAL nEol
+	LOCAL nPos
+	LOCAL nMaxLine
+
+	nMaxLine := if( nMaxLine = NIL, 512, nMaxLine)
+	cBuffer  := Space(nMaxLine)
+   nSavePos := FSEEK( nH, 0, FS_RELATIVE )
+   nNumRead := FREAD( nH, @cBuffer, nMaxLine )
+	if ( nEol := AT( EOL, substr( cBuffer, 1, nNumRead ))) == 0
+      nPos := nSavePos
+   else
+	   nPos := nSavePos + nEol + 1
+	endif
+	return( FSEEK( nH, nPos, FS_SET))
+
+def FLocate( nHandle, cStr, lFlag )
+*----------------------------------------*
+   LOCAL nPos    := FSeek( nHandle, 0, FS_RELATIVE )
+   LOCAL nNewPos := -2   // not found return code
+   LOCAL j       := FLen( nHandle ) - nPos
+   LOCAL cText   := Space( j )
+
+   FRead( nHandle , @cText , j )
+   if HB_IsLogical( lFlag ) .and. lFlag
+      j := hb_AtI( cStr, cText )
+   else
+      j := hb_At( cStr, cText )
+   endif
+   if j > 0
+      nNewPos := nPos + j - 1
+      FSeek( nHandle, nNewPos, FS_SET )
+   endif
+   return nNewPos
+
+def FLen( nHandle )
+*-----------------------*
+   LOCAL nPos := FSeek( nHandle, 0, FS_RELATIVE )
+   LOCAL nLen := FSeek( nHandle, 0, FS_END )
+   FSeek( nHandle, nPos, FS_SET )
+   return nLen
+
+def FTell( nHandle )
+*-----------------------*
+   return FSeek(nHandle, 0, FS_RELATIVE)
+
+def FWriteLine( nH, cBuffer)
+*--------------------------------*
+	LOCAL nSavePos
+	LOCAL nNumRead
+	#define EOL HB_OSNEWLINE()
+
+   nSavePos := FSEEK( nH, 0, FS_RELATIVE )
+   FBot(nH)
+	nNumRead := FWRITE( nH, cBuffer + EOL)
+	FSEEK( nH, nSavePos, FS_SET )
+   return nNumRead != 0
+
+def Untrim( cString, nTam)
+*------------------------------*
+	LOCAL nLenStr  := Len(cString)
+	LOCAL cChar    := Space(1)
+	LOCAL cRetChar
+
+	if( nTam  = NIL, nTam := nLenStr, nTam)
+	cRetChar := cString + Replicate(cChar, nTam)
+	return( Left(cRetChar,nTam))
+
+def Tecla_ESC()
+********************
+	LOCAL cScreen := SaveScreen()
+
+	if Inkey() == ESC
+		ErrorBeep()
+		return(Conf("Pergunta: Deseja cancelar?"))
+	endif
+	return(FALSO)
+
+def RJust( cString, nTam, cChar)
+************************************
+	LOCAL nLenStr  := Len(cString)
+	LOCAL cStrTrim := AllTrim(cString)
+	LOCAL nLenTrim := Len(cStrTrim)
+	LOCAL cRetChar
+
+	if( cChar = NIL, cChar := Space(1), cChar )
+	if( nTam  = NIL, nTam  := (nLenStr-nLenTrim), nTam := (nTam-nLenTrim))
+	cRetChar := Replicate(cChar, nTam) + cStrTrim
+	return( cRetChar )
+
+def LJust( cString, nTam, cChar)
+************************************
+	LOCAL nLenStr  := Len(cString)
+	LOCAL cStrTrim := AllTrim(cString)
+	LOCAL nLenTrim := Len(cStrTrim)
+	LOCAL cRetChar
+
+	if( cChar = NIL, cChar := Space(1), cChar )
+	if( nTam  = NIL, nTam  := (nLenStr-nLenTrim), nTam := (nTam-nLenTrim))
+	cRetChar := cStrTrim + Replicate(cChar, nTam)
+	return( cRetChar )
+
+def FBof( nHandle )
+************************
+   return FTell( nHandle) == 0
+
+def FBot( nHandle )
+************************
+   LOCAL nPos := FSeek( nHandle, 0, FS_END )
+   return nPos	!= -2
+
+def FTop( nHandle )
+************************
+   LOCAL nPos := FSeek( nHandle, 0, FS_SET )
+   return nPos	!= -2
+
+def MS_FReadStr( nH, cB, nMaxLine )
+	LOCAL cLine
+	LOCAL nSavePos
+	LOCAL nEol
+	LOCAL nNumRead
+	#define EOL HB_OSNEWLINE()
+
+	if( nMaxLine = NIL, nMaxLine := 512, nMaxLine)
+	cLine := space( nMaxLine )
+	cB    := ''
+	nSavePos := FSEEK( nH, 0, FS_RELATIVE )
+	nNumRead := FREAD( nH, @cLine, nMaxLine )
+	if ( nEol := AT( EOL, substr( cLine, 1, nNumRead ) ) ) == 0
+	cB := cLine
+	else
+	cB := SUBSTR( cLine, 1, nEol - 1 )
+	FSEEK( nH, nSavePos + nEol + 1, FS_SET )
+	endif
+	FSEEK( nH, nSavePos, FS_SET )
+	//return nNumRead != 0
+	return(cB)
+
+def FReadLine( nH, nMaxLine )
+**********************************
+   LOCAL nSavePos
+	LOCAL nNumRead
+	LOCAL cBuffer
+	LOCAL nEol
+	LOCAL cB
+	#define EOL HB_OSNEWLINE()
+
+	nMaxLine := if( nMaxLine = NIL, 512, nMaxLine)
+	cBuffer  := Space(nMaxLine)
+   nSavePos := FSEEK( nH, 0, FS_RELATIVE )
+   nNumRead := FREAD( nH, @cBuffer, nMaxLine )
+	if ( nEol := AT( EOL, substr( cBuffer, 1, nNumRead ))) == 0
+      cB := cBuffer
+   else
+      cB := SUBSTR( cBuffer, 1, nEol - 1 )
+      FSEEK( nH, nSavePos + nEol + 1, FS_SET )
+   endif
+	FSEEK( nH, nSavePos, FS_SET )
+   return cB
+
+def FReadByte( nH )
+************************
+	LOCAL nSavePos, nNumRead, cBuffer := Space(1)
+
+   nSavePos := FSEEK( nH, 0, FS_RELATIVE )
+   nNumRead := FREAD( nH, @cBuffer, 1 )
+	FSEEK( nH, nSavePos, FS_SET )
+   return cBuffer
+

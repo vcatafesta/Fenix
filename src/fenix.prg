@@ -28,14 +28,15 @@ function main()
 	public oMenu     	:= oAmbiente
 	public oIni		  	:= TIniNew("fenix.ini")
 	public oIndice	  	:= TIndiceNew()
+   public oPrinter   := TPrinterNew()
 
-	hb_langSelect( "pt" ) 	
+	hb_langSelect( "pt" )
 	oMenu:Limpa()
   	SetaAmbiente()
 	//altd()
-   RddSetDefault( RDDNAME )   
+   RddSetDefault( RDDNAME )
 	ArrayBancoDeDados()
-	CriaArquivo()
+   CriaArquivo()
 	if !VerIndice()
 		Alert("ERRO Tente mais tarde.")
 		FChDir( oAmbiente:xBase )
@@ -48,14 +49,14 @@ function main()
 	UsaArquivo()
 	//Abrearea()
    oMenu:Limpa()
-	
+
 	login()
-	
+
 	oMenu:StatusSup := "Fenix for Windows v1.0"
 	oMenu:StatusInf += AllTrim(oMenu:Comp)
 	oMenu:StatusInf += "|"
 	oMenu:StatusInf += AllTrim(oMenu:Unidade)
-   
+
 	Area("dad_nfen")
    locate for dad_nfen->X = Space(1)
    if dad_nfen->(!eof())
@@ -79,7 +80,7 @@ function main()
    Date := Date()
    Dif  := Date()
    SetColor("")
-   
+
 	oMenu:Limpa()
    oPull := Monta_Menu()
 	while MenuModal( oPull, 01, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
@@ -341,7 +342,7 @@ function Monta_Menu()
       oItem :=MenuItem( "&Registra Vazilhames", {|| Alert("vazilhames()") })
       oPopUp:AddItem( oItem )
 
-	
+
 	// Ambiente
 	oPopUp := PopUp()
    oPopUp :ColorSpec:= cCorItem
@@ -356,7 +357,7 @@ function Monta_Menu()
       oPopUp2 :ColorSpec:= cCorItem
       oItem := MenuItem( "&Pano Fundo", {|| xSetaPano() })
       oPopUp:AddItem( oItem )
-	   	
+
 *----------
 *SAIR
 *----------
@@ -365,12 +366,12 @@ function Monta_Menu()
    oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
    //Rodape()
    return ( oTopBar )
-	
+
 Function xSetaPano()
 ********************
 	oMenu:SetaPano()
 	SalvaMem()
-	return nil	
+	return nil
 
 function Rodape()
 *****************
@@ -398,9 +399,9 @@ def Encerra(nResult)
 	nResult := 999
 	FechaTudo()
 	FChDir( oAmbiente:xBase )
-	SalvaMem()	
-	
-	oIni:Close()	
+	SalvaMem()
+
+	oIni:Close()
 	//oSci:Close()
 
 	F_Fim( "Fenix for Windows" + " " + "v1.0" )
@@ -431,7 +432,7 @@ def F_Fim( Texto )
 endef
 
 
-def SetaIni()		
+def SetaIni()
 	oMenu:Frame 				 := oIni:ReadString( oAmbiente:xUsuario,  'frame',         oAmbiente:Frame )
 	oMenu:PanoFundo			 := oIni:ReadString( oAmbiente:xUsuario,  'panofundo',     oAmbiente:PanoFundo )
 	oMenu:CorMenu				 := oIni:ReadInteger( oAmbiente:xUsuario, 'cormenu',       oAmbiente:CorMenu )
@@ -485,11 +486,11 @@ def SetaIni()
 		Eval( oAmbiente:TabelaFonte[ oAmbiente:Fonte] )
 	EndIF
 	return( NIL)
-		
+
 	endef
 
 
-def SalvaMem()	
+def SalvaMem()
 	oIni:WriteString(  oAmbiente:xUsuario,	'frame',         oMenu:Frame )
 	oIni:WriteString(  oAmbiente:xUsuario,	'panofundo',     oMenu:PanoFundo )
 	oIni:WriteInteger( oAmbiente:xUsuario, 'selecionado',   oMenu:Selecionado )
@@ -513,7 +514,7 @@ def SalvaMem()
 	oIni:WriteInteger( oAmbiente:xUsuario, 'cormsg',        oAmbiente:CorMsg )
 	oIni:WriteBool(    oAmbiente:xUsuario, 'sombra',        oMenu:Sombra )
 	oIni:WriteBool(    oAmbiente:xUsuario, 'get_ativo',     oAmbiente:Get_Ativo )
-	//oAmbiente:ShowVar(true, nil, true)	
+	//oAmbiente:ShowVar(true, nil, true)
 	SetaIni()
 	return NIL
 endef
@@ -545,9 +546,21 @@ function login()
 	LOCAL cLogin    := Space(15)
 	LOCAL cPassword := Space(6)
 	LOCAL SNA       := "168935"
-	
+   MEMVAR cLpt1
+	MEMVAR cLpt2
+	MEMVAR cLpt3
+	MEMVAR cLpd1
+	MEMVAR cLpd2
+	MEMVAR cLpd3
+	MEMVAR cLpd4
+	MEMVAR cLpd5
+	MEMVAR cLpd6
+	MEMVAR cLpd7
+	MEMVAR cLpd8
+	MEMVAR cLpd9
+
 	Area("usuario")
-	while true		
+	while true
 		MaBox(09, 21, 14, 50, "LOGIN")
 		@ 11,23 say 'Usuario..:' get cLogin    pict "@!" valid UsuarioErrado( @cLogin )
 		@ 12,23 say 'Senha....:' get cPassword pict "@S" valid SenhaErrada( cLogin, cPassword )
@@ -565,15 +578,26 @@ function login()
 		nMuser        			:= Usuario->Fantazia
 		oMenu:Usuario 			:= Usuario->Fantazia
 		oAmbiente:xUsuario	:= Usuario->Fantazia
+      cLpt1 := "06"
+      cLpt2 := "06"
+      cLpt3 := "06"
+      cLpd1 := "06"
+      cLpd2 := "06"
+      cLpd3 := "06"
+      cLpd4 := "06"
+      cLpd5 := "06"
+      cLpd6 := "06"
+      cLpd7 := "06"
+      cLpd8 := "06"
+      cLpd9 := "06"
 		Ctr_User()
-		
-		
+
 		Area("desc")
 		Descto := Desc
-		
+
 		Area("cadprod") // oMenu:aDbfs[11])
 		CadProd->(DbGoTop())
-		
+
 		if CadProd->(TravaArq())
 			Mensagem("Aguarde, Atualizando valores")
          while Cadprod->(!Eof())
@@ -585,8 +609,8 @@ function login()
 				vpreco         := precopl/des_prc
 				CadProd->Preco := vPreco
 				CadProd->(DbSkip(1))
-			end			
-		end	
+			end
+		end
 		CadProd->(Libera())
 		ResTela( cScreen )
 		return nil
@@ -607,7 +631,7 @@ function UsuarioErrado( cNome )
 	Else
 		IF Empty(Usuario->Senha)
 			GravaSenhaAdmin(FALSO)
-		EndIF	
+		EndIF
 	EndIF
 
 	IF Usuario->(!DbSeek( cNome ))
@@ -618,10 +642,10 @@ function UsuarioErrado( cNome )
 	AreaAnt( Arq_Ant, Ind_Ant )
 	return( OK )
 
-	def SenhaErrada(cLogin, cPassWord)
-		LOCAL cSenha  := Usuario->( AllTrim( Senha ))
-		LOCAL Passe   := cPassword
-		
+def SenhaErrada(cLogin, cPassWord)
+	LOCAL cSenha  := Usuario->( AllTrim( Senha ))
+	LOCAL Passe   := cPassword
+
 		IF !Empty( Passe) .AND. cSenha == Passe
 			return true
 		EndIF
@@ -640,26 +664,26 @@ def GravaSenhaAdmin(lIncluirOuAlterar)
 
 	Area("Usuario")
 	(Usuario->(Order( USUARIO_NOME )), Usuario->(DbGoTop()))
-	
+
 	if lIncluirOuAlterar              // Incluir
 		lDone := Usuario->(Incluiu())
 	else
-		lDone := Usuario->(TravaReg())		
+		lDone := Usuario->(TravaReg())
 	endif
-	
+
 	while lDone
 		cPasse			 	:= MSEncrypt("280966")
 		cSim				 	:= MSEncrypt("S")
 		Usuario->CodUsu   := StrZero(Usuario->Id, 4)
 		Usuario->Fantazia := "ADMIN"
 		Usuario->Senha  	:= cPasse
-		Usuario->DtCad  	:= Date()		
+		Usuario->DtCad  	:= Date()
 		lDone 				:= FALSO
-	EndDo	
+	EndDo
 	Usuario->(Libera())
 	AreaAnt( Arq_Ant, Ind_Ant )
 	return lDone
-endef	
+endef
 
 def UsuarioCerto( cNome )
 	LOCAL Arq_Ant := Alias()
@@ -673,7 +697,473 @@ def UsuarioCerto( cNome )
 	EndIF
 	Return( OK )
 endef
-	
+
 def AbreUsuario()
 	Return( UsaArquivo("usuario") )
-endef	
+endef
+
+Proc ErrorSys()
+*--------------*
+	Private ErrorSys := 9876543210
+	ErrorBlock( {|Erro| MacroErro(Erro)} )
+	return
+
+Function MacroErro(e)
+*********************
+	LOCAL cScreen	 := SaveScreen()
+	LOCAL cPrograma := ms_swap_extensao("sci", ".err")
+   LOCAL cDbf
+	LOCAL cmens
+	LOCAL i
+	LOCAL cmessage
+	LOCAL aoptions
+	LOCAL nchoice
+	LOCAL errodos
+	LOCAL ab
+	LOCAL abdes
+	LOCAL abexp
+	LOCAL abacao
+	LOCAL abacao1
+	LOCAL adbf
+	LOCAL adbfdes
+	LOCAL adbfexp
+	LOCAL adbfacao
+	LOCAL adbfacao1
+
+	cmens 	 := ""
+	errodos	 := {}
+	ab 		 := {}
+	abdes 	 := {}
+	abexp 	 := {}
+	abacao	 := {}
+	abacao1	 := {}
+	adbf		 := {}
+	adbfdes	 := {}
+	adbfexp	 := {}
+	adbfacao  := {}
+	adbfacao1 := {}
+
+	if (e:gencode() == 5)
+		return 0
+	endif
+	if (e:gencode() == 21 .AND. e:oscode() == 32 .AND. e:candefault())
+		neterr( true )
+		return false
+	EndIf
+	if (e:gencode() == 40 .AND. e:candefault())
+		neterr( true )
+		return false
+	endif
+
+	AAdd(ab, 1002)
+	AAdd(abdes, "ALIAS NAO EXISTE.")
+	AAdd(abexp, "O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.")
+	AAdd(abacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(abacao1, "")
+	AAdd(ab, 1003)
+	AAdd(abdes, "VARIAVEL NAO EXISTE.")
+	AAdd(abexp, "A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.")
+	AAdd(abacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(abacao1, "")
+	AAdd(ab, 1004)
+	AAdd(abdes, "VARIAVEL NAO EXISTE.")
+	AAdd(abexp, "A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.")
+	AAdd(abacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(abacao1, "")
+	AAdd(ab, 2006)
+	AAdd(abdes,   "ERRO DE GRAVACAO/CRIACAO DE ARQUIVO.")
+	AAdd(abexp,   "O ARQUIVO ESPECIFICADO NAO PODE SER GRAVADO/CRIADO.")
+	AAdd(abacao,  "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE. ESPACO")
+	AAdd(abacao1, "EM DISCO, OU SE O ARQUIVO ESTA ATRIBUIDO PARA SOMENTE LEITURA.")
+	AAdd(ab, 5300)
+	AAdd(abdes, "MEMORIA BAIXA.")
+	AAdd(abexp, "MEMORIA DISPONIVEL INSUFICIENTE PARA RODAR O APLICATIVO.")
+	AAdd(abacao, "LIBERE MAIS MEMORIA CONVENCIONAL VERIFICANDO OS ARQUIVOS")
+	AAdd(abacao1, "CONFIG.SYS E AUTOEXEC.BAT.")
+
+	AAdd(adbf, 1001)
+	AAdd(adbfdes, "ERRO DE ABERTURA DO ARQUIVO ESPECIFICADO.")
+	AAdd(adbfexp, "O ARQUIVO ESPECIFICADO NAO PODE SER ABERTO.")
+	AAdd(adbfacao, "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE. ESPACO")
+	AAdd(adbfacao1, "EM DISCO, OU SE O ARQUIVO ESTA ATRIBUIDO PARA SOMENTE LEITURA.")
+	AAdd(adbf, 1003)
+	AAdd(adbfdes, "ERRO DE ABERTURA DO ARQUIVO ESPECIFICADO.")
+	AAdd(adbfexp, "O ARQUIVO ESPECIFICADO NAO PODE SER ABERTO.")
+	AAdd(adbfacao, "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE. ESPACO")
+	AAdd(adbfacao1, "EM DISCO, OU SE O ARQUIVO ESTA ATRIBUIDO PARA SOMENTE LEITURA.")
+	AAdd(adbf, 1004)
+	AAdd(adbfdes, "ERRO DE CRIACAO DE ARQUIVO.")
+	AAdd(adbfexp, "O ARQUIVO ESPECIFICADO NAO PODE SER CRIADO.")
+	AAdd(adbfacao, "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE. ESPACO")
+	AAdd(adbfacao1, "EM DISCO, OU SE O ARQUIVO ESTA ATRIBUIDO PARA SOMENTE LEITURA.")
+	AAdd(adbf, 1006)
+	AAdd(adbfdes, "ERRO DE CRIACAO DE ARQUIVO.")
+	AAdd(adbfexp, "O ARQUIVO ESPECIFICADO NAO PODE SER CRIADO.")
+	AAdd(adbfacao, "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE. ESPACO")
+	AAdd(adbfacao1,"EM DISCO, OU SE O ARQUIVO ESTA ATRIBUIDO PARA SOMENTE LEITURA.")
+	AAdd(adbf, 1010)
+	AAdd(adbfdes, "ERRO DE LEITURA DE ARQUIVO.")
+	AAdd(adbfexp, "UM ERRO DE LEITURA OCORREU NO ARQUIVO ESPECIFICADO.")
+	AAdd(adbfacao, "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE, OU SE")
+	AAdd(adbfacao1, "O ARQUIVO NAO ESTA TRUNCADO.")
+	AAdd(adbf, 1011)
+	AAdd(adbfdes, "ERRO DE GRAVACAO DE ARQUIVO.")
+	AAdd(adbfexp, "UM ERRO DE GRAVACAO OCORREU NO ARQUIVO ESPECIFICADO.")
+	AAdd(adbfacao, "VERIFIQUE SEUS DIREITOS EM AMBIENTE DE REDE. ESPACO")
+	AAdd(adbfacao1, "EM DISCO, OU SE O ARQUIVO ESTA ATRIBUIDO PARA SOMENTE LEITURA.")
+	AAdd(adbf, 1012)
+	AAdd(adbfdes, "CORRUPCAO DE ARQUIVOS DETECTADA.")
+	AAdd(adbfexp, "OS ARQUIVOS DE DADOS .DBF E/OU INDICES .NTX ESTAO CORROMPIDOS.")
+	AAdd(adbfacao, "APAGUE OS ARQUIVOS COM EXTENSAO .NTX E TENTE NOVAMENTE.")
+	AAdd(adbfacao1, "")
+	AAdd(adbf, 1020)
+	AAdd(adbfdes, "ERRO DE TIPO DE DADO.")
+	AAdd(adbfexp, "OS TIPOS DE DADOS SAO IMCOMPATIVEIS.")
+	AAdd(adbfacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(adbfacao1, "")
+	AAdd(adbf, 1021)
+	AAdd(adbfdes, "ERRO DE TAMANHO DE DADO.")
+	AAdd(adbfexp, "O TAMANHO DE DADO EH MAIOR QUE O CAMPO.")
+	AAdd(adbfacao, "VERIFIQUE DATAS DE VCTO, EMISSAO E OU CALCULOS MUITO ")
+	AAdd(adbfacao1, "GRANDES.")
+	AAdd(adbf, 1022)
+	AAdd(adbfdes, "TRAVAMENTO DE ARQUIVO REQUERIDO.")
+	AAdd(adbfexp, "TENTATIVA DE ALTERAR UM REGISTRO SEM PRIMEIRO OBTER TRAVAMENTO.")
+	AAdd(adbfacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(adbfacao1, "")
+	AAdd(adbf, 1023)
+	AAdd(adbfdes, "O ARQUIVO REQUER ABERTURA EXCLUSIVA")
+	AAdd(adbfexp, "O INICIO DA OPERACAO REQUER ABERTURA DE ARQUIVO EXCLUSIVA.")
+	AAdd(adbfacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(adbfacao1, "")
+	AAdd(adbf, 1027)
+	AAdd(adbfdes, "LIMITE EXCEDIDO.")
+	AAdd(adbfexp, "MUITOS ARQUIVOS DE INDICES ESTAO ABERTOS NA AREA CORRENTE.")
+	AAdd(adbfacao, "ENTRE EM CONTATO COM O SUPORTE TECNICO.")
+	AAdd(adbfacao1, "")
+
+	nsubcode    := e:subcode()
+	csystem	   := e:subsystem()
+	cexplanacao := ""
+	cacao 	   := ""
+	cacao1	   := ""
+	nPos		   := 0
+
+	If (csystem = "BASE")
+		npos:= ascan(ab, nsubcode)
+		If (npos != 0)
+			e:description := abdes[npos]
+			cExplanacao   := abexp[npos]
+			cAcao 		  := abacao[npos]
+			cAcao1		  := abacao1[npos]
+		EndIf
+	ElseIf (csystem = "DBFNTX")
+		npos:= ascan(adbf, nsubcode)
+		If (npos != 0)
+			e:description := adbfdes[npos]
+			cExplanacao   := adbfexp[npos]
+			cAcao 		  := adbfacao[npos]
+			cAcao1		  := adbfacao1[npos]
+		EndIf
+	ElseIf (csystem = "SIXNSX")
+		npos:= ascan(adbf, nsubcode)
+		If (npos != 0)
+			e:description := adbfdes[npos]
+			cExplanacao   := adbfexp[npos]
+			cAcao 		  := adbfacao[npos]
+			cAcao1		  := adbfacao1[npos]
+		EndIf
+   ElseIf (csystem = "SIXCDX")
+		npos:= ascan(adbf, nsubcode)
+		If (npos != 0)
+			e:description := adbfdes[npos]
+			cExplanacao   := adbfexp[npos]
+			cAcao 		  := adbfacao[npos]
+			cAcao1		  := adbfacao1[npos]
+		EndIf
+	ElseIf ( csystem = "TERM")
+		if e:oscode() != 3
+			IF LptOk()
+				Return( OK )
+			EndIF
+			Set Devi To Screen
+			Set Prin Off
+			Set Cons On
+			Set Print to
+			Break
+		endif
+	EndIf
+
+	If (e:oscode() = 4)
+		e:description := "IMPOSSIVEL ABRIR MAIS ARQUIVOS."
+		cExplanacao   := "O LIMITE DE ABERTURA DE ARQUIVOS FOI EXCEDIDO."
+		cAcao 		  := "INCREMENTE FILES NO CONFIG.SYS OU FILE HANDLES"
+		cAcao1		  := "NO ARQUIVO SHELL.CFG SE EM AMBIENTE DE REDE."
+	EndIf
+	IF nPos = 0
+		cExplanacao := "ERRO NAO DOCUMENTADO."
+		cAcao 	   := "IMPRIMA ESTA TELA. E ENTRE EM CONTATO COM O"
+		cAcao1	   := "SUPORTE TECNICO ATRAVES DO TEL (69)3451.3085 ou VCATAFESTA@GMAIL.COM"
+	EndIF
+
+   /*
+	if nSubCode = 1003
+		FChDir( oAmbiente:xRoot )
+
+		Set Date British
+		Set Console Off
+		FClose( cPrograma )
+      if !ms_swap_File( cPrograma )
+			cHandle := Fcreate( cPrograma, FC_NORMAL )
+			FClose( cHandle )
+		endif
+		cHandle := FOpen( cPrograma, FO_READWRITE + FO_SHARED )
+		IF ( Ferror() != 0 )
+			FClose( cHandle )
+			SetColor("")
+			Cls
+			Alert( "Erro #3: Erro de Abertura " + cPrograma + ". Erro DOS " + Str( Ferror(),3))
+			Break(e)
+			//FlReset()
+			Quit
+		EndIF
+		FBot( cHandle )
+		FWriteLine( cHandle, Replicate("=", 80))
+		FWriteLine( cHandle, "Usuario   : " + oAmbiente:xUsuario )
+		FWriteLine( cHandle, "Data      : " + DToC(Date()))
+		FWriteLine( cHandle, "Horas     : " + Time())
+		FWriteLine( cHandle, "SubSystem : " + csystem )
+		FWriteLine( cHandle, "SubCode   : " + Str(nsubcode, 4))
+		FWriteLine( cHandle, "Variavel  : " + e:operation )
+		FWriteLine( cHandle, "Arquivo   : " + e:filename )
+		FWriteLine( cHandle, "Area      : " + Alias())
+		FWriteLine( cHandle, "Indice    : " + IndexKey( IndexOrd()))
+		FWriteLine( cHandle, "Descricao : " + e:description )
+		FWriteLine( cHandle, "Explanacao: " + cexplanacao )
+		FWriteLine( cHandle, "Acao      : " + cAcao )
+		FWriteLine( cHandle, "Acao      : " + cAcao1 )
+		FWriteLine( cHandle, Replicate("-", 80))
+		FWriteLine( cHandle, "PILHA DE CARGA" )
+		nCol := 0
+		i	  := 2
+		nX   := 0
+		Do While (!Empty(ProcName(i)))
+			nCol++
+			nX++
+			FWriteLine( cHandle, Space(16) + "Linha : " + strzero(procline(i), 6) + "    Proc : " + ProcName(i))
+			i++
+		EndDo
+		FWriteLine( cHandle, Replicate("=", 80))
+		Fclose( cHandle )
+		Set Console On
+		FChDir( oAmbiente:xRoot )
+		// Break(e)
+	EndIF
+   */
+
+	SetColor("")
+	Cls
+	if nSubCode = 1012
+      cDbf := e:FileName()
+		if !Empty(cDbf)
+			ErrorBeep()
+			if Conf("O arquivo " + AllTrim(cDbf) + " corrompeu. Criar um novo ?")
+				cTemp := StrTran( cDbf, ".dbf") + ".old"
+				Ferase( cTemp )
+				if msrename(cDbf, cTemp) == 0
+					if CriaArquivo(ms_remove_path(cDbf))
+						Ferase(ms_remove_path(cDbf) + CEXT)
+						Cls
+						ErrorBeep()
+						Mensagem("Informa: Arquivo " + cDbf + " criado com sucesso.;-; Encerrando... Execute novamente o Sistema.")
+						FChDir( oAmbiente:xRoot )
+                  SetColor("")
+                  SetPos(maxrow(),0)
+                  ? "Macrosoft for Linux terminate!"
+						Break( e )
+						Quit
+					endif
+				else
+					AlertaPy("Erro: Impossivel consertar o arquivo.; Erro# " + StrTrim(Ferror()))
+				endif
+			else
+            FChDir( oAmbiente:xRoot )
+            Encerra()
+         endif
+		endif
+	endif
+
+	Set Devi To Screen
+	Set Prin Off
+	Set Cons On
+	Set Print to
+	Set Color To Gr+/b
+	@ 0, 0 Clear To  9, MaxCol()
+	@ 0, 0 To	9, MaxCol() Color "Gr+/b"
+	@ 1, 1  Say "SubSystem : "
+	@ 1, 35 Say "SubCode : "
+	@ 2, 1  Say "OsCode    : "
+	@ 2, 35 Say "GenCode : "
+	@ 3, 1  Say "Variavel  : "
+	@ 3, 35 Say "Arquivo : "
+	@ 4, 1  Say "Area      : "
+	@ 4, 35 Say "Indice  : "
+
+	@ 5, 1 Say "Descri‡ao : "
+	@ 6, 1 Say "Explana‡ao: "
+	@ 7, 1 Say "A‡ao      : "
+
+	@ 1, 14 Say csystem             				Color "W+/B"
+	@ 1, 45 Say Str(nsubcode, 4)    				Color "W+/B"
+
+	@ 2, 14 Say Alltrim(Str(e:oscode(), 4)) 	Color "W+/B"
+	@ 2, 45 Say AllTrim(Str(e:gencode(), 4)) 	Color "W+/B"
+
+	@ 3, 14 Say e:operation()       				Color "W+/B"
+	@ 3, 45 Say Upper(e:filename()) 				Color "W+/B"
+
+	@ 4, 14 Say Alias()             				Color "W+/B"
+	@ 4, 45 Say Upper(IndexKey(IndexOrd())) 	Color "W+/B"
+
+	@ 5, 14 Say e:description 						Color "W+/B"
+	@ 6, 14 Say cexplanacao 						Color "W+/B"
+	@ 7, 14 Say cacao 								Color "R/B"
+	@ 8, 14 Say cacao1 								Color "R/B"
+
+	ncol := 16
+	Set Color To Gr+/b
+	@ ncol, 0 Clear To 23, MaxCol()
+	@ ncol, 0		 To 23, MaxCol() Color "Gr+/b"
+	@ ncol, 12 Say "PILHA DE CARGA" Color "W+/B"
+
+	i	:= 2
+	nx := 0
+	ncol ++
+	nRow := 00
+	Do While (!Empty( ProcName(i)))
+		nx++
+		@ ncol, nRow+01 Say "[" + StrZero( i, 2 )   + "]:"        Color "W+/B"
+		@ ncol, nRow+06 Say "[" + strzero(procline(i), 6) + "]:"  Color "GR+/B"
+		@ ncol, nRow+16 Say ProcName(i)								    Color "W+/B"
+		i++
+		nCol++
+		IF nCol >= 23
+			nCol := 17
+			nRow += 40
+		EndIF
+	EndDo
+
+	cmessage := "Escolha uma opcao abaixo."
+	aoptions := {"Encerrar"}
+	If (e:canretry())
+		AAdd(aoptions, "Tentar")
+	EndIf
+	If (e:candefault())
+		AAdd(aoptions, "Default")
+	EndIf
+
+	nchoice:= 0
+	Do While (nchoice == 0)
+		nchoice:= alert(cmessage, aoptions)
+		If (!Empty(nchoice))
+			If (aoptions[nchoice] == "Encerrar")
+				nopcao:= alert("Pergunta: Imprimir resultado para ?", {"Nenhum", "Impressora"})
+				if (nopcao == 2)
+					If (instru80() .AND. lptok())
+						printon()
+						setprc(0, 0)
+						Qout(Replicate("=", 80))
+						@	02,  01 Say "SubSystem : " + csystem
+						@	03,  01 Say "SubCode   : " + Str(nsubcode, 4)
+						@	04,  01 Say "Variavel  : " + e:operation()
+						@	05,  01 Say "Arquivo   : " + e:filename()
+						@	06,  01 Say "Area      : " + Alias()
+						@	07,  01 Say "Descricao : " + e:description
+						@	08,  01 Say "Explanacao: " + cexplanacao
+						@	09,  01 Say "Acao      : " + cacao
+						@	10,  13 Say cacao1
+						Qout( Replicate("-", 80))
+						ncol := 12
+						@ ncol,	6 Say "[Pilha de Carga]"
+						i := 2
+						nx := 0
+						Do While (!Empty(ProcName(i)))
+							nCol++
+							nX++
+							@ nCol, 01 Say StrZero(nX, 2) +")Proc:"
+							@ nCol, 09 Say ProcName(i) Color "W+/B"
+							@ nCol, 20 Say "Linha:"
+							@ nCol, 26 Say strzero(procline(i), 6) Color "W+/B"
+							i++
+						EndDo
+						Qout(Replicate("=", 80))
+						Eject
+						PrintOff()
+					EndIf
+				EndIF
+				FChDir( oAmbiente:xRoot )
+				Set Date British
+				Set Console Off
+				FClose( cPrograma )
+            if !ms_swap_File( cPrograma )
+					cHandle := Fcreate( cPrograma, FC_NORMAL )
+					FClose( cHandle )
+				EndIF
+				cHandle := FOpen( cPrograma, FO_READWRITE + FO_SHARED )
+				IF ( Ferror() != 0 )
+					FClose( cHandle )
+					SetColor("")
+					Cls
+					Alert( "Erro #3: Erro de Abertura " + cPrograma + ". Erro DOS " + Str( Ferror(),3))
+					Break(e)
+					//FlReset()
+					Quit
+				EndIF
+				FBot( cHandle )
+				FWriteLine( cHandle, Replicate("=", 80))
+				FWriteLine( cHandle, "Usuario  1: " + oAmbiente:xUsuario )
+				FWriteLine( cHandle, "Data      : " + DToC(Date()))
+				FWriteLine( cHandle, "Horas     : " + Time())
+				FWriteLine( cHandle, "SubSystem : " + csystem )
+				FWriteLine( cHandle, "SubCode   : " + Str(nsubcode, 4))
+				FWriteLine( cHandle, "Variavel  : " + e:operation )
+				FWriteLine( cHandle, "Arquivo   : " + e:filename )
+				FWriteLine( cHandle, "Area      : " + Alias())
+				FWriteLine( cHandle, "Indice    : " + IndexKey( IndexOrd()))
+				FWriteLine( cHandle, "Descricao : " + e:description )
+				FWriteLine( cHandle, "Explanacao: " + cexplanacao )
+				FWriteLine( cHandle, "Acao      : " + cAcao )
+				FWriteLine( cHandle, "Acao      : " + cAcao1 )
+				FWriteLine( cHandle, Replicate("-", 80))
+				FWriteLine( cHandle, "PILHA DE CARGA" )
+				i	:= 2
+				nX := 0
+				Do While (!Empty(ProcName(i)))
+					nCol++
+					nX++
+					FWriteLine( cHandle, Space(16) + "Linha : " + strzero(procline(i), 6) + "    Proc : " + ProcName(i))
+					i++
+				EndDo
+				FWriteLine( cHandle, Replicate("=", 80))
+				Fclose( cHandle )
+				Set Console On
+				SetColor("")
+				Cls
+				FChDir( oAmbiente:xRoot )
+				Break(e)
+				//FlReset()
+				Quit
+			ElseIf (aoptions[nchoice] == "Tentar")
+				ResTela( cScreen )
+				Return .T.
+			ElseIf (aoptions[nchoice] == "Default")
+				ResTela( cScreen )
+				Return .F.
+			EndIf
+		EndIf
+	EndDo
+	Set Device To Screen
+	Set Printer Off
+	Break
+	Return .T.
+endef

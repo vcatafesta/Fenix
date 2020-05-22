@@ -1,35 +1,36 @@
 #include "fenix.ch"
 
+
 function caduser()
 ******************
 	LOCAL GetList   := {}
 	LOCAL Arq_Ant   := Alias()
 	LOCAL Ind_Ant   := IndexOrd()
    LOCAL cScreen   := SaveScreen()
-   LOCAL cCep      
-   LOCAL cLogin    
-   LOCAL cPassword 
-   LOCAL BLQ 
+   LOCAL cCep
+   LOCAL cLogin
+   LOCAL cPassword
+   LOCAL BLQ
 	LOCAL cNome
 	LOCAL cEnde
 	LOCAL cBair
 	LOCAL cCida
 	LOCAL cEsta
-	
+
    oMenu:Limpa()
    Area("cadfun")
    Area("usuario")
    while true
 	   cLogin      := space(15)
       cPassword   := space(6)
-      cCep        := Space(9)       
+      cCep        := Space(9)
 		cNome		   := Cadfun->(Space(FieldLen(FieldPos("nfunc"))))
 		cEnde		   := Cadfun->(Space(FieldLen(FieldPos("endrco"))))
 		cBair		   := Cadfun->(Space(FieldLen(FieldPos("bairro"))))
 		cCida		   := Cadfun->(Space(FieldLen(FieldPos("cdde"))))
 		cEsta		   := Cadfun->(Space(FieldLen(FieldPos("uf"))))
 		blq         := "B"
-		
+
 		MaBox(11, 10, 18, LastCol()-1, "CADASTRO DE USUARIO")
 		@ 12, 11 say 'Usuario...........:' get cLogin    Pict "@!" Valid VerificarUsuario( cLogin ) .AND. !Empty( cLogin )
 		@ 13, 11 say 'Senha.............:' get cPassword pict "@S"
@@ -43,7 +44,7 @@ function caduser()
 		if lastKey() = ESC
 			errorbeep()
 			if conf("Pergunta: Deseja retornar?")
-			   AreaAnt( Arq_Ant, Ind_Ant )		
+			   AreaAnt( Arq_Ant, Ind_Ant )
 		      restela(cScreen)
 				return nil
 			endif
@@ -68,7 +69,7 @@ function caduser()
 					repl clicad with BLQ, forcad with BLQ, mercad with BLQ, procad with BLQ, cfocad with BLQ
 					repl cdbcad with BLQ, estcad with BLQ, clacad with BLQ, muncad with BLQ, repcad with BLQ
 					repl tracad with BLQ, cescad with BLQ, embcad with BLQ
-					
+
 					CadFun->CodUsu := cCodi
 					CadFun->CodFun := cCodi
 					CadFun->Dtaadm := Date()
@@ -81,11 +82,11 @@ function caduser()
 				endif
 				CadFun->(Libera())
 				Usuario->(Libera())
-			endif			
+			endif
       endif
-	EndDo	
+	EndDo
 
-*--------------------------------------------------------------------------*	
+*--------------------------------------------------------------------------*
 def VerificarUsuario( cNome )
 	LOCAL Arq_Ant := Alias()
 	LOCAL Ind_Ant := IndexOrd()
@@ -99,7 +100,7 @@ def VerificarUsuario( cNome )
 	EndIF
 	Return( OK )
 endef
-*--------------------------------------------------------------------------*	
+*--------------------------------------------------------------------------*
 
 
 Proc CepInclusao( lAlteracao )
@@ -340,7 +341,7 @@ WHILE Cep->(!Eof()) .AND. Rel_Ok()
 
   Qout( Cep, Cida, Esta, Bair )
   Col := Col + 1
-  
+
   if Col >= 58
 	  Write( Col, 0,	Repl( SEP, Tam ))
 	  __Eject()
@@ -355,15 +356,15 @@ Return
 
 function cadastro()
 *******************
-	LOCAL nChoice := 0	
+	LOCAL nChoice := 0
    LOCAL cScreen := SaveScreen()
 	LOCAL aMenu   := {" Cadastrar ", " Pesquisar ", " Listar "}
-	
+
    Area("desc")
    descto := Desc->desc
 	Area("cadcli")
    Qcl := Cadcli->(Lastrec())
-	
+
    while true
 		oMenu:Limpa()
    	nChoice := FazMenu( 10, 10, aMenu )
@@ -379,6 +380,469 @@ function cadastro()
    		LstCli()
 	   Endcase
 	enddo
+
+Function ClientesInclusao()
+***************************
+      LOCAL GetList := {}
+      LOCAL cScreen := SaveScreen()
+
+      oMenu:Limpa()
+      FJ := ' '
+      do whil FJ = ' '
+         @ 10,04 say '* <P>essoa Fisica ou <E>mpresa:' get FJ pict '!' valid (FJ $ 'PE')
+         read
+         if FJ = ' '
+            Restela( cScreen )
+            return nil
+         endi
+         if FJ = "P"
+            stor 'PESSOA FISICA' to FJ
+         else
+            stor 'EMPRESA' to FJ
+         endi
+         @ 04,32 get FJ
+         clea gets
+      endd
+
+
+      DT := date()
+      @ 05,00 clea to 23,79
+      rdata:=date
+      rativo:=spac(1)
+      csit:=spac(13)
+      rcliente:=spac(22)
+      Rrazao:=spac(40)
+      Render:=spac(40)
+      Rnroend:=spac(6)
+      Rcompl:=spac(20)
+      Rbairro:=spac(16)
+      Rcida:=spac(30)
+      Rest:=spac(2)
+      Rcnpj:=spac(18)
+      Rinscr:=spac(15)
+      Rcpf:=spac(14)
+      Rinscrp:=spac(16)
+      Rfone1:=spac(14)
+      Rfone2:=spac(14)
+      Rprazo:=0
+      Rprazo2:=0
+      Robs:=spac(45)
+      CCEP:=spac(10)
+      Rcontato:=spac(20)
+      Rvmin := 0
+      Rcnae:=spac(9)
+
+      If FJ = 'E'
+         Rindie := ' '
+      else
+         Rindie := '9'
+      endi
+
+      Rmail:=spac(60)
+      Rexml:=spac(43)
+      Rtpdesc:=spac(1)
+      Rdesc:=0
+      Rtpag:=0
+      Rlinha:=spac(2)
+      Rhrrec:=spac(62)
+      Rnf := 'S'
+      Rprnf := 'S'
+      Rreg_apur:=spac(1)
+      Rpais := 'BRASIL'
+      Rdespacho := SPAC(40)
+      Robssep:=spac(62)
+      @ 00,00 clea to 23,79
+      bcor()
+      @ 00,00 clea to 00,79
+      @ 00,30 say TEF
+      tcor()
+      set confirm on
+      @ 02,00 to 02,79
+      @ 02,02 say 'Cliente'
+      @ 04,02 say 'C¢digo do Cliente:'
+      @ 04,28 get FJ
+      @ 05,02 say 'Data Cadastro:' get date
+      clea gets
+      Do whil .t.
+         @ 04,42 say 'Fantasia:' get Rcliente pict '@!'
+         read
+         @ 05,30 say 'XML:' get Rexml
+         @ 06,02 say 'Razao Social:' get Rrazao pict '@!' valid !Empty(rrazao)
+         if FJ = 'E'
+            @ 07,02 say 'C.N.P.J.:' get Rcnpj pict '99.999.999/9999-99'
+            @ 07,42 say 'Inscr.Est.:' get Rinscr pict '9999999999999999'
+         else
+            @ 07,02 say 'CPF:' get RCPF pict '999.999.999-99'
+            @ 07,42 say 'RG:' get Rinscrp pict '9999999999999999'
+         endi
+         @ 08,02 say 'Contato:' get Rcontato pict '@!'
+         @ 08,35 say 'Fone:' get Rfone1 pict '(99)9999-99999'
+         @ 08,56 say 'ou:' get Rfone2 pict '(99)9999-99999'
+         @ 09,02 say 'E-mail:' get Rmail
+         @ 10,02 say 'Prazo:' get Rprazo pict '999'
+         @ 10,12 say '/'
+         @ 10,13 get Rprazo2 pict '999'
+         @ 10,17 say 'Dias.'
+         @ 10,50 say 'Cnae:' get Rcnae pict '9999-9/99'
+         @ 11,02 say 'Obs.:' get Robs pict '@!'
+         @ 11,54 say 'Pedido M°nimo:' get Rvmin pict '9,999.99'
+         @ 12,02 say 'Tipo de Cobranáa:'
+         @ 13,02 say 'Regime de Apuraá∆o:'
+         @ 13,23 say '-'
+         @ 13,50 say 'Pagamento:'
+         @ 14,02 say 'Tipo Contrbte:'
+         @ 14,39 say 'Representante:'
+         @ 14,57 say '-'
+         read
+         if Rprazo2 # 0 .and. Rprazo2 <= Rprazo
+            save scre to Tprz
+            @ 09,13 clea to 11,40
+            @ 09,13 to 11,40
+            @ 10,16 say ' Prazo Incorreto !' get z
+            read
+            rest scre from Tprz
+            Rprazo:=0
+            Rprazo2:=0
+            loop
+         endi
+
+         if Rrazao = '   '
+            TONE(200,5)
+            If ALERT("Raz∆o Social em Branco !!!;Preencha!;", {"CONTINUA", "SAIR"} , "W+/B") ==1
+               LOOP
+            else
+               set confirm off
+               restscreen(00,00,23,79,TELA)
+               RETU
+            endi
+         elseif Rcliente = '   '
+            TONE(200,5)
+            If ALERT("Nome Fantasia em Branco !!!;Preencha!;", {"CONTINUA", "SAIR"} , "W+/B") ==1
+               LOOP
+            else
+               set confirm off
+               restscreen(00,00,23,79,TELA)
+               RETU
+            endi
+         endi
+         DSC := 0
+         set color to w/b+
+         @ 12,20 clea to 13,29
+         @ 12,21 prompt 'COMUM'
+         @ 13,21 prompt 'ESPECIAL'
+         menu to DSC
+         tcor()
+         @ 12,20 clea to 13,29
+         if DSC = 0
+            mdanul()
+            set confirm off
+            restscreen(00,00,23,79,TELA)
+            retu
+         endi
+         if DSC = 1
+            Rtpdesc := 'C'
+            TPCb := 'COMUM'
+            @ 12,21 get TPCb
+            clea gets
+            PD_s := ' '
+            do whil PD_s = ' '
+               @ 12,42 say 'Porcentagem de Desconto:' get Rdesc pict '999.9999'
+               @ 12,70 say '%'
+               read
+               if Rdesc > descto
+                  save scre to msg
+                  @ 12,20 clea to 13,55
+                  set color to w/r
+                  n := ' '
+                  @ 12,02 say 'ESSE DESCONTO EXEDE O LIMITE !!!' get n pict '!'
+                  read
+                  tcor()
+                  if PD_S # 'P'
+                     rest scre from msg
+                     PD_s := ' '
+                     loop
+                  endi
+               endi
+               exit
+            endd
+         Endi
+         if DSC = 2
+            TPCb := 'ESPECIAL'
+            Rtpdesc := 'E'
+            @ 12,21 get TPCb
+            clea gets
+         endi
+         if FJ = 'P'
+            OP_REGAP := 3
+            desc_REGA := 'ISENTO'
+            Creg_apur :='3'
+         else
+            OP_regap := 0
+            Do whil OP_REGAP = 0
+               save scre to regap
+               set color to w/b+
+               @ 15,02 clea to 20,22
+               @ 15,02 say 'Regime de Apuraá∆o'
+               @ 16,02 to 16,22
+               @ 17,02 prompt '1-SIMPLES NACIONAL'
+               @ 18,02 prompt '2-OUTROS REGIMES'
+               @ 19,02 prompt '3-ISENTO'
+               menu to op_regap
+               tcor()
+               If OP_regap = 1
+                  desc_REGA := 'SIMPLES NACIONAL'
+               elseif OP_regap = 2
+                  desc_REGA := 'OUTROS REGIMES'
+               elseif OP_regap = 3
+                  desc_REGA := 'ISENTO'
+               elseif OP_regap = 0
+                  TONE(600)
+                  If ALERT("Voce deve informar o Regime!;Se optar em Sair,;o Cadastro sera Anulado", {"CONTINUAR", "SAIR"} , "B/GR+,r") ==2
+                     mdanul()
+                     restscreen(00,00,23,79,TELA)
+                     retu
+                  Endi
+                  OP_REGAP := 0
+                  loop
+               Endi
+               exit
+            endd
+            stor ltrim(str(op_regap)) to Creg_apur
+            rest scre from regap
+            @ 13,22 get Creg_apur
+            @ 13,24 get desc_rega
+            clea gets
+***************************************************
+            OP_Tpg := 0
+            save scre to tpg
+            set color to w/b+
+            @ 13,61 clea to 17,81
+            @ 13,61 prompt '1-BOLETO'
+            @ 14,61 prompt '2-DINHEIRO'
+            @ 15,61 prompt '3-CHEQUE'
+            @ 16,61 prompt '4-DEP‡SITO'
+            @ 17,61 prompt '5-NENHUM'
+            menu to op_tpg
+            tcor()
+            If OP_tpg = 1
+               desc_TPG := 'BOLETO'
+            elseif OP_tpg = 2
+               desc_tpg := 'DINHEIRO'
+            elseif OP_tpg = 3
+               desc_tpg := 'CHEQUE'
+            elseif OP_tpg = 4
+               desc_tpg := 'DEP‡SITO'
+            elseif OP_tpg = 5 .or. OP_tpg = 0
+               desc_tpg := 'NENHUM'
+            Endi
+            stor op_tpg to Rtpag
+            rest scre from tpg
+            @ 13,61 CLEA TO 13,81
+            @ 13,61 get Rtpag pict '9'
+            @ 13,62 say '-'
+            @ 13,63 get desc_tpg
+            clea gets
+
+            if FJ = 'PESSOA FISICA'
+               op_ctb := '9'
+               desc_ctb := '9-N«O Contribuinte'
+            else
+               OP_ctb := 0
+               save scre to tpg
+               bcor()
+               @ 15,17 clea to 19,37
+               @ 15,17 say 'Tipo de Contribuinte'
+               @ 16,17 to 16,37
+               @ 17,17 prompt '1-Contribuinte ICMS'
+               @ 18,17 prompt '2-Contribuinte ISENTO'
+               @ 19,17 prompt '9-N«O Contribuinte'
+               menu to op_ctb
+               tcor()
+               if OP_ctb = 0
+                  rest scre from tpg
+                  MN_CL := 0
+                  loop
+               endi
+               If OP_ctb = 1
+                  desc_ctb := '1-Contribuinte ICMS'
+               elseif OP_ctb = 2
+                  desc_ctb := '2-Contribuinte ISENTO'
+               elseif OP_ctb = 3
+                  desc_ctb := '9-N«O Contribuinte'
+               Endi
+               stor ltrim(str(op_ctb)) to op_ctb
+            endi
+            rest scre from tpg
+            @ 14,17 get desc_ctb
+            clea gets
+********************************************************
+            rps :=0
+            Do whil rps =0
+               save scre to tl
+               @ 10,44 clea to 10,77
+               cdr := '    '
+               @ 14,53 get cdr pict '!999'
+               @ 15,53 say '<*>Pesquisa'
+               read
+               if cdr = '    '
+                  nmrep :=''
+               else
+                  if cdr = '*   '
+                     psqrepre()
+                     rps :=0
+                     cdr := '    '
+                  endi
+                  Area(oMenu:aDbfs[49])
+                  loca for codr = cdr
+                  if eof()
+                     // unlock
+                     //use
+                     mddad()
+                     rps := 0
+                     loop
+                  endi
+                  stor codr to cdr
+                  stor nrep to nmrep
+                  // unlock
+                  //use
+                  rest scre from tl
+                  @ 14,53 get cdr
+                  @ 14,58 get nmrep
+                  clea gets
+               endi
+               exit
+            endd
+            if Rcliente = '       '
+               @ 17,01 say ' Favor preencher o NOME FANTASIA !' get z
+               read
+               @ 17,01 clea to 17,40
+               loop
+            endi
+********************************************************
+            Area(oMenu:aDbfs[5])
+            if FJ = 'E'
+               loca for cnpj = Rcnpj
+            else
+               loca for cpf = Rcpf
+            endi
+            if eof()
+            else
+               // unlock
+               //use
+               TONE(200,5)
+               If ALERT("Ja Existe Cadastro com Esse CNPJ;Voce nao pode continuar !;", {"ALTERAR", "SAIR"} , "B/GR+,r") ==2
+                  restscreen(00,00,23,79,TELA)
+                  retu
+               else
+                  loop
+               endi
+            endi
+            // unlock
+            //use
+            exit
+         endi
+         @ 15,00 to 15,79
+         @ 16,02 say 'Endereáo'
+         @ 18,02 say 'Lagradouro:' get Render pict '@!'
+         @ 18,55 say 'N£mero:' get Rnroend pict '!!!!!!'
+         @ 19,02 say 'Complemento:' get Rcompl pict '@!'
+         @ 19,37 say 'Bairro:' get Rbairro pict '@!'
+         @ 19,62 say 'CEP:' get CCEP pict '99.999-999'
+         @ 20,02 say 'Pa°s:'
+         @ 20,18 say 'Estado:'
+         @ 20,39 say 'Cidade:'
+         read
+         @ 20,08 get Rpais pict '@!'
+         clea gets
+         RE := '  '
+         do whil RE = '  '
+            ET := '1'
+            @ 20,26 get RE pict '!!'
+            read
+            if RE = '  '
+               mdanul()
+               rele all like r*
+               set confirm off
+               restscreen(00,00,23,79,TELA)
+               retu
+            endi
+            Area(oMenu:aDbfs[40])
+            loca for estd = RE
+            if eof()
+               // unlock
+               //use
+               mdest()
+               RE := '  '
+               loop
+            endi
+            stor estd to Rest
+            // unlock
+            //use
+            @ 20,47 get Rcida pict '@!'
+            read
+            ET := '2'
+            Area(oMenu:aDbfs[40])
+            loca for cidade = Rcida .and. estd = RE
+            if eof()
+               // unlock
+               //use
+               mdest()
+               Rcida := spac(30)
+               @ 20,47 clea to 21,77
+               RE := '  '
+               loop
+            endi
+            // unlock
+            //use
+            exit
+         endd
+         @ 21,12 say 'NF:' get RNF
+         @ 21,19 say 'PRNF:' get Rprnf
+         clea gets
+         @ 21,02 say 'Linha:' get Rlinha
+         @ 21,27 say 'Despacho:' get Rdespacho pict '@!'
+         @ 22,02 say 'Recebimento:' get Rhrrec
+         @ 23,02 say 'Observacao do Pedido:' get Robssep
+         read
+         set confirm off
+         TONE(600)
+         If conf("Deseja Registrar o Cadastro?")
+            showtime()
+            mdanul()
+            restscreen(00,00,23,79,TELA)
+            retu
+         Endi
+         Area(oMenu:aDbfs[5])
+         go bott
+         stor CODC to cdc
+         // unlock
+         //use
+         do case
+            case val(cdc)+1 < 10
+               stor '000'+subs(str(val(cdc)+1),10,1) to cod
+            case val(cdc)+1 >9 .and. val(cdc) < 100
+               stor '00'+subs(str(val(cdc)+1),9,2) to cod
+            case val(cdc)+1 > 99 .and. val(cdc) < 1000
+               stor '0'+subs(str(val(cdc)+1),8,3) to cod
+            case val(cdc)+1 > 999
+               stor subs(str(val(cdc)+1),7,4) to cod
+         endcase
+         @ 04,20 get cod
+         clea gets
+         Area(oMenu:aDbfs[5])
+         appe blan
+         repl cliente with rcliente,razao with Rrazao,ender with Render,bairro with Rbairro,cida with Rcida,est with Rest,cnpj with Rcnpj,cpf with Rcpf,inscr with Rinscr,inscrp with Rinscrp,fone1 with Rfone1,fone2 with Rfone2,prazo with Rprazo
+         repl CEP with CCEP,email with Rmail,obs with Robs, dscnto with Rdesc, tpdesc with Rtpdesc, contato with Rcontato,cliente with Rcliente, prazo2 with Rprazo2
+         repl Ativo with 'A', nroend with Rnroend, compl with Rcompl, paiis with Rpais, linha with Rlinha,exml with Rexml, usuario with logfan, indie with Rindie
+         repl nf with Rnf, prnf with Rprnf, hrrec with Rhrrec, data with DT, sit with FJ, codc with cod, tpag with Rtpag, Vmin with Rvmin, despacho with Rdespacho
+         repl reg_apur with Creg_apur, indie with subs(desc_ctb,1,1), cnae with Rcnae, codrp with cdr, nrepre with nmrep,obssep with Robssep
+         // unlock
+         //use
+         mdsuces()
+         restscreen(00,00,23,79,TELA)
+         retu
+      endd
+
 
 Function ClientesPesquisa()
 ***************************
@@ -1851,475 +2315,34 @@ Function ClientesPesquisa()
       retu
 
 
-Function ClientesInclusao()
-***************************
-      oMenu:Limpa()
-      FJ := ' '
-      do whil FJ = ' '
-         @ 10,04 say '* <P>essoa Fisica ou <E>mpresa:' get FJ pict '!' valid (FJ $ 'PE')
-         read
-         if FJ = ' '
-            restscreen(00,00,23,79,TELA)
-            retu
-         endi
-         if FJ = "P"
-            stor 'PESSOA FISICA' to FJ
-         else
-            stor 'EMPRESA' to FJ
-         endi
-         @ 04,32 get FJ
-         clea gets
-      endd
-      DT := date()
-      @ 05,00 clea to 23,79
-      rdata:=date
-      rativo:=spac(1)
-      Csit:=spac(13)
-      Rcliente:=spac(22)
-      Rrazao:=spac(40)
-      Render:=spac(40)
-      Rnroend:=spac(6)
-      Rcompl:=spac(20)
-      Rbairro:=spac(16)
-      Rcida:=spac(30)
-      Rest:=spac(2)
-      Rcnpj:=spac(18)
-      Rinscr:=spac(15)
-      Rcpf:=spac(14)
-      Rinscrp:=spac(16)
-      Rfone1:=spac(14)
-      Rfone2:=spac(14)
-      Rprazo:=0
-      Rprazo2:=0
-      Robs:=spac(45)
-      CCEP:=spac(10)
-      Rcontato:=spac(20)
-      Rvmin := 0
-      Rcnae:=spac(9)
-      If FJ = 'E'
-         Rindie := ' '
-      else
-         Rindie := '9'
-      endi
-      Rmail:=spac(60)
-      Rexml:=spac(43)
-      Rtpdesc:=spac(1)
-      Rdesc:=0
-      Rtpag:=0
-      Rlinha:=spac(2)
-      Rhrrec:=spac(62)
-      Rnf := 'S'
-      Rprnf := 'S'
-      Rreg_apur:=spac(1)
-      Rpais := 'BRASIL'
-      Rdespacho := SPAC(40)
-      Robssep:=spac(62)
-      @ 00,00 clea to 23,79
-      bcor()
-      @ 00,00 clea to 00,79
-      @ 00,30 say TEF
-      tcor()
-      set confirm on
-      @ 02,00 to 02,79
-      @ 02,02 say 'Cliente'
-      @ 04,02 say 'C¢digo do Cliente:'
-      @ 04,28 get FJ
-      @ 05,02 say 'Data Cadastro:' get date
-      clea gets
-      Do whil .t.
-         @ 04,42 say 'Fantasia:' get Rcliente pict '@!'
-         read
-         @ 05,30 say 'XML:' get Rexml
-         @ 06,02 say 'Razao Social:' get Rrazao pict '@!'
-         if FJ = 'E'
-            @ 07,02 say 'C.N.P.J.:' get Rcnpj pict '99.999.999/9999-99'
-            @ 07,42 say 'Inscr.Est.:' get Rinscr pict '9999999999999999'
-         else
-            @ 07,02 say 'CPF:' get RCPF pict '999.999.999-99'
-            @ 07,42 say 'RG:' get Rinscrp pict '9999999999999999'
-         endi
-         @ 08,02 say 'Contato:' get Rcontato pict '@!'
-         @ 08,35 say 'Fone:' get Rfone1 pict '(99)9999-99999'
-         @ 08,56 say 'ou:' get Rfone2 pict '(99)9999-99999'
-         @ 09,02 say 'E-mail:' get Rmail
-         @ 10,02 say 'Prazo:' get Rprazo pict '999'
-         @ 10,12 say '/'
-         @ 10,13 get Rprazo2 pict '999'
-         @ 10,17 say 'Dias.'
-         @ 10,50 say 'Cnae:' get Rcnae pict '9999-9/99'
-         @ 11,02 say 'Obs.:' get Robs pict '@!'
-         @ 11,54 say 'Pedido M°nimo:' get Rvmin pict '9,999.99'
-         @ 12,02 say 'Tipo de Cobranáa:'
-         @ 13,02 say 'Regime de Apuraá∆o:'
-         @ 13,23 say '-'
-         @ 13,50 say 'Pagamento:'
-         @ 14,02 say 'Tipo Contrbte:'
-         @ 14,39 say 'Representante:'
-         @ 14,57 say '-'
-         read
-         if Rprazo2 # 0 .and. Rprazo2 <= Rprazo
-            save scre to Tprz
-            @ 09,13 clea to 11,40
-            @ 09,13 to 11,40
-            @ 10,16 say ' Prazo Incorreto !' get z
-            read
-            rest scre from Tprz
-            Rprazo:=0
-            Rprazo2:=0
-            loop
-         endi
-         if Rrazao = '   '
-            TONE(200,5)
-            If ALERT("Raz∆o Social em Branco !!!;Preencha!;", {"CONTINUA", "SAIR"} , "W+/B") ==1
-               LOOP
-            else
-               set confirm off
-               restscreen(00,00,23,79,TELA)
-               RETU
-            endi
-         elseif Rcliente = '   '
-            TONE(200,5)
-            If ALERT("Nome Fantasia em Branco !!!;Preencha!;", {"CONTINUA", "SAIR"} , "W+/B") ==1
-               LOOP
-            else
-               set confirm off
-               restscreen(00,00,23,79,TELA)
-               RETU
-            endi
-         endi
-         DSC := 0
-         set color to w/b+
-         @ 12,20 clea to 13,29
-         @ 12,21 prompt 'COMUM'
-         @ 13,21 prompt 'ESPECIAL'
-         menu to DSC
-         tcor()
-         @ 12,20 clea to 13,29
-         if DSC = 0
-            mdanul()
-            set confirm off
-            restscreen(00,00,23,79,TELA)
-            retu
-         endi
-         if DSC = 1
-            Rtpdesc := 'C'
-            TPCb := 'COMUM'
-            @ 12,21 get TPCb
-            clea gets
-            PD_s := ' '
-            do whil PD_s = ' '
-               @ 12,42 say 'Porcentagem de Desconto:' get Rdesc pict '999.9999'
-               @ 12,70 say '%'
-               read
-               if Rdesc > descto
-                  save scre to msg
-                  @ 12,20 clea to 13,55
-                  set color to w/r
-                  n := ' '
-                  @ 12,02 say 'ESSE DESCONTO EXEDE O LIMITE !!!' get n pict '!'
-                  read
-                  tcor()
-                  if PD_S # 'P'
-                     rest scre from msg
-                     PD_s := ' '
-                     loop
-                  endi
-               endi
-               exit
-            endd
-         Endi
-         if DSC = 2
-            TPCb := 'ESPECIAL'
-            Rtpdesc := 'E'
-            @ 12,21 get TPCb
-            clea gets
-         endi
-         if FJ = 'P'
-            OP_REGAP := 3
-            desc_REGA := 'ISENTO'
-            Creg_apur :='3'
-         else
-            OP_regap := 0
-            Do whil OP_REGAP = 0
-               save scre to regap
-               set color to w/b+
-               @ 15,02 clea to 20,22
-               @ 15,02 say 'Regime de Apuraá∆o'
-               @ 16,02 to 16,22
-               @ 17,02 prompt '1-SIMPLES NACIONAL'
-               @ 18,02 prompt '2-OUTROS REGIMES'
-               @ 19,02 prompt '3-ISENTO'
-               menu to op_regap
-               tcor()
-               If OP_regap = 1
-                  desc_REGA := 'SIMPLES NACIONAL'
-               elseif OP_regap = 2
-                  desc_REGA := 'OUTROS REGIMES'
-               elseif OP_regap = 3
-                  desc_REGA := 'ISENTO'
-               elseif OP_regap = 0
-                  TONE(600)
-                  If ALERT("Voce deve informar o Regime!;Se optar em Sair,;o Cadastro sera Anulado", {"CONTINUAR", "SAIR"} , "B/GR+,r") ==2
-                     mdanul()
-                     restscreen(00,00,23,79,TELA)
-                     retu
-                  Endi
-                  OP_REGAP := 0
-                  loop
-               Endi
-               exit
-            endd
-            stor ltrim(str(op_regap)) to Creg_apur
-            rest scre from regap
-            @ 13,22 get Creg_apur
-            @ 13,24 get desc_rega
-            clea gets
-***************************************************
-            OP_Tpg := 0
-            save scre to tpg
-            set color to w/b+
-            @ 13,61 clea to 17,81
-            @ 13,61 prompt '1-BOLETO'
-            @ 14,61 prompt '2-DINHEIRO'
-            @ 15,61 prompt '3-CHEQUE'
-            @ 16,61 prompt '4-DEP‡SITO'
-            @ 17,61 prompt '5-NENHUM'
-            menu to op_tpg
-            tcor()
-            If OP_tpg = 1
-               desc_TPG := 'BOLETO'
-            elseif OP_tpg = 2
-               desc_tpg := 'DINHEIRO'
-            elseif OP_tpg = 3
-               desc_tpg := 'CHEQUE'
-            elseif OP_tpg = 4
-               desc_tpg := 'DEP‡SITO'
-            elseif OP_tpg = 5 .or. OP_tpg = 0
-               desc_tpg := 'NENHUM'
-            Endi
-            stor op_tpg to Rtpag
-            rest scre from tpg
-            @ 13,61 CLEA TO 13,81
-            @ 13,61 get Rtpag pict '9'
-            @ 13,62 say '-'
-            @ 13,63 get desc_tpg
-            clea gets
-***********************************************
-            if FJ = 'PESSOA FISICA'
-               op_ctb := '9'
-               desc_ctb := '9-N«O Contribuinte'
-            else
-               OP_ctb := 0
-               save scre to tpg
-               bcor()
-               @ 15,17 clea to 19,37
-               @ 15,17 say 'Tipo de Contribuinte'
-               @ 16,17 to 16,37
-               @ 17,17 prompt '1-Contribuinte ICMS'
-               @ 18,17 prompt '2-Contribuinte ISENTO'
-               @ 19,17 prompt '9-N«O Contribuinte'
-               menu to op_ctb
-               tcor()
-               if OP_ctb = 0
-                  rest scre from tpg
-                  MN_CL := 0
-                  loop
-               endi
-               If OP_ctb = 1
-                  desc_ctb := '1-Contribuinte ICMS'
-               elseif OP_ctb = 2
-                  desc_ctb := '2-Contribuinte ISENTO'
-               elseif OP_ctb = 3
-                  desc_ctb := '9-N«O Contribuinte'
-               Endi
-               stor ltrim(str(op_ctb)) to op_ctb
-            endi
-            rest scre from tpg
-            @ 14,17 get desc_ctb
-            clea gets
-********************************************************
-            rps :=0
-            Do whil rps =0
-               save scre to tl
-               @ 10,44 clea to 10,77
-               cdr := '    '
-               @ 14,53 get cdr pict '!999'
-               @ 15,53 say '<*>Pesquisa'
-               read
-               if cdr = '    '
-                  nmrep :=''
-               else
-                  if cdr = '*   '
-                     psqrepre()
-                     rps :=0
-                     cdr := '    '
-                  endi
-                  Area(oMenu:aDbfs[49])
-                  loca for codr = cdr
-                  if eof()
-                     // unlock
-                     //use
-                     mddad()
-                     rps := 0
-                     loop
-                  endi
-                  stor codr to cdr
-                  stor nrep to nmrep
-                  // unlock
-                  //use
-                  rest scre from tl
-                  @ 14,53 get cdr
-                  @ 14,58 get nmrep
-                  clea gets
-               endi
-               exit
-            endd
-            if Rcliente = '       '
-               @ 17,01 say ' Favor preencher o NOME FANTASIA !' get z
-               read
-               @ 17,01 clea to 17,40
-               loop
-            endi
-********************************************************
-            Area(oMenu:aDbfs[5])
-            if FJ = 'E'
-               loca for cnpj = Rcnpj
-            else
-               loca for cpf = Rcpf
-            endi
-            if eof()
-            else
-               // unlock
-               //use
-               TONE(200,5)
-               If ALERT("Ja Existe Cadastro com Esse CNPJ;Voce nao pode continuar !;", {"ALTERAR", "SAIR"} , "B/GR+,r") ==2
-                  restscreen(00,00,23,79,TELA)
-                  retu
-               else
-                  loop
-               endi
-            endi
-            // unlock
-            //use
-            exit
-         endi
-         @ 15,00 to 15,79
-         @ 16,02 say 'Endereáo'
-         @ 18,02 say 'Lagradouro:' get Render pict '@!'
-         @ 18,55 say 'N£mero:' get Rnroend pict '!!!!!!'
-         @ 19,02 say 'Complemento:' get Rcompl pict '@!'
-         @ 19,37 say 'Bairro:' get Rbairro pict '@!'
-         @ 19,62 say 'CEP:' get CCEP pict '99.999-999'
-         @ 20,02 say 'Pa°s:'
-         @ 20,18 say 'Estado:'
-         @ 20,39 say 'Cidade:'
-         read
-         @ 20,08 get Rpais pict '@!'
-         clea gets
-         RE := '  '
-         do whil RE = '  '
-            ET := '1'
-            @ 20,26 get RE pict '!!'
-            read
-            if RE = '  '
-               mdanul()
-               rele all like r*
-               set confirm off
-               restscreen(00,00,23,79,TELA)
-               retu
-            endi
-            Area(oMenu:aDbfs[40])
-            loca for estd = RE
-            if eof()
-               // unlock
-               //use
-               mdest()
-               RE := '  '
-               loop
-            endi
-            stor estd to Rest
-            // unlock
-            //use
-            @ 20,47 get Rcida pict '@!'
-            read
-            ET := '2'
-            Area(oMenu:aDbfs[40])
-            loca for cidade = Rcida .and. estd = RE
-            if eof()
-               // unlock
-               //use
-               mdest()
-               Rcida := spac(30)
-               @ 20,47 clea to 21,77
-               RE := '  '
-               loop
-            endi
-            // unlock
-            //use
-            exit
-         endd
-         @ 21,12 say 'NF:' get RNF
-         @ 21,19 say 'PRNF:' get Rprnf
-         clea gets
-         @ 21,02 say 'Linha:' get Rlinha
-         @ 21,27 say 'Despacho:' get Rdespacho pict '@!'
-         @ 22,02 say 'Recebimento:' get Rhrrec
-         @ 23,02 say 'Observacao do Pedido:' get Robssep
-         read
-         set confirm off
-         TONE(600)
-         If conf("Deseja Registrar o Cadastro?")
-            showtime()
-            mdanul()
-            restscreen(00,00,23,79,TELA)
-            retu
-         Endi
-         Area(oMenu:aDbfs[5])
-         go bott
-         stor CODC to cdc
-         // unlock
-         //use
-         do case
-            case val(cdc)+1 < 10
-               stor '000'+subs(str(val(cdc)+1),10,1) to cod
-            case val(cdc)+1 >9 .and. val(cdc) < 100
-               stor '00'+subs(str(val(cdc)+1),9,2) to cod
-            case val(cdc)+1 > 99 .and. val(cdc) < 1000
-               stor '0'+subs(str(val(cdc)+1),8,3) to cod
-            case val(cdc)+1 > 999
-               stor subs(str(val(cdc)+1),7,4) to cod
-         endcase
-         @ 04,20 get cod
-         clea gets
-         Area(oMenu:aDbfs[5])
-         appe blan
-         repl cliente with rcliente,razao with Rrazao,ender with Render,bairro with Rbairro,cida with Rcida,est with Rest,cnpj with Rcnpj,cpf with Rcpf,inscr with Rinscr,inscrp with Rinscrp,fone1 with Rfone1,fone2 with Rfone2,prazo with Rprazo
-         repl CEP with CCEP,email with Rmail,obs with Robs, dscnto with Rdesc, tpdesc with Rtpdesc, contato with Rcontato,cliente with Rcliente, prazo2 with Rprazo2
-         repl Ativo with 'A', nroend with Rnroend, compl with Rcompl, paiis with Rpais, linha with Rlinha,exml with Rexml, usuario with logfan, indie with Rindie
-         repl nf with Rnf, prnf with Rprnf, hrrec with Rhrrec, data with DT, sit with FJ, codc with cod, tpag with Rtpag, Vmin with Rvmin, despacho with Rdespacho
-         repl reg_apur with Creg_apur, indie with subs(desc_ctb,1,1), cnae with Rcnae, codrp with cdr, nrepre with nmrep,obssep with Robssep
-         // unlock
-         //use
-         mdsuces()
-         restscreen(00,00,23,79,TELA)
-         retu
-      endd
+function achaEsta(cEsta)
+************************
+   CadCli->(Order( CADCLI_ESTA ))
+   if Cadcli->(!DbSeek( cEsta ))
+      Nada()
+      return false
+   endif
+   return true
 
 
 function lstcli()
 *****************
-	
+   LOCAL GetList  := {}
+   LOCAL cScreen  := SaveScreen()
+   LOCAL cEsta    := Space(2)
+	LOCAL Arq_Ant   := Alias()
+	LOCAL Ind_Ant   := IndexOrd()
+
    oMenu:Limpa()
-   Pest := Space(2)
    Mabox(10, 10,12, 40, "LISTAGEM DE CLIENTES")
-   @ 11, 11 say 'Estado:' get Pest pict '@!' valid !Empty(Pest)
+   @ 11, 11 say 'Estado:' get cEsta pict "@!" valid AchaEsta(cEsta)
    read
    if LastKey() = ESC
    	if conf("Pergunta: Deseja encerrar?")
-      	return nil
+         return(Restela( cScreen ))
       endif
    endif
-	
+
    ty := 0
 	while ty = 0
    	OI  := 0
@@ -2327,24 +2350,21 @@ function lstcli()
    	dct := -1
 
    	Area("cadcli")
-   	index on dscnto to I5
-	   set index to I5
-	   while !eof()
-      if Pest # '  '
-         if est # Pest
-            DbSkip(1)
-            loop
-         endi
-      endi
-      if ativo # 'A' .OR. dscnto = dct
-         DbSkip(1)
-         loop
-      endi
+      Order( CADCLI_ESTA )
+
+      if !Cadcli->(DbSeek( cEsta ))
+         while Cadcli->est == cEsta
+            if CadCli->ativo != "A" .OR. CadCli->dscnto = -1
+               CadCli->(DbSkip(1))
+               loop
+            endif
+         enddo
+      endif
+
       @ l,01 say dscnto
       stor DSCNTO to dct
       l++
       skip
-   end
 
    @ 21,20 say 'Digite o Valor do Desconto:' get oi pict '9999.99'
    read
@@ -2355,6 +2375,7 @@ function lstcli()
    if TY # 1
       retu
    endi
+
    Area(oMenu:aDbfs[5])
    go top
    ln := 2
@@ -2726,4 +2747,4 @@ if digt = '2'
    endi
 endi
 
-	
+
