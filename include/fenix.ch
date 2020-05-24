@@ -34,7 +34,6 @@
 	#include "indice.ch"
 	#include "rddname.ch"
 
-
 //#require "hbwin"
 #define FORM_A4 9
 #define RGB( nR,nG,nB ) ( nR + ( nG * 256 ) + ( nB * 256 * 256 ) )
@@ -78,9 +77,6 @@
 #translate ifNIL( <var>, <val> )        			=> if( <var> = NIL, <var> := <val>, <var> )
 #translate MS_DEFAULT( <var>, <val> )    			=> if( <var> = NIL, <var> := <val>, <var> )
 #translate MS_NIL( <var>, <val> )    				=> if( <var> = NIL, <var> := <val>, <var> )
-#translate TrimStr(<xValue>)      					=> alltrim(<xValue>)
-#translate StrTrim(<xValue>)      					=> alltrim(<xValue>)
-#translate xAllTrim(<xValue>)                	=> alltrim(<xValue>)
 #translate TrimStrZero(<xValue>, <nzeros>)   	=> alltrim(strzero(<xValue>, <nzeros>))
 #translate AllTrimStrZero(<xValue>, <nzeros>)   => alltrim(strzero(<xValue>, <nzeros>))
 #Translate Beep				 => Tone

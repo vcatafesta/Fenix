@@ -1,5 +1,8 @@
 #include "fenix.ch"
 
+achoice()
+
+
 function ArrayBancoDeDados()
 ****************************
 	oMenu:aDbfs := {"comp",;
@@ -96,6 +99,7 @@ function ArrayBancoDeDados()
 					"etiqueta",;
 					"etqenv",;
 					"etqpre",;
+					"uf",;
 					"printer",;
 					"cep"}
 	return nil
@@ -669,6 +673,7 @@ Aadd( aArquivos, {"abcprod.dbf",;
           }})
  Aadd( aArquivos, {"cadcli.dbf",;
           {;
+          {'ID', '+', 8, 0 },;
           {'DATA', 'D', 8, 0 },;
           {'SIT', 'C', 13, 0 },;
           {'CODC', 'C', 4, 0 },;
@@ -721,7 +726,8 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'HRREC', 'C', 150, 0 },;
           {'OBSSEP', 'C', 81, 0 },;
           {'RESTRIC', 'C', 1, 0 },;
-          {'USUARIO', 'C', 4, 0 };
+          {'USUARIO', 'C', 4, 0 },;
+          {'ATUALIZADO', 'D', 8, 0 };
           }})
  Aadd( aArquivos, {"cadcons.dbf",;
           {;
@@ -2128,11 +2134,19 @@ Aadd( aArquivos, {"clafisc.dbf",;
           {'NNOTA', 'N', 10, 0 };
           }})
 Aadd( aArquivos, { "cep.dbf",;
-											 {{ "CEP",        "C", 09, 0 }, ;
-											  { "CIDA",       "C", 25, 0 }, ;
-											  { "ESTA",       "C", 02, 0 }, ;
-											  { "ATUALIZADO", "D", 08, 0 }, ;
+											 {{ "ID",         "+", 08, 0 },;
+											  { "CEP",        "C", 09, 0 },;
+											  { "CIDA",       "C", 25, 0 },;
+											  { "ESTA",       "C", 02, 0 },;
+											  { "ATUALIZADO", "D", 08, 0 },;
 											  { "BAIR",       "C", 20, 0 }}})
+											  
+Aadd( aArquivos, { "uf.dbf",;
+											 {{ "ID",         "+", 08, 0 },;
+											  { "UF",         "C", 02, 0 },;
+											  { "NOME",       "C", 40, 0 },;
+											  { "ICMS",       "N", 05, 2 },;
+											  { "ATUALIZADO", "D", 08, 0 }}})											  
 
 Aadd( aArquivos, { "printer.dbf",;
 											 {{ "CODI",      "C", 02, 0 },;
@@ -2345,8 +2359,9 @@ def ArrayIndices()
 	LOCAL aArquivos := {}
 	Aadd( aArquivos, { "usuario",   "usuario1","usuario2"})
 	Aadd( aArquivos, { "cep",       "cep1","cep2"})
-	Aadd( aArquivos, { "cadcli",    "cadcli1","cadcli2"})
+	Aadd( aArquivos, { "cadcli",    "cadcli1","cadcli2","cadcli3","cadcli4","cadcli5","cadcli6","cadcli7","cadcli8"})
 	Aadd( aArquivos, { "printer",   "printer1","printer2"})
+	Aadd( aArquivos, { "uf",        "uf1","uf"})
 	return( aArquivos )
 endef
 
@@ -2462,6 +2477,7 @@ def CriaIndice( cDbf )
 	Aadd( aProc, {"cep",       {||Re_Cep()}})
 	Aadd( aProc, {"cadcli",    {||Re_CadCli()}})
 	Aadd( aProc, {"printer",   {||Re_Printer()}})
+	Aadd( aProc, {"uf",        {||Re_Uf()}})
 
 	nTodos := Len( aProc )
 	//----------------------------------------------------------------//
@@ -2547,15 +2563,31 @@ Proc Re_CadCli()
 	oIndice:PackDbf("cadcli")
 	oIndice:AddNtx("dscnto",  "CADCLI1", "CADCLI" )
 	oIndice:AddNtx("est",     "CADCLI2", "CADCLI" )
+	oIndice:AddNtx("cliente", "CADCLI3", "CADCLI" )
+	oIndice:AddNtx("razao",   "CADCLI4", "CADCLI" )
+	oIndice:AddNtx("cnpj",    "CADCLI5", "CADCLI" )
+	oIndice:AddNtx("cpf",     "CADCLI6", "CADCLI" )
+	oIndice:AddNtx("cida",    "CADCLI7", "CADCLI" )
+	oIndice:AddNtx("ender",   "CADCLI8", "CADCLI" )
 	oIndice:CriaNtx()
 	Return
 
 Proc Re_Printer()
 *****************
-oIndice:Limpa()
-oIndice:DbfNtx("printer")
-oIndice:PackDbf("printer")
-oIndice:AddNtx("Codi", "PRINTER1", "PRINTER" )
-oIndice:AddNtx("Nome", "PRINTER2", "PRINTER" )
-oIndice:CriaNtx()
-Return
+	oIndice:Limpa()
+	oIndice:DbfNtx("printer")
+	oIndice:PackDbf("printer")
+	oIndice:AddNtx("Codi", "PRINTER1", "PRINTER" )
+	oIndice:AddNtx("Nome", "PRINTER2", "PRINTER" )
+	oIndice:CriaNtx()
+	Return
+
+Proc Re_Uf()
+*****************
+	oIndice:Limpa()
+	oIndice:DbfNtx("uf")
+	oIndice:PackDbf("uf")
+	oIndice:AddNtx("uf",   "UF1", "UF" )
+	oIndice:AddNtx("Nome", "UF2", "UF" )
+	oIndice:CriaNtx()
+	Return

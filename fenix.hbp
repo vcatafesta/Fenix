@@ -32,11 +32,13 @@ src\tmenu.prg
 src\tget.prg
 src\tini.prg
 src\tprinter.prg
+src\trelato.prg
 src\tbrowse.prg
 src\getsys.prg
 src\getpsw.prg
 src\sixtools.prg
 src\errorsys.prg
+src\sciapilinux.c
 
 hbmisc.hbc
 hbblink.hbc

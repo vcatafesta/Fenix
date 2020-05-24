@@ -1,41 +1,41 @@
 #include <fenix.ch>
 
 CLASS TPrinter
-    Export:
-        DATA RowPrn	  INIT 0
-		  DATA Pagina	  INIT 0
-		  DATA Tamanho   INIT 80
-		  DATA NomeFirma INIT oAmbiente:xFanta
-        DATA Sistema   INIT "Macrosoft NOME DO PROGRAMA"
-		  DATA Titulo	  INIT "TITULO DO RELATORIO"
-		  DATA Cabecalho INIT "CODIGO DESCRICAO"
-		  DATA Separador INIT "="
-		  DATA Registros INIT 0
+	export:
+		DATA RowPrn	  	INIT 0
+		DATA Pagina	  	INIT 0
+		DATA Tamanho   INIT 80
+		DATA NomeFirma INIT oAmbiente:xFanta
+		DATA Sistema   INIT "Macrosoft NOME DO PROGRAMA"
+		DATA Titulo	  	INIT "TITULO DO RELATORIO"
+		DATA Cabecalho INIT "CODIGO DESCRICAO"
+		DATA Separador INIT "="
+		DATA Registros	INIT 0
 
-    Export:
-        method    New CONSTRUCTOR
-		  method    Inicio
-		  method    Eject
-        method    ArrPrinter()
-        method    CriaNewPrinter()
-        method    EscolheImpressoraUsuario(cLpt1,cLpt2,cLpt3,cLpd1,cLpd2,cLpd3,cLpd4,cLpd5,cLpd6,cLpd7,cLpd8,cLpd9)
-        method    PrintOn()
-        method    PrintOff()
-        method    AbreSpooler()
-        method    FPrint(cString)
-        method    CloseSpooler()
-        method    CupsArrayPrinter()
-        method    Instru80()
-        method    SaidaParaRedeCups()
-        method    SetPrc(n,y)
-        method    LptOk()
-        method    RetPrinterStatus()
-        message   cabec method Inicio
-        message   __eject method Eject
+	export:
+		method    New CONSTRUCTOR
+		method    Inicio
+		method    Eject
+      method    ArrPrinter()
+      method    CriaNewPrinter()
+      method    EscolheImpressoraUsuario(cLpt1,cLpt2,cLpt3,cLpd1,cLpd2,cLpd3,cLpd4,cLpd5,cLpd6,cLpd7,cLpd8,cLpd9)
+      method    PrintOn()
+      method    PrintOff()
+      method    AbreSpooler()
+      method    FPrint(cString)
+      method    CloseSpooler()
+      method    CupsArrayPrinter()
+      method    Instru80()
+      method    SaidaParaRedeCups()
+      method    SetPrc(n,y)
+      method    LptOk()
+      method    RetPrinterStatus()
+      message   cabec method Inicio
+      message   __eject method Eject
 EndClass
 
 Method New() class TPrinter
-        return( Self )
+		return( Self )
 
 Method Inicio() class TPrinter
 		LOCAL nTam := ::Tamanho / 2
@@ -50,14 +50,14 @@ Method Inicio() class TPrinter
 		Qout( Repl( ::Separador, ::Tamanho ))
 		Qout( ::Cabecalho )
 		Qout( Repl( ::Separador, ::Tamanho ))
-      ::RowPrn := 7
-      return( Self )
+		::RowPrn := 7
+		return( Self )
 
 Method EJect() class TPrinter
-	::RowPrn := 0
-   __Eject()
-	SetPrc(0,0)
-   return self
+		::RowPrn := 0
+		__Eject()
+		SetPrc(0,0)
+		return self
 
 Method ArrPrinter() class TPrinter
 	LOCAL hESCP    := oAmbiente:hESCP
@@ -108,15 +108,15 @@ Method ArrPrinter() class TPrinter
 	Aadd( aPrinter, {'38',' ARQUIVO',        '#255','#255','#255','#255','#255','#255','#255','#255','#255','#255','#255','#255','#255','#255','#27#52', '#27#53', Date()})
 	nTam := Len( aPrinter )
 	if Printer->(TravaArq())
-	  for nX := 1 To nTam
-		  Printer->(DbAppend())
-		  for nField := 1 To Printer->(FCount())
-			  Printer->(FieldPut( nField, aPrinter[nX,nField]))
-		  next
-	  next
-	  Printer->(Libera())
+		for nX := 1 To nTam
+			Printer->(DbAppend())
+			for nField := 1 To Printer->(FCount())
+				Printer->(FieldPut( nField, aPrinter[nX,nField]))
+			next
+		next
+		Printer->(Libera())
 	endif
-   //BrowseArray(aPrinter)
+	//BrowseArray(aPrinter)
 	return
 endmethod
 
@@ -141,9 +141,9 @@ endmethod
 
 method EscolheImpressoraUsuario(cLpt1,cLpt2,cLpt3,cLpd1,cLpd2,cLpd3,cLpd4,cLpd5,cLpd6,cLpd7,cLpd8,cLpd9) class TPrinter
    MEMVAR cStr
-   LOCAL nIndex := 0
-   LOCAL cIndex := Space(1)
-
+   MEMVAR cIndex
+	MEMVAR nIndex
+   	
 	hb_default(@cLpt1, "06")
 	hb_default(@cLpt2, "06")
 	hb_default(@cLpt3, "06")
@@ -165,11 +165,13 @@ method EscolheImpressoraUsuario(cLpt1,cLpt2,cLpt3,cLpd1,cLpd2,cLpd3,cLpd4,cLpd5,
 		endif
 
       for nIndex := 1 to 3
-         cIndex := AllTrim(Str(nIndex))
-         cStr := &("cLpt" + cIndex )
-         &("oAmbiente:aLpt" + cIndex ) := {}
+         //cIndex := AllTrim(Str(nIndex))
+         //cStr := &("cLpt" + cIndex )
+         //&("oAmbiente:aLpt" + cIndex ) := {}
+			cStr := cLpt1
          if Printer->(DbSeek( cStr ))
-            Aadd( &("oAmbiente:aLpt" + cIndex ), {;
+            //Aadd( &("oAmbiente:aLpt" + cIndex ), {;
+            Aadd(oAmbiente:aLpt1, {;
                                                             Printer->Codi,;
                                                             Printer->Nome, ;
                                                             Printer->_Cpi10,;
@@ -187,17 +189,58 @@ method EscolheImpressoraUsuario(cLpt1,cLpt2,cLpt3,cLpd1,cLpd2,cLpd3,cLpd4,cLpd5,
                                                             Printer->_Spaco1_6,;
                                                             Printer->Reseta;
                                                          })
+       Aadd(oAmbiente:aLpt2, {;
+                                                            Printer->Codi,;
+                                                            Printer->Nome, ;
+                                                            Printer->_Cpi10,;
+                                                            Printer->_Cpi12,;
+                                                            Printer->Gd,;
+                                                            Printer->Pq,;
+                                                            Printer->Ng,;
+                                                            Printer->Nr,;
+                                                            Printer->Ca,;
+                                                            Printer->c18,;
+                                                            Printer->LigSub,;
+                                                            Printer->DesSub,;
+                                                            Printer->_SaltoOff,;
+                                                            Printer->_Spaco1_8,;
+                                                            Printer->_Spaco1_6,;
+                                                            Printer->Reseta;
+                                                         })
+		Aadd(oAmbiente:aLpt3, {;
+                                                            Printer->Codi,;
+                                                            Printer->Nome, ;
+                                                            Printer->_Cpi10,;
+                                                            Printer->_Cpi12,;
+                                                            Printer->Gd,;
+                                                            Printer->Pq,;
+                                                            Printer->Ng,;
+                                                            Printer->Nr,;
+                                                            Printer->Ca,;
+                                                            Printer->c18,;
+                                                            Printer->LigSub,;
+                                                            Printer->DesSub,;
+                                                            Printer->_SaltoOff,;
+                                                            Printer->_Spaco1_8,;
+                                                            Printer->_Spaco1_6,;
+                                                            Printer->Reseta;
+                                                         })																			
          else
-            Aadd( &("oAmbiente:aLpt" + cIndex), { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
+            //Aadd( &("oAmbiente:aLpt" + cIndex), { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
+            Aadd( oAmbiente:aLpt1, { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
+            Aadd( oAmbiente:aLpt2, { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
+            Aadd( oAmbiente:aLpt3, { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
          endif
       next
 
       for nIndex := 1 to 9
-         cIndex := AllTrim(Str(nIndex))
-         cStr := &("cLpd" + cIndex )
-         &("oAmbiente:aLpd" + cIndex ) := {}
+         //cIndex := AllTrim(Str(nIndex))
+         //cStr := &("cLpd" + cIndex )
+         //&("oAmbiente:aLpd" + cIndex ) := {}
+			cStr := cLpd1
          if Printer->(DbSeek( cStr ))
-            Aadd( &("oAmbiente:aLpd" + cIndex ), {;
+            //Aadd( &("oAmbiente:aLpd" + cIndex ), {;
+            Aadd( oAmbiente:aLpd1, {;
                                                             Printer->Codi,;
                                                             Printer->Nome, ;
                                                             Printer->_Cpi10,;
@@ -216,7 +259,8 @@ method EscolheImpressoraUsuario(cLpt1,cLpt2,cLpt3,cLpd1,cLpd2,cLpd3,cLpd4,cLpd5,
                                                             Printer->Reseta;
                                                          })
          else
-            Aadd( &("oAmbiente:aLpd" + cIndex ), { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
+            //Aadd( &("oAmbiente:aLpd" + cIndex ), { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
+            Aadd(oAmbiente:aLpd1, { NIL, NIL, NIL, NIL, NIL, NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL,NIL })
          endif
       next
 		Printer->(DbCloseArea())
@@ -287,7 +331,7 @@ method CloseSpooler() class TPrinter
             oMenu:Limpa()
             oMenu:StatInf()
             oMenu:StatReg("IMPRESSO #" + StrZero( oAmbiente:nRegistrosImpressos, 7))
-            M_Title( "ESC - Retorna ³Setas CIMA/BAIXO Move")
+            M_Title( "ESC - Retorna ï¿½Setas CIMA/BAIXO Move")
             M_View( 00, 00, MaxRow()-1, MaxCol(), cTemp, Cor())
             //ShellRun("NOTEPAD " + cTemp )
             ResTela( cScreen )
@@ -374,7 +418,7 @@ method Instru80( nQualPorta, cArquivo ) class TPrinter
    PRIVA aModelo
 
 
-   altd()
+   //altd()
 	if len(oAmbiente:aLpt1) == 0 .or. len(oAmbiente:aLpd1) == 0
 		oPrinter:EscolheImpressoraUsuario()
 	endif
@@ -399,7 +443,7 @@ method Instru80( nQualPorta, cArquivo ) class TPrinter
       nTamJan  := AmaxStrLen(aMenu) + 3
       nIndex   := Len(aMenu)
 
-		MaBox( 05, 10, 05 + nIndex + 1, nTamJan + 1, nil , "ENTER=IMPRIMIR¦CTRL/ALT+ENTER=ESCOLHER¦CTRL+PGDN=ONLINE")
+		MaBox( 05, 10, 05 + nIndex + 1, nTamJan + 1, nil , "ENTER=IMPRIMIRï¿½CTRL/ALT+ENTER=ESCOLHERï¿½CTRL+PGDN=ONLINE")
 		nChoice := aChoice( 06, 11, 04 + nIndex + 1, nTamJan, aMenu, alDisp, "_Instru80" )
 		if nChoice = 0 .OR. nChoice = 12
          if Conf("Pergunta: Cancelar Impressao ?")
@@ -550,18 +594,18 @@ method CupsArrayPrinter() class TPrinter
    LOCAL nPr
    MEMVAR cStr
 
-   aMenu := {  " LPT1 þ " + aAction[ aStatus[1]] + " þ " + oAmbiente:aLpt1[1,2],;
-					" LPT2 þ " + aAction[ aStatus[2]] + " þ " + oAmbiente:aLpt2[1,2],;
-					" LPT3 þ " + aAction[ aStatus[3]] + " þ " + oAmbiente:aLpt3[1,2],;
-					" COM1 þ " + Iif( FIsPrinter("COM1"), aComPort[1], aComPort[2]) + " þ " + "PORTA SERIAL 1",;
-					" COM2 þ " + Iif( FIsPrinter("COM2"), aComPort[1], aComPort[2]) + " þ " + "PORTA SERIAL 2",;
-					" COM3 þ " + Iif( FIsPrinter("COM3"), aComPort[1], aComPort[2]) + " þ " + "PORTA SERIAL 3",;
-					" USB  þ " + aAction[ aStatus[1]] + " þ IMPRESSORA USB",;
-					" VISUALIZAR   þ ",;
-					" EMAIL        þ ",;
-					" WEB BROWSER  þ ",;
-					" SPOOLER      þ ",;
-					" CANCELAR     þ ";
+   aMenu := {  " LPT1 ï¿½ " + aAction[ aStatus[1]] + " ï¿½ " + oAmbiente:aLpt1[1,2],;
+					" LPT2 ï¿½ " + aAction[ aStatus[2]] + " ï¿½ " + oAmbiente:aLpt2[1,2],;
+					" LPT3 ï¿½ " + aAction[ aStatus[3]] + " ï¿½ " + oAmbiente:aLpt3[1,2],;
+					" COM1 ï¿½ " + Iif( FIsPrinter("COM1"), aComPort[1], aComPort[2]) + " ï¿½ " + "PORTA SERIAL 1",;
+					" COM2 ï¿½ " + Iif( FIsPrinter("COM2"), aComPort[1], aComPort[2]) + " ï¿½ " + "PORTA SERIAL 2",;
+					" COM3 ï¿½ " + Iif( FIsPrinter("COM3"), aComPort[1], aComPort[2]) + " ï¿½ " + "PORTA SERIAL 3",;
+					" USB  ï¿½ " + aAction[ aStatus[1]] + " ï¿½ IMPRESSORA USB",;
+					" VISUALIZAR   ï¿½ ",;
+					" EMAIL        ï¿½ ",;
+					" WEB BROWSER  ï¿½ ",;
+					" SPOOLER      ï¿½ ",;
+					" CANCELAR     ï¿½ ";
             }
 
    FOR EACH nPr IN aPrinter
@@ -569,7 +613,7 @@ method CupsArrayPrinter() class TPrinter
       //nWidth := Max( nWidth, Len( nPr ) )
       nIndex++
       cStr := &( "oAmbiente:aLpd" + trimstr(nIndex))
-      Aadd( aMenu, " LPD" + TrimStr(nPr:__enumIndex()) + "  þ REDE CUPS      þ " + Left(cStr[1,2],17) + " em " + nPr)
+      Aadd( aMenu, " LPD" + TrimStr(nPr:__enumIndex()) + "  ï¿½ REDE CUPS      ï¿½ " + Left(cStr[1,2],17) + " em " + nPr)
       Aadd( aModelo, nPr)
    NEXT
    return {aMenu, aModelo, aAction, aStatus, aPrinter}
@@ -611,7 +655,7 @@ method LptOk() class TPrinter
 			cMsg += " (TENTAR).                                               "
 			cMsg += ";3)Ao escolher a opcao (IMPRIMIR ASSIM MESMO) podera haver"
 			cMsg += "   um travamento completo do sistema.                    "
-			cMsg += ";4)Escolha (RETORNAR) para cancelar a impress„o.          "
+			cMsg += ";4)Escolha (RETORNAR) para cancelar a impressï¿½o.          "
 
 	if lMaluco
 		return( lMaluco)
@@ -684,3 +728,12 @@ endef
 Function TPrinterNew()
 *********************
 return( TPrinter():New())
+
+
+#ifdef __PLATFORM__WINDOWS
+	function cupsPrintFile()
+		return nil
+
+	function cupsGetDests()
+		return nil
+#endif		

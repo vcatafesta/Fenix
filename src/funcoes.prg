@@ -2512,6 +2512,73 @@ For nX := 1 To Len( aPattern)
 next
 return( 0 )
 
+def Cls( CorFundo, PanoFundo, lforcar )
+	LOCAL nDelay     := 0
+	LOCAL row        := 0
+	LOCAL col        := 0
+	LOCAL row1       := MaxRow()
+	LOCAL col1       := MaxCol() 
+	LOCAL nComp      := ( col1 - col )
+	LOCAL nLen       := Len( Panofundo)
+	LOCAL cString    := ""
+	LOCAL xString    := ""
+	LOCAL nConta     := 0
+	LOCAL y          := 0
+	LOCAL x          := 0
+	STATI cScreen    := NIL
+	STATI xPanoFundo := ""
+	STATI xCorFundo  := NIL
+	DEFAU CorFundo   TO oAmbiente:CorFundo
+	DEFAU PanoFundo  TO oAmbiente:PanoFundo
+
+	//HB3.2/3.4
+	//FT_CLS( row, col, row1, col1, corfundo)
+	//HB3.0
+	//hb_DispBox( 00, 00, maxrow(), maxcol(), Repl(PanoFundo,9))
+
+	ms_cls(CorFundo, PanoFundo, nDelay)
+   return nil
+   
+	//Tela(CorFundo, PanoFundo)
+	//Ms_Char(CorFundo, PanoFundo)
+	//Ms_Cls(CorFundo, PanoFundo)
+	//return NIL
+
+
+	if lforcar = nil
+		if !(xPanoFundo == PanoFundo ) .OR. !(xCorFundo == CorFundo )
+			cScreen := NIL
+		endif
+	else
+		cScreen := NIL
+	endif
+
+	if cScreen == NIL
+		//for x := row To row1
+			//ft_WrtChr( nX, nY, PanoFundo, Cor())
+			//ft_VidStr( x, col, Panofundo, corfundo) 
+		//   Print( x, col, Panofundo, corfundo, MaxCol(), panofundo)
+		//next
+		nConta = row1 * col1 
+		for x := 1 TO nConta STEP nlen
+			//ft_WrtChr( nX, nY, PanoFundo, Cor())
+			//ft_VidStr( x, col, Panofundo, corfundo) 
+			cString += PanoFundo       
+		next
+		y := 0
+		for x := 1 to nConta STEP col1
+			xString := SubStr( cString, x, col1)
+			Print( y++, 0, xString, corfundo, col1, xString)
+		next
+		xPanoFundo := PanoFundo
+		xCorFundo  := CorFundo
+		cScreen    := SaveScreen()
+	endif
+	//FT_Shadow(oAmbiente:sombra)
+	return( restela( cScreen ))
+endef
+
+/*
 Function Cls( CorFundo, PanoFundo )
 ***********************************
 LOCAL row   := 0
@@ -2527,8 +2594,9 @@ FT_CLS( row, col, row1, col1, corfundo)
 for x := row To row1
    Print( x, col, Panofundo, corfundo, MaxCol(), panofundo)
 next
-
 return NIL
+*/
+
 
 def Rep_Ok()
 	LOCAL cScreen := SaveScreen()
@@ -3596,7 +3664,7 @@ intWindowStyle
 #ifdef __XHARBOUR__
    WshShell := CreateObject("WScript.Shell")
 #else
-   //WshShell := win_oleCreateObject("WScript.Shell")
+   WshShell := win_oleCreateObject("WScript.Shell")
 #endif
 
 lRet     := WshShell:Run("%comspec% /c " + cComando, intWindowStyle, .F.)

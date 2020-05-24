@@ -1,4 +1,5 @@
 ﻿#include "fenix.ch"
+
 request SIXCDX
 REQUEST HB_CODEPAGE_PT850
 REQUEST HB_CODEPAGE_PTISO
@@ -7,6 +8,8 @@ REQUEST HB_CODEPAGE_UTF8
 REQUEST HB_LANG_EN
 REQUEST HB_LANG_PT
 static s_hMutex
+public XNOMEFIR
+public SISTEM_NA2
 
 function main()
 ********************
@@ -52,10 +55,12 @@ function main()
 
 	login()
 
-	oMenu:StatusSup := "Fenix for Windows v1.0"
-	oMenu:StatusInf += AllTrim(oMenu:Comp)
-	oMenu:StatusInf += "|"
-	oMenu:StatusInf += AllTrim(oMenu:Unidade)
+	oMenu:StatusSup 	:= "Fenix for Windows v1.0"
+	oMenu:StatusInf 	+= AllTrim(oMenu:Comp)
+	oMenu:StatusInf 	+= "|"
+	oMenu:StatusInf 	+= AllTrim(oMenu:Unidade)
+	XNOMEFIR 		 	:= oMenu:Nomefirma	
+	SISTEM_NA2			:= oMenu:StatusSup
 
 	Area("dad_nfen")
    locate for dad_nfen->X = Space(1)
@@ -96,12 +101,16 @@ function Monta_Menu()
    oTopBar := TopBar( 01,00 , MaxCol())
    oTopBar:ColorSpec := cCorBar
 
+*=============================================================================================================================*
+* CADASTROS
+*=============================================================================================================================*
+
    oPopUp := PopUp()
    oPopUp :ColorSpec:= cCorItem
    oTopBar:AddItem( MenuItem ( "&Cadastros", oPopUp, ,) )
 
 
-   oItem := MenuItem( "Cadastro de &Clientes" , {|| cadastro() } ,101)
+   oItem := MenuItem( "&Clientes" , {|| ClientesInclusao() } ,101)
    oPopUp:AddItem( oItem )
    if Yclicad = 'B'
       oItem:Enabled := .f.
@@ -109,7 +118,7 @@ function Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-   oItem :=MenuItem( "Cadastro de &Fornecedores" ,{|| cadastro() })
+   oItem :=MenuItem( "&Fornecedores" ,{|| nil })
    oPopUp:AddItem( oItem )
    if Yforcad = 'B'
       oItem:Enabled := .f.
@@ -117,7 +126,7 @@ function Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-   oItem :=MenuItem( "Cadastro de &Merc./Suprimento" ,{|| Alert("merc.suprim...()") })
+   oItem :=MenuItem( "&Merc./Suprimento" ,{|| Alert("merc.suprim...()") })
    oPopUp:AddItem( oItem )
    if Ymercad = 'B'
       oItem:Enabled := .f.
@@ -125,7 +134,7 @@ function Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-   oItem :=MenuItem( "Cadastro de &Produtos" ,{|| Alert("Produtos()") })
+   oItem :=MenuItem( "&Produtos" ,{|| Alert("Produtos()") })
    oPopUp:AddItem( oItem )
    if Yprocad = 'B'
       oItem:Enabled := .f.
@@ -169,7 +178,7 @@ function Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-   oItem :=MenuItem( "&Estado/ICMS", {|| Alert("estado icms()") })
+   oItem :=MenuItem( "&Estado/ICMS", {|| UfInclusao() })
    oPopUp:AddItem( oItem )
    if Yestcad = 'B'
       oItem:Enabled := .f.
@@ -195,6 +204,257 @@ function Monta_Menu()
       oItem:Enabled := .T.
    endi
 
+   oItem :=MenuItem( "Clas.Suprimentos", {|| Alert("suprimentos()") })
+   oPopUp:AddItem( oItem )
+   if Yclacad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Embalagens", {|| Alert("Embalgens()") })
+   oPopUp:AddItem( oItem )
+   if Yembcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+	
+	oItem :=MenuItem( "Cep", {|| CepInclusao() })
+   oPopUp:AddItem( oItem )
+   if Yembcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endif
+
+*=============================================================================================================================*
+* ALTERACAO
+*=============================================================================================================================*
+
+   oPopUp := PopUp()
+   oPopUp :ColorSpec:= cCorItem
+   oTopBar:AddItem( MenuItem ( "&Alteracao", oPopUp, ,) )
+
+   oItem := MenuItem( "&Clientes" , {|| ClientesDbedit() } ,101)
+   oPopUp:AddItem( oItem )
+   if Yclicad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Fornecedores" ,{|| nil })
+   oPopUp:AddItem( oItem )
+   if Yforcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Merc./Suprimento" ,{|| Alert("merc.suprim...()") })
+   oPopUp:AddItem( oItem )
+   if Ymercad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Produtos" ,{|| Alert("Produtos()") })
+   oPopUp:AddItem( oItem )
+   if Yprocad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Representantes", {|| Alert("representantes()") })
+   oPopUp:AddItem( oItem )
+   if Yrepcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Transportadoras", {|| Alert("Transportadoras()") })
+   oPopUp:AddItem( oItem )
+   if Ytracad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Municipios", {|| Alert("municipios()") })
+   oPopUp:AddItem( oItem )
+   if Ymuncad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Cfop" ,{|| Alert("CFOP()") })
+   oPopUp:AddItem( oItem )
+   if Ycfocad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Estado/ICMS", {|| UfDbEdit() })
+   oPopUp:AddItem( oItem )
+   if Yestcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "CEST", {|| Alert("cest()") })
+   oPopUp:AddItem( oItem )
+   if Ycescad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Codigo de Barras", {|| Alert("CODB BAR()") })
+   oPopUp:AddItem( oItem )
+   if Ycdbcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Clas.Suprimentos", {|| Alert("suprimentos()") })
+   oPopUp:AddItem( oItem )
+   if Yclacad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Embalagens", {|| Alert("Embalgens()") })
+   oPopUp:AddItem( oItem )
+   if Yembcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endif
+	
+	oItem :=MenuItem( "Cep", {|| CepInclusao(true) })
+   oPopUp:AddItem( oItem )
+   if Yembcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endif	
+
+*=============================================================================================================================*
+* CONSULTA
+*=============================================================================================================================*
+
+   oPopUp := PopUp()
+   oPopUp :ColorSpec:= cCorItem
+   oTopBar:AddItem( MenuItem ( "&Consulta", oPopUp, ,) )
+
+   oItem := MenuItem( "&Clientes" , {|| ClientesDbedit() } ,101)
+   oPopUp:AddItem( oItem )
+   if Yclicad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Fornecedores" ,{|| nil })
+   oPopUp:AddItem( oItem )
+   if Yforcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Merc./Suprimento" ,{|| Alert("merc.suprim...()") })
+   oPopUp:AddItem( oItem )
+   if Ymercad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Produtos" ,{|| Alert("Produtos()") })
+   oPopUp:AddItem( oItem )
+   if Yprocad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Representantes", {|| Alert("representantes()") })
+   oPopUp:AddItem( oItem )
+   if Yrepcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Transportadoras", {|| Alert("Transportadoras()") })
+   oPopUp:AddItem( oItem )
+   if Ytracad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Municipios", {|| Alert("municipios()") })
+   oPopUp:AddItem( oItem )
+   if Ymuncad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Cfop" ,{|| Alert("CFOP()") })
+   oPopUp:AddItem( oItem )
+   if Ycfocad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Estado/ICMS", {|| UfDbEdit() })
+   oPopUp:AddItem( oItem )
+   if Yestcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "CEST", {|| Alert("cest()") })
+   oPopUp:AddItem( oItem )
+   if Ycescad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Codigo de Barras", {|| Alert("CODB BAR()") })
+   oPopUp:AddItem( oItem )
+   if Ycdbcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
 
    oItem :=MenuItem( "Clas.Suprimentos", {|| Alert("suprimentos()") })
    oPopUp:AddItem( oItem )
@@ -212,9 +472,135 @@ function Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-*----------
-*VENDAS
-*----------
+*=============================================================================================================================*
+* IMPRESSAO
+*=============================================================================================================================*
+
+   oPopUp := PopUp()
+   oPopUp :ColorSpec:= cCorItem
+   oTopBar:AddItem( MenuItem ( "&Impressao", oPopUp, ,) )
+
+   oItem := MenuItem( "&Clientes" , {|| LstCli() } ,101)
+   oPopUp:AddItem( oItem )
+   if Yclicad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Fornecedores" ,{|| nil })
+   oPopUp:AddItem( oItem )
+   if Yforcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Merc./Suprimento" ,{|| Alert("merc.suprim...()") })
+   oPopUp:AddItem( oItem )
+   if Ymercad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Produtos" ,{|| Alert("Produtos()") })
+   oPopUp:AddItem( oItem )
+   if Yprocad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Representantes", {|| Alert("representantes()") })
+   oPopUp:AddItem( oItem )
+   if Yrepcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Transportadoras", {|| Alert("Transportadoras()") })
+   oPopUp:AddItem( oItem )
+   if Ytracad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Municipios", {|| Alert("municipios()") })
+   oPopUp:AddItem( oItem )
+   if Ymuncad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Cfop" ,{|| Alert("CFOP()") })
+   oPopUp:AddItem( oItem )
+   if Ycfocad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "&Estado/ICMS", {|| UfDbEdit() })
+   oPopUp:AddItem( oItem )
+   if Yestcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "CEST", {|| Alert("cest()") })
+   oPopUp:AddItem( oItem )
+   if Ycescad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
+
+   oItem :=MenuItem( "Codigo de Barras", {|| Alert("CODB BAR()") })
+   oPopUp:AddItem( oItem )
+   if Ycdbcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Clas.Suprimentos", {|| Alert("suprimentos()") })
+   oPopUp:AddItem( oItem )
+   if Yclacad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endi
+
+   oItem :=MenuItem( "Embalagens", {|| Alert("Embalgens()") })
+   oPopUp:AddItem( oItem )
+   if Yembcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endif
+	
+	oItem :=MenuItem( "Cep", {|| CepPrint() })
+   oPopUp:AddItem( oItem )
+   if Yembcad = 'B'
+      oItem:Enabled := .f.
+   else
+      oItem:Enabled := .T.
+   endif
+
+
+// VENDAS
+
    oPopUp           := PopUp()
    oPopUp:ColorSpec := cCorItem
    oTopBar:AddItem( MenuItem ( "&Vendas", oPopUp, ,) )
@@ -546,18 +932,19 @@ function login()
 	LOCAL cLogin    := Space(15)
 	LOCAL cPassword := Space(6)
 	LOCAL SNA       := "168935"
-   MEMVAR cLpt1
-	MEMVAR cLpt2
-	MEMVAR cLpt3
-	MEMVAR cLpd1
-	MEMVAR cLpd2
-	MEMVAR cLpd3
-	MEMVAR cLpd4
-	MEMVAR cLpd5
-	MEMVAR cLpd6
-	MEMVAR cLpd7
-	MEMVAR cLpd8
-	MEMVAR cLpd9
+	memvar cLpt1
+	memvar cLpt2
+	memvar cLpt3
+	memvar cLpd1
+	memvar cLpd2
+	memvar cLpd3
+	memvar cLpd4
+	memvar cLpd5
+	memvar cLpd6
+	memvar cLpd7
+	memvar cLpd8
+	memvar cLpd9
+
 
 	Area("usuario")
 	while true

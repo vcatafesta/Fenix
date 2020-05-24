@@ -1,140 +1,23 @@
 ================================================================================
 Usuario  1: GABRIEL        
-Data      : 22/05/2020
-Horas     : 17:29:11
+Data      : 23/05/2020
+Horas     : 20:57:00
 SubSystem : BASE
 SubCode   : 1003
-Variavel  : CLPT1
+Variavel  : TEF
 Arquivo   : 
-Area      : CADCLI
-Indice    : dscnto
+Area      : CEP
+Indice    : cep
 Descricao : VARIAVEL NAO EXISTE.
 Explanacao: A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.
 Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
 Acao      : 
 --------------------------------------------------------------------------------
 PILHA DE CARGA
-                Linha : 000167    Proc : TPRINTER:ESCOLHEIMPRESSORAUSUARIO
-                Linha : 002897    Proc : INSTRU80
-                Linha : 001072    Proc : MACROERRO
-                Linha : 000708    Proc : (b)ERRORSYS
-                Linha : 000457    Proc : CLIENTESINCLUSAO
-                Linha : 000376    Proc : CADASTRO
-                Linha : 000104    Proc : (b)MONTA_MENU
+                Linha : 000538    Proc : CLIENTESINCLUSAO
+                Linha : 000113    Proc : (b)MONTA_MENU
                 Linha : 000000    Proc : HBMENUSYS:EXECUTE
                 Linha : 000000    Proc : HBMENUSYS:MODAL
                 Linha : 000000    Proc : MENUMODAL
-                Linha : 000086    Proc : MAIN
-================================================================================
-================================================================================
-Usuario  1: GABRIEL        
-Data      : 22/05/2020
-Horas     : 17:33:08
-SubSystem : BASE
-SubCode   : 1003
-Variavel  : CLPT1
-Arquivo   : 
-Area      : CADCLI
-Indice    : dscnto
-Descricao : VARIAVEL NAO EXISTE.
-Explanacao: A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.
-Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
-Acao      : 
---------------------------------------------------------------------------------
-PILHA DE CARGA
-                Linha : 000169    Proc : TPRINTER:ESCOLHEIMPRESSORAUSUARIO
-                Linha : 002897    Proc : INSTRU80
-                Linha : 001072    Proc : MACROERRO
-                Linha : 000708    Proc : (b)ERRORSYS
-                Linha : 000457    Proc : CLIENTESINCLUSAO
-                Linha : 000376    Proc : CADASTRO
-                Linha : 000104    Proc : (b)MONTA_MENU
-                Linha : 000000    Proc : HBMENUSYS:EXECUTE
-                Linha : 000000    Proc : HBMENUSYS:MODAL
-                Linha : 000000    Proc : MENUMODAL
-                Linha : 000086    Proc : MAIN
-================================================================================
-================================================================================
-Usuario  1: GABRIEL        
-Data      : 22/05/2020
-Horas     : 17:34:39
-SubSystem : BASE
-SubCode   : 1003
-Variavel  : CLPT1
-Arquivo   : 
-Area      : CADCLI
-Indice    : dscnto
-Descricao : VARIAVEL NAO EXISTE.
-Explanacao: A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.
-Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
-Acao      : 
---------------------------------------------------------------------------------
-PILHA DE CARGA
-                Linha : 000169    Proc : TPRINTER:ESCOLHEIMPRESSORAUSUARIO
-                Linha : 002897    Proc : INSTRU80
-                Linha : 001072    Proc : MACROERRO
-                Linha : 000708    Proc : (b)ERRORSYS
-                Linha : 000457    Proc : CLIENTESINCLUSAO
-                Linha : 000376    Proc : CADASTRO
-                Linha : 000104    Proc : (b)MONTA_MENU
-                Linha : 000000    Proc : HBMENUSYS:EXECUTE
-                Linha : 000000    Proc : HBMENUSYS:MODAL
-                Linha : 000000    Proc : MENUMODAL
-                Linha : 000086    Proc : MAIN
-================================================================================
-================================================================================
-Usuario  1: GABRIEL        
-Data      : 22/05/2020
-Horas     : 17:37:26
-SubSystem : BASE
-SubCode   : 1003
-Variavel  : CLPT1
-Arquivo   : 
-Area      : CADCLI
-Indice    : dscnto
-Descricao : VARIAVEL NAO EXISTE.
-Explanacao: A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.
-Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
-Acao      : 
---------------------------------------------------------------------------------
-PILHA DE CARGA
-                Linha : 000170    Proc : TPRINTER:ESCOLHEIMPRESSORAUSUARIO
-                Linha : 002897    Proc : INSTRU80
-                Linha : 001072    Proc : MACROERRO
-                Linha : 000708    Proc : (b)ERRORSYS
-                Linha : 000457    Proc : CLIENTESINCLUSAO
-                Linha : 000376    Proc : CADASTRO
-                Linha : 000104    Proc : (b)MONTA_MENU
-                Linha : 000000    Proc : HBMENUSYS:EXECUTE
-                Linha : 000000    Proc : HBMENUSYS:MODAL
-                Linha : 000000    Proc : MENUMODAL
-                Linha : 000086    Proc : MAIN
-================================================================================
-================================================================================
-Usuario  1: GABRIEL        
-Data      : 22/05/2020
-Horas     : 17:38:36
-SubSystem : BASE
-SubCode   : 1003
-Variavel  : CLPT1
-Arquivo   : 
-Area      : CADCLI
-Indice    : dscnto
-Descricao : VARIAVEL NAO EXISTE.
-Explanacao: A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.
-Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
-Acao      : 
---------------------------------------------------------------------------------
-PILHA DE CARGA
-                Linha : 000170    Proc : TPRINTER:ESCOLHEIMPRESSORAUSUARIO
-                Linha : 002897    Proc : INSTRU80
-                Linha : 001072    Proc : MACROERRO
-                Linha : 000708    Proc : (b)ERRORSYS
-                Linha : 000457    Proc : CLIENTESINCLUSAO
-                Linha : 000376    Proc : CADASTRO
-                Linha : 000104    Proc : (b)MONTA_MENU
-                Linha : 000000    Proc : HBMENUSYS:EXECUTE
-                Linha : 000000    Proc : HBMENUSYS:MODAL
-                Linha : 000000    Proc : MENUMODAL
-                Linha : 000086    Proc : MAIN
+                Linha : 000091    Proc : MAIN
 ================================================================================
