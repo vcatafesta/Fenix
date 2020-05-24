@@ -126,41 +126,6 @@ function AbreArea()
    next
    return nil
 
-function VerArquivo()
-*********************
-	LOCAL nTam := Len(oMenu:aDbfs)
-	LOCAL nX
-	LOCAL cDbf
-
-   Mensagem("Aguarde, verificando arquivos")
-	rddsetdefault("SIXCDX")
-	for nX := 1 to nTam
-		cDatabase := oMenu:aDbfs[nX]
-		cDbf      := oMenu:aDbfs[nX] + ".dbf"
-		if !file( cDbf )
-			ErrorBeep()
-			mensagem("Erro: Arquivo " + upper(cDbf) + " nao existe")
-			//quit
-		end
-
-		if cDatabase = "usuario"
-			Ferase("usuario.cdx")
-			use usuario exclusive new
-			if !Neterr()
-				index on Usuario->Fantazia Tag Fantazia to Usuario
-				Usuario->(DbCloseArea())
-				return true
-			else
-				alert("erro")
-				return false
-			endif
-		end
-	next
-	oMenu:Limpa()
-	return true
-
-*==================================================================================================*
-
 def VerIndice()
 	LOCAL lReindexar := FALSO
 	LOCAL aIndice	  := ArrayIndices()
@@ -228,10 +193,11 @@ def VerIndice()
 		Next
 	Next
 #endif
-   if oIndice:Reindexado
-      oReindexa:Close()
-      return true
-   endif
+   //if oIndice:Reindexado
+      //oReindexa:Close()
+      //return true
+   //endif
+	oMenu:Limpa()
    oReindexa:Close()
    ErrorBeep()
    if !Conf("Pergunta: Deseja entrar sem reindexar ?")
@@ -266,7 +232,7 @@ def UsaArquivo( cArquivo, cAlias )
 				ResTela( cScreen )
 				return( OK )
 			endif
-		endif
+		endif		
 		nPos := Ascan( aIndices,{ |oBloco|oBloco[1] = cArquivo })
 		if NetUse( cArquivo, MULTI,, cAlias )
 			if nPos != 0
@@ -2522,7 +2488,7 @@ def CriaIndice( cDbf )
 	for nY := 1 To nTodos
 		cDbf		 := aProc[ nY, 1 ]
 		cLocalDbf := cDbf + '.dbf'
-
+		
 		if AbreArquivo( cDbf )
 			oReindexa:WriteBool('reindexando', cLocalDbf, FALSO )
 			Eval( aProc[ nY, 2 ] )

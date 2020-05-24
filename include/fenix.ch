@@ -46,14 +46,14 @@
 #define MAGENTA         RGB( 0x85,0x0 ,0x85 )
 #define BROWN           RGB( 0x85,0x85,0x0 )
 #define WHITE           RGB( 0xC6,0xC6,0xC6 )
-#define TRUE 		.t.
-#define true 		.t.
-#define OK   		.t.
-#define FALSE		.f.
-#define FALSO		.f.
-#define NOK   		.f.
-#define FORM_A4 	9
-#define ESC			27
+#define TRUE 				.t.
+#define true 				.t.
+#define OK   				.t.
+#define FALSE				.f.
+#define FALSO				.f.
+#define NOK   				.f.
+#define FORM_A4 			9
+#define ESC					27
 
 #XCOMMAND DEFAULT <v1> TO <x1> [, <vn> TO <xn> ]								;
 			 =>																				;

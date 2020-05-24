@@ -36,7 +36,6 @@ function main()
 	hb_langSelect( "pt" )
 	oMenu:Limpa()
   	SetaAmbiente()
-	//altd()
    RddSetDefault( RDDNAME )
 	ArrayBancoDeDados()
    CriaArquivo()
@@ -48,11 +47,10 @@ function main()
 		Cls
 		Quit
 	endif
-	//VerArquivo()
+	oMenu:Limpa()
 	UsaArquivo()
 	//Abrearea()
    oMenu:Limpa()
-
 	login()
 
 	oMenu:StatusSup 	:= "Fenix for Windows v1.0"

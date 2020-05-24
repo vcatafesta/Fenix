@@ -24,7 +24,7 @@ CLASS TIndice
 ENDCLASS
 
 METHOD New( cAlias )
-	Self:ProgressoNtx := .F.
+	Self:ProgressoNtx := .T.
 	Self:Reindexando	:= .F.
 	Self:aNome_Campo	:= {}
 	Self:aNome_Ntx 	:= {}

@@ -41,13 +41,13 @@
 #Define	_CODIGO				 12
 #Define	SUB					 9
 #Define	MIL					 1000
-#Define	TAXAMACRO_1 		 1.05415  // Taxa para 30 dias
-#Define	TAXAMACRO_5 		 0.23616  // Taxa para 5 pgtos
-#Define	TAXAMACRO_10		 0.13558  // Taxa para 5 pgtos
-#Define	TAXAMACRO_VENDEDOR 1.1		 // Taxa para Vendedor
+#Define	TAXAMACRO_1 		 1.05415  	// Taxa para 30 dias
+#Define	TAXAMACRO_5 		 0.23616  	// Taxa para 5 pgtos
+#Define	TAXAMACRO_10		 0.13558  	// Taxa para 5 pgtos
+#Define	TAXAMACRO_VENDEDOR 1.1		 	// Taxa para Vendedor
 #Define	CTRL_END_SPECIAL	 .T.
 #Define	SWAP					 .T.
-#Define	MULTI 				 .F.
+#Define	MULTI 				 .T. 			// multiusuario
 #Define	CODEBAR				 .F.
 #Define	FANTACODEBAR		 ""
 #Define	LIG					 .T.

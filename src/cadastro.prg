@@ -33,16 +33,16 @@ function UfInclusao()
 		endif
 		ErrorBeep()
 		if conf("Pergunta: Deseja gravar?")
-			if Uf->(Incluiu())
-			   if Uf->(Incluiu())
+			if ufCerto(cEsta)
+				if Uf->(Incluiu())
 					Uf->Uf   := cEsta
 					Uf->Nome := cNome
 					Uf->Icms := nIcms
 				endif
 				Uf->(Libera())
 			endif
-      endif
-	EndDo
+		endif
+	enddo
 
 function UfCerto( cUf )
 ***********************
@@ -59,17 +59,43 @@ if Empty( cUf )
 	return( false )
 endif
 
-Area("Uf")
+Area("uf")
 Uf->(Order( UF_UF ))
 if Uf->(DbSeek( cUf ))
 	ErrorBeep()
-	Alerta("Erro: Já registrado ou,; Incluido por outra Estacao...")
+	Alerta("Erro: Ja registrado ou,; incluido por outra estacao...")
 	AreaAnt( Arq_Ant, Ind_Ant )
 	return( false )
 endif
 AreaAnt( Arq_Ant, Ind_Ant )
 return( true )
 
+
+function ufErrado( cEsta, cNome)
+********************************
+LOCAL aRotina			  := {{|| UfInclusao()}}
+LOCAL aRotinaAlteracao := {{|| UfDbedit( OK )}}
+LOCAL Ind_Ant			  := IndexOrd()
+LOCAL Arq_Ant			  := Alias()
+
+Area("uf")
+uf->(Order( UF_UF ))
+if (Lastrec() = 0 )
+	ErrorBeep()
+	if Conf(" Pergunta: Nenhuma UF Disponivel. Registrar ?")
+		UfInclusao()
+	endif
+	AreaAnt( Arq_Ant, Ind_Ant )
+	Return( FALSO )
+endif
+if Uf->(!DbSeek( cEsta ))
+	Uf->(Order( UF_NOME ))
+	Uf->(Escolhe( 03, 01, 22, "uf + '�' + Nome  ", "UF ESTADO", aRotina,, aRotinaAlteracao ))
+endif
+cEsta := Uf->Uf
+cNome := Uf->Nome
+AreaAnt( Arq_Ant, Ind_Ant )
+Return( OK )
 
 function caduser()
 ******************
@@ -103,12 +129,12 @@ function caduser()
 		cBloqueado  := "B"
 
 		MaBox(11, 10, 18, LastCol()-1, "CADASTRO DE USUARIO")
-		@ 12, 11 say 'Usuario...........:' get cLogin    Pict "@!" Valid VerificarUsuario( cLogin ) .AND. !Empty( cLogin )
+		@ 12, 11 say 'Usuario...........:' get cLogin    Pict "@!" 			valid VerificarUsuario( cLogin ) .AND. !Empty( cLogin )
 		@ 13, 11 say 'Senha.............:' get cPassword pict "@S"
 		@ 14, 11 say 'Nome Completo.....:' get cNome     pict "@!"
 		@ 15, 11 say 'CEP...............:' get cCep      pict "99999-999" valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
 		@ 15, 41 say 'Cidade.:'            get cCida     pict "@!"
-		@ 15, 76 say 'UF.:'                get cEsta     pict "@!"
+		@ 15, 76 say 'UF.:'                get cEsta     pict "@!"  		valid UfErrado( @cEsta )
 		@ 16, 11 say 'Endere�o..........:' get cEnde     pict "@!"
 		@ 17, 11 say 'Bairro............:' get cBair     pict "@!"
 		read
@@ -366,6 +392,8 @@ if Empty( cBair )
 endif
 AreaAnt( Arq_Ant, Ind_Ant )
 Return( OK )
+
+
 
 Proc CepPrint()
 ***************
