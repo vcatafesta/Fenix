@@ -1096,7 +1096,7 @@ Proc ErrorSys()
 Function MacroErro(e)
 *********************
 	LOCAL cScreen	 := SaveScreen()
-	LOCAL cPrograma := ms_swap_extensao("sci", ".err")
+	LOCAL cPrograma := ms_swap_extensao("fenix", ".err")
    LOCAL cDbf
 	LOCAL cmens
 	LOCAL i

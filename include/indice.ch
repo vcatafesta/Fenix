@@ -21,3 +21,12 @@
 
 #define UF_UF       			1
 #define UF_NOME    			2
+
+#define REPRESEN_CODI 			 1
+#define REPRESEN_CODR 			 1
+#define REPRESEN_NREP 			 2
+#define REPRESEN_REPRESENTANTE 2
+#define REPRESEN_COMPLETO 		 3
+#define REPRESEN_NOME 		 	 3
+
+

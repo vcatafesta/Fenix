@@ -100,6 +100,35 @@ endif
 AreaAnt( Arq_Ant, Ind_Ant )
 Return( OK )
 
+function RepresentanteErrado( cRepre, cNome, nRow, nCol)
+********************************************************
+LOCAL aRotina			  := {{|| RepresentanteInclusao()}}
+LOCAL aRotinaAlteracao := {{|| RepresentanteInclusao(true)}}
+LOCAL Ind_Ant			  := IndexOrd()
+LOCAL Arq_Ant			  := Alias()
+
+Area("represen")
+Represen->(Order( REPRESEN_CODI ))
+if (Lastrec() = 0 )
+	ErrorBeep()
+	if Conf(" Pergunta: Nenhum REPRESENTANTE disponivel. Registrar ?")
+		RepresentanteInclusao()
+	endif
+	AreaAnt( Arq_Ant, Ind_Ant )
+	Return( FALSO )
+endif
+if Represen->(!DbSeek( cRepre ))
+	Represen->(Order( REPRESEN_NOME ))
+	Represen->(Escolhe( 03, 01, 22, "codr + '�' + nrep + '�' + Completo", "CODI REPRESENTANTE   NOME COMPLETO", aRotina,, aRotinaAlteracao ))
+endif
+cRepre := Represen->Codr
+cNome  := Represen->nRep
+if !isnil(nRow)
+	write( nRow, nCol, cNome)
+endif
+AreaAnt( Arq_Ant, Ind_Ant )
+Return( OK )
+
 function caduser()
 ******************
 	LOCAL GetList   := {}
@@ -135,10 +164,10 @@ function caduser()
 		@ 12, 11 say 'Usuario...........:' get cLogin    Pict "@!" 			valid VerificarUsuario(cLogin) .AND. !Empty(cLogin)
 		@ 13, 11 say 'Senha.............:' get cPassword pict "@S"
 		@ 14, 11 say 'Nome Completo.....:' get cNome     pict "@!"
-		@ 15, 11 say 'CEP...............:' get cCep      pict "99999-999" valid CepErrado(@cCep, @cCida, @cEsta, @cBair)
+		@ 15, 11 say 'CEP...............:' get cCep      pict "99999-999" valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
 		@ 15, 41 say 'Cidade.:'            get cCida     pict "@!"
 		@ 15, 76 say 'UF.:'                get cEsta     pict "@!"  		valid UfErrado(@cEsta)
-		@ 16, 11 say 'Endere�o..........:' get cEnde     pict "@!"
+		@ 16, 11 say 'Endereco..........:' get cEnde     pict "@!"
 		@ 17, 11 say 'Bairro............:' get cBair     pict "@!"
 		read
 		if lastKey() = ESC
@@ -340,6 +369,100 @@ WHILE OK
 	endif
 EndDo
 
+Proc RepresentanteInclusao( lAlteracao )
+****************************************
+LOCAL GetList		:= {}
+LOCAL cScreen		:= SaveScreen()
+LOCAL lModificar	:= FALSO
+LOCAL nOpcao		:= 0
+LOCAL dData
+LOCAL cCodi
+LOCAL cRepre
+LOCAL cCompleto
+LOCAL cString
+LOCAL cSwap
+LOCAL lSair
+
+if lAlteracao != NIL .AND. lAlteracao
+	lModificar := OK
+endif
+
+if !lModificar
+	if !PodeIncluir()
+		ResTela( cSCreen )
+		Return
+	endif
+endif
+
+Area("represen")
+Represen->(Order( REPRESEN_CODI ))
+WHILE OK
+	oMenu:Limpa()
+	if lModificar
+		cCodi	 		:= Represen->Codr
+		cRepre		:= Represen->nRep
+		cCompleto 	:= Represen->Completo
+		cString	 	:= "ALTERACAO DE REPRESENTANTE"
+	Else
+		cCodi	 		:= Represen->(Space(FieldLen(FieldPos("codr"))))
+		cRepre		:= Represen->(Space(FieldLen(FieldPos("nrep"))))
+		cCompleto 	:= Represen->(Space(FieldLen(FieldPos("completo"))))
+		cString 		:= "INCLUSAO DE NOVO REPRESENTANTE"
+	endif
+	cSwap := cCodi
+	lSair := FALSO
+	WHILE OK
+		MaBox( 06, 02, 12, 78, cString )
+		@ 08		 , 03 Say  "Novo Codi...,,:" Get cCodi     Pict "9999" valid RepresentanteCerto( @cCodi, lModificar, cSwap )
+		@ Row()+1 , 03 Say  "Representante.:" Get cRepre    Pict "@!"
+		@ Row()+1 , 03 Say  "Nome Completo.:" Get cCompleto Pict "@!"
+		Read
+		if LastKey() = ESC
+			lSair := OK
+			Exit
+		endif
+		if lModificar
+			nOpcao := Alerta("Pergunta: Voce Deseja ? ", {" Alterar", " Cancelar ", "Sair "})
+		Else
+			nOpcao := Alerta("Pergunta: Voce Deseja ? ", {" Incluir", " Alterar ", "Sair "})
+		endif
+		if nOpcao = 1
+			if lModificar
+				if Represen->(TravaReg())
+					Represen->Codr	  		:= cCodi
+					Represen->nrep	  		:= cRepre
+					Represen->Completo	:= cCompleto
+					Represen->(Libera())
+					lSair := OK
+					Exit
+				endif
+			Else
+				if Represen->(Incluiu())
+					Represen->Codr	  		:= cCodi
+					Represen->nrep	  		:= cRepre
+					Represen->Completo	:= cCompleto				
+					Represen->(Libera())
+					Exit
+				endif
+			endif
+
+		Elseif nOpcao = 2 // Alterar
+			Loop
+
+		Elseif nOpcao = 3 // Sair
+			lSair := OK
+			Exit
+
+		endif
+	EndDo
+	if lSair
+		ResTela( cScreen )
+		Exit
+
+	endif
+EndDo
+
+
 function CepCerto( cCep, lModificar, cSwap )
 ********************************************
 FIELD Cep, Cida, Bair
@@ -363,6 +486,34 @@ Cep->(Order( CEP_CEP ))
 if Cep->(DbSeek( cCep ))
 	ErrorBeep()
 	Alerta("Erro: Cep Ja Registrado. " + Cep->( AllTrim( Cida)))
+	Return( FALSO )
+endif
+Return( OK )
+
+
+function RepresentanteCerto( cCodi, lModificar, cSwap )
+*******************************************************
+FIELD Codr, nRep, Completo
+
+if LastKey() = UP
+	Return( OK )
+endif
+
+if lModificar != NIL .AND. lModificar
+	if cCodi == cSwap
+		Return( OK )
+	endif
+endif
+
+if Empty( cCodi )
+	ErrorBeep()
+	Alerta("Erro: Entrada invalida.")
+	Return( FALSO )
+endif
+Represen->(Order( REPRESEN_CODI ))
+if Represen->(DbSeek( cCodi ))
+	ErrorBeep()
+	Alerta("Erro: Representante ja Registrado. " + Represen->( AllTrim( nRep)))
 	Return( FALSO )
 endif
 Return( OK )
@@ -392,13 +543,9 @@ endif
 cCep	:= Cep->Cep
 cCida := Cep->Cida
 cEsta := Cep->Esta
-if Empty( cBair )
-	cBair := Cep->Bair
-endif
+cBair := Cep->Bair
 AreaAnt( Arq_Ant, Ind_Ant )
-Return( OK )
-
-
+return true
 
 Proc CepPrint()
 ***************
@@ -497,18 +644,18 @@ return(ResTela( cScreen ))
 
 function PickTipoRegime( cPick, cList, nRow, nCol )
 	LOCAL aList 	 := { "SIMPLES NACIONAL", "OUTROS REGIMES", "ISENTO"}
-	LOCAL aSituacao := { "1", "2", "3" }
+	LOCAL aSituacao := { 1, 2, 3 }
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL nChoice
 
-	if Ascan( aSituacao, cPick ) == 0
+	if (nchoice := Ascan( aSituacao, cPick )) == 0
 		MaBox( 11, 01, 14, 44, NIL, NIL, Roloc( Cor()) )
 		if (nChoice := AChoice( 12, 02, 13, 43, aList )) != 0
 			cPick := aSituacao[ nChoice ]
 		else
 			return false
 		endif
-	endif
+	endif		
 	cPick := aSituacao[ nChoice ]
 	cList := aList[ nChoice ]
 	resTela( cScreen )
@@ -516,7 +663,6 @@ function PickTipoRegime( cPick, cList, nRow, nCol )
 		write( nRow, nCol, cList)
 	endif	
 	return true
-	
 endef
 
 
@@ -526,7 +672,7 @@ function PickTipoCobranca( cPick, cList, nRow, nCol )
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL nChoice
 
-	if Ascan( aSituacao, cPick ) == 0
+	if (nChoice := Ascan( aSituacao, cPick )) == 0
 		MaBox( 11, 01, 14, 44, NIL, NIL, Roloc( Cor()) )
 		if (nChoice := AChoice( 12, 02, 13, 43, aList )) != 0
 			cPick := aSituacao[ nChoice ]
@@ -543,23 +689,27 @@ function PickTipoCobranca( cPick, cList, nRow, nCol )
 	return true
 endef
 
-function PickTipoContribuinte( cPick, cList )
+function PickTipoContribuinte( cPick, cList, nRow, nCol )
 	LOCAL aList 	 := { "CONTRIBUINTE ICMS", "CONTRIBUENTE ISENTO","NAO CONTRIBUINTE"}
-	LOCAL aSituacao := { "1", "2", "9" }
+	LOCAL aSituacao := { 1, 2, 9 }
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL nChoice
 
-	if Ascan( aSituacao, cPick ) != 0
-		cList := aList[ nChoice ]
-		return true
+	if (nChoice := Ascan( aSituacao, cPick )) == 0
+		MaBox( 11, 01, 15, 44, NIL, NIL, Roloc( Cor()) )
+		if (nChoice := AChoice( 12, 02, 14, 43, aList )) != 0
+			cPick := aSituacao[ nChoice ]
+		else
+			return false
+		endif
 	endif
-	MaBox( 11, 01, 15, 44, NIL, NIL, Roloc( Cor()) )
-	IF (nChoice := AChoice( 12, 02, 14, 43, aList )) != 0
-		cPick := aSituacao[ nChoice ]
-		cList := aList[ nChoice ]
-	EndIf
+	cPick := aSituacao[ nChoice ]
+	cList := aList[ nChoice ]
 	resTela( cScreen )
-	return false
+	if !isnil(nRow) .and. !isnil(nCol)
+		write( nRow, nCol, cList)
+	endif	
+	return true
 endef
 
 
@@ -569,7 +719,7 @@ function PickTipoPagamento( cPick, cList, nRow, nCol )
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL nChoice
 
-	if Ascan( aSituacao, cPick ) == 0
+	if (nChoice := Ascan( aSituacao, cPick )) == 0
 		MaBox( 11, 01, 17, 44, NIL, NIL, Roloc( Cor()) )
 		if (nChoice := AChoice( 12, 02, 16, 43, aList )) != 0
 			cPick := aSituacao[ nChoice ]
@@ -586,35 +736,54 @@ function PickTipoPagamento( cPick, cList, nRow, nCol )
 	return true
 endef
 
+function PickTipoCliente( cPick, cList, nRow, nCol )
+	LOCAL aList 	 := { "PESSOA FISICA","EMPRESA"}
+	LOCAL aSituacao := { "P", "E" }
+	LOCAL cScreen	 := SaveScreen()
+	LOCAL nChoice
+
+	if (nChoice := Ascan( aSituacao, cPick )) == 0
+		MaBox( 11, 01, 14, 44, NIL, NIL, Roloc( Cor()) )
+		if (nChoice := AChoice( 12, 02, 13, 43, aList )) != 0
+			cPick := aSituacao[ nChoice ]
+		else
+			return false
+		endif
+	endif
+	cPick := aSituacao[ nChoice ]
+	cList := aList[ nChoice ]
+	resTela( cScreen )
+	if !isnil(nRow) .and. !isnil(nCol)
+		write( nRow, nCol, space(13))
+		write( nRow, nCol, cList)
+	endif	
+	return true
+endef
+
+
 function ClientesInclusao()
 ***************************
 	LOCAL GetList := {}
 	LOCAL cScreen := SaveScreen()
 	
-	oMenu:Limpa()
-	FJ := ' '
-	while FJ = ' '
-		@ 10,04 say '* <P>essoa Fisica ou <E>mpresa:' get FJ pict '!' valid (FJ $ 'PE')
-		read
-		if LastKey() = ESC
-			if conf("Pergunta: Deseja sair")
-				return(restela(cScreen))
-			endif         
-		endif         
-		Fj := iif(FJ = 'P', "PESSOA FISICA", "EMPRESA")
-	
+	while true
+		oMenu:Limpa()
+		Area("cadcli")
+		Cadcli->(DbGoBottom())
+		cCodi 		:= Strzero(Cadcli->Id + 1, 4)
+		fj 			:= space(1)
 		DT				:=	date()
 		rdata			:=	date
 		rativo		:=	spac(1)
-		csit			:=	spac(13)
+		cSit			:=	spac(13)
 		rcliente		:=	spac(22)
 		Rrazao		:=	spac(40)
-		Render		:=	spac(40)
+		cEnde			:=	spac(40)
+		cLogra		:=	spac(40)
 		Rnroend		:=	spac(6)
 		Rcompl		:=	spac(20)
-		Rbairro		:=	spac(16)
-		Rcida			:=	spac(30)
-		Rest			:=	spac(2)
+		cCida			:=	spac(30)
+		cEsta			:=	spac(2)
 		Rcnpj			:=	spac(18)
 		Rinscr		:=	spac(15)
 		Rcpf			:=	spac(14)
@@ -628,7 +797,6 @@ function ClientesInclusao()
 		Rcontato		:=	spac(20)
 		Rvmin 		:=	 0
 		Rcnae			:=	spac(9)
-		Rindie		:=	 iif(FJ = 'E', Space(1), "9")
 		Rmail			:=	spac(60)
 		Rexml			:=	spac(43)
 		Rtpdesc		:=	spac(1)
@@ -639,17 +807,20 @@ function ClientesInclusao()
 		Rnf 			:=	 'S'
 		Rprnf 		:=	 'S'
 		Rreg_apur	:=	spac(1)
-		Rpais 		:=	"BRASIL"
+		cPais 		:=	"BRASIL"
 		Rdespacho 	:=	spac(40)
 		Robssep		:=	spac(62)
 		dsc         := 0
-		op_regap    := Space(1)
+		op_regap    := 0
 		desc_rega   :=	Space(0)
-		op_ctb      := Space(1)
-		cCodi       := space(4)
+		op_ctb      := 0
+		cRepre      := space(4)
+		cNomeRepre  := Space(0)
+		cBair 		:= space(16)
 		
-		Mabox(01,01, Maxrow(), maxcol(), "INCLUSAO DE CLIENTES")
-		@ Row()+1,02 say "Tipo Cliente........:" 	+ Space(1) + FJ
+		
+		Mabox(10,01, 37, maxcol(), "INCLUSAO DE CLIENTES")
+		@ Row()+1,02 say "<P>Fisica <E>mpresa.:"  get fj pict "!" valid PickTipoCliente(@fj, @cSit, Row(), Col()+1)
 		@ Row()+1,02 say "Codigo do Cliente...:" 	get cCodi pict "9999"
 		@ Row()+1,02 say "Data Cadastro:......." 	get date
 		@ Row()+1,02 say "Fantasia............:" 	get Rcliente pict '@!' valid lastkey() = UP .or. eval({|p1|
@@ -693,7 +864,15 @@ function ClientesInclusao()
 			}, Rcpf) 			
 			@ Row(),  50 say "RG...:" 	get Rinscrp pict '9999999999999999'
 		endif
-			
+		@ Row()+1,02 say "Cep.................:"  get cCep 	pict '99999-999' valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
+		@ Row(),  50 say "Cidade:"		            get cCida   pict "@!"  
+		@ Row(),  82 say "Estado:"                get cEsta   pict "@" valid UfErrado(@cEsta, nil, Row(), Col()+1)
+		@ Row()+1,02 say "Pais................:"  get cPais   pict "@!"	
+		@ Row()+1,02 say "Endereco............:" 	get cEnde 	pict "@!"
+		@ Row()+1,02 say "Logradouro..........:" 	get cLogra 	pict '@!'
+		@ Row(),  72 say "Numero:" 					get Rnroend pict '@!'
+		@ Row()+1,02 say "Complemento.........:" 	get Rcompl 	pict '@!'
+		@ Row(),  50 say "Bairro:" 					get cBair	pict '@!'
 		@ Row()+1,02 say "Contato.............:"	get Rcontato pict '@!'
 		@ Row(),  50 say "Fone :"  					get Rfone1   pict '(99)9999-99999'
 		@ Row(),  72 say "Fone1:"   					get Rfone2   pict '(99)9999-99999'
@@ -719,19 +898,25 @@ function ClientesInclusao()
 		@ Row()+1,02 say "Tipo de Cobranca....:" get dsc   	pict "9"    		valid PickTipoCobranca(@dsc, nil, Row(), Col()+1)
 		@ Row()+1,02 say "Regime de Apuracaoo.:" get op_regap pict "9" 			valid PickTipoRegime(@op_regap, nil, Row(), Col()+1)
 		@ Row(),  50 say "Tipo Pagamento......:" get rtpag    pict "9" 			valid PickTipoPagamento(@rtpag, nil, Row(), Col()+1)
-		@ Row()+1,42 say "Percentagem Desconto"  get Rdesc 	pict '999.9999'	valid lastkey() = UP .or. eval({|p1, p2|
+		@ Row()+1,02 say "Percentagem Desconto:" get Rdesc 	pict '999.9999'	valid lastkey() = UP .or. eval({|p1, p2, p3|
 		if p1 = 1
-			if rDesc > descto
+			if p2 > p3
 				errorbeep()
 				Alerta("ERRO: Percentual excede limite!")
 				return false
 			endif
 		endif
 		return true
-		}, dsc, rDesc)
+		}, dsc, rDesc, desc->desc)
 		@ Row(),  70 say "%"						                                        
-		@ Row()+1,02 say "Tipo Contribuinte...:" get op_ctb   valid PickTipoContribuinte(@op_ctb, @desc_rega)
-		@ Row(),  50 say "Representante :"
+		@ Row()+1,02 say "Tipo Contribuinte...:" get op_ctb pict "9"    valid PickTipoContribuinte(@op_ctb, @desc_rega, Row(), Col()+1)
+		@ Row()+1,02 say "Representante.......:" get cRepre pict "9999" valid RepresentanteErrado(@cRepre, @cNomeRepre, Row(), Col()+1)
+		@ Row()+1,02 say "NF..................:" get RNF
+		@ Row(),	 50 say "PRNF....:"   	   	  get Rprnf
+		@ Row()+1,02 say "Linha...............:" get Rlinha
+		@ Row(),  50 say "Despacho:" 			 	  get Rdespacho pict '@!'
+		@ Row()+1,02 say "Recebimento.........:" get Rhrrec
+		@ Row()+1,02 say "Observacao do Pedido:" get Robssep
 		read
 		if lastkey() = ESC
 			errorbeep()
@@ -741,114 +926,17 @@ function ClientesInclusao()
 		endif
 	
 		rTpdesc   := iif(dsc == 1, "C", "E")
-		cReg_apur := op_regap
-		
-		rps := 0
-		while rps =0
-			save scre to tl
-			@ 10,44 clea to 10,77
-			cdr := '    '
-			@ 14,53 get cdr pict '!999'
-			@ 15,53 say '<*>Pesquisa'
-			read
-			if cdr = '    '
-				nmrep :=''
-			else
-				if cdr = '*   '
-					psqrepre()
-					rps :=0
-					cdr := '    '
-				endif
-					
-				Area(oMenu:aDbfs[49])
-				loca for codr = cdr
-				if eof()
-					mddad()
-					rps := 0
-					loop
-				endif
-				stor codr to cdr
-				stor nrep to nmrep
-				rest scre from tl
-				@ 14,53 get cdr
-				@ 14,58 get nmrep
-				clea gets
-			endif
-			exit
-		enddo
-	
-		Area("cadcli")
-		@ 15,00 to 15,79
-		@ 16,02 say "Endereco"
-		@ 18,02 say "Lagradouro:" 	get Render 	pict '@!'
-		@ 18,55 say "Numero:" 		get Rnroend pict '!!!!!!'
-		@ 19,02 say "Complemento:" get Rcompl 	pict '@!'
-		@ 19,37 say "Bairro:" 		get Rbairro pict '@!'
-		@ 19,62 say "CEP:" 			get CCEP 	pict '99.999-999'
-		@ 20,02 say "País:"
-		@ 20,18 say "Estado:"
-		@ 20,39 say "Cidade:"
-		read
-		@ 20,08 get Rpais pict '@!'
-		clea gets
-		RE := '  '
-		while RE = '  '
-			ET := '1'
-			@ 20,26 get RE pict '!!'
-			read
-			if RE = '  '
-				mdanul()
-				rele all like r*
-				set confirm off
-				restscreen(00,00,23,79,TELA)
-				retu
-			endif
-				
-			Area(oMenu:aDbfs[40])
-			loca for estd = RE
-			if eof()
-				mdest()
-				RE := '  '
-				loop
-			endif
-
-			Rest := estd
-			@ 20,47 get Rcida pict '@!'
-			read
-			ET := '2'
-
-			Area(oMenu:aDbfs[40])
-			loca for cidade = Rcida .and. estd = RE
-			if eof()
-				mdest()
-				Rcida := spac(30)
-				@ 20,47 clea to 21,77
-				RE := '  '
-				loop
-			endi
-			exit
-		enddo
-		@ 21,12 say "NF:" 						get RNF
-		@ 21,19 say "PRNF:" 						get Rprnf
-		clea gets
-		@ 21,02 say "'Linha:" 					get Rlinha
-		@ 21,27 say "Despacho:" 				get Rdespacho pict '@!'
-		@ 22,02 say "Recebimento:" 			get Rhrrec
-		@ 23,02 say "Observacao do Pedido:" get Robssep
-		read
-	
 		
 		if conf("INFO: Deseja Registrar o Cadastro?")
 			Area("cadcli")
-			Cadcli->(DbGoBottom())
-			cCodi := Strzero(Cadcli->Id + 1, 4)
 			if cadcli->(incluiu())
 				repl cliente with rcliente
 				repl razao with Rrazao
-				repl ender with Render
-				repl bairro with Rbairro
-				repl cida with Rcida
-				repl est with Rest
+				repl ender 	with cEnde
+				repl ender2 with cLogra
+				repl bairro with cBair
+				repl cida with cCida
+				repl est with cEsta
 				repl cnpj with Rcnpj
 				repl cpf with Rcpf
 				repl inscr with Rinscr
@@ -867,33 +955,31 @@ function ClientesInclusao()
 				repl Ativo with 'A'
 				repl nroend with Rnroend
 				repl compl with Rcompl
-				repl paiis with Rpais
+				repl paiis with cPais
 				repl linha with Rlinha
 				repl exml with Rexml
 				repl usuario with logfan
-				repl indie with Rindie
 				repl nf with Rnf
 				repl prnf with Rprnf
 				repl hrrec with Rhrrec
 				repl data with DT
-				repl sit with FJ
+				repl sit with cSit
 				repl codc with cCodi
 				repl tpag with Rtpag
 				repl Vmin with Rvmin
 				repl despacho with Rdespacho
-				repl reg_apur with Creg_apur
-				repl indie with op_ctb
+				repl reg_apur with strzero(op_regap,1)
+				repl indie with strzero(op_ctb)
 				repl cnae with Rcnae
-				repl codrp with cdr
-				repl nrepre with nmrep
+				repl codrp with cRepre
+				repl nrepre with cNomeRepre
 				repl obssep with Robssep			
 			endif
+			Cadcli->(Libera())
 		endif
+		loop
 	enddo
-	CadCli->(Libera())
-	return(restela(cScreen))
-
-
+	
 function achaEsta(cEsta)
 ************************
    CadCli->(Order( CADCLI_ESTA ))

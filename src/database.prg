@@ -976,20 +976,61 @@ Aadd( aArquivos, {"abcprod.dbf",;
           {'NUM', 'N', 5, 0 },;
           {'DESC', 'C', 35, 0 };
           }})
-Aadd( aArquivos, {"cheq.dbf",;
+			 
+Aadd( aArquivos, {"cheq.dbf",; 
           {;
-          {'NUM', 'N', 5, 0 },;
-          {'DESC', 'C', 35, 0 };
+          {'CODCL', 'C', 4, 0 },;
+          {'NOME', 'C', 20, 0 },;
+          {'DATAR', 'D', 8, 0 },;
+          {'BANCO', 'C', 3, 0 },;
+          {'AGENCIA', 'C', 6, 0 },;
+          {'CONTA', 'C', 14, 0 },;
+          {'NRO', 'C', 6, 0 },;
+          {'DIG', 'N', 1, 0 },;
+          {'DEBITO', 'C', 1, 0 },;
+          {'VL', 'N', 10, 2 },;
+          {'DINHEIRO', 'N', 10, 2 },;
+          {'BOLETO', 'N', 10, 2 },;
+          {'DINH_FAT', 'N', 10, 2 },;
+          {'DATAP', 'D', 8, 0 },;
+          {'DATAREP', 'D', 8, 0 },;
+          {'CODFOR', 'C', 4, 0 },;
+          {'FORN', 'C', 20, 0 },;
+          {'DGT', 'N', 2, 0 },;
+          {'NFAT', 'C', 10, 0 },;
+          {'DEBT', 'C', 1, 0 },;
+          {'NROBX', 'C', 12, 0 },;
+          {'USUREG', 'C', 4, 0 },;
+          {'TERM', 'C', 2, 0 },;
+          {'STATUS', 'C', 10, 0 };
           }})
-Aadd( aArquivos, {"demovi.dbf",;
+Aadd( aArquivos, {"demovi.dbf",; 
           {;
-          {'NUM', 'N', 5, 0 },;
-          {'DESC', 'C', 35, 0 };
+          {'PROD', 'C', 15, 0 },;
+          {'CDP', 'C', 2, 0 },;
+          {'IT1', 'C', 15, 0 },;
+          {'TPIT1', 'C', 3, 0 },;
+          {'QDE1', 'N', 6, 3 },;
+          {'IT2', 'C', 15, 0 },;
+          {'TPIT2', 'C', 3, 0 },;
+          {'QDE2', 'N', 6, 3 },;
+          {'IT3', 'C', 15, 0 },;
+          {'TPIT3', 'C', 3, 0 },;
+          {'QDE3', 'N', 6, 3 },;
+          {'IT4', 'C', 15, 0 },;
+          {'TPIT4', 'C', 3, 0 },;
+          {'QDE4', 'N', 6, 3 },;
+          {'IT5', 'C', 15, 0 },;
+          {'TPIT5', 'C', 3, 0 },;
+          {'QDE5', 'N', 6, 3 },;
+          {'MO', 'N', 5, 2 };
           }})
-Aadd( aArquivos, {"tblp.dbf",;
+ Aadd( aArquivos, {"tblp.dbf",; 
           {;
-          {'NUM', 'N', 5, 0 },;
-          {'DESC', 'C', 35, 0 };
+          {'CODP', 'C', 5, 0 },;
+          {'PRODUTO', 'C', 30, 0 },;
+          {'EMBAL', 'C', 15, 0 },;
+          {'PRECO', 'N', 5, 2 };
           }})
 Aadd( aArquivos, {"clafisc.dbf",;
           {;
@@ -1850,6 +1891,7 @@ Aadd( aArquivos, {"clafisc.dbf",;
           }})
  Aadd( aArquivos, {"represen.dbf",;
           {;
+          {'ID',   '+', 8, 0 },;
           {'DATA', 'D', 8, 0 },;
           {'CODR', 'C', 4, 0 },;
           {'NREP', 'C', 20, 0 },;
@@ -2327,7 +2369,8 @@ def ArrayIndices()
 	Aadd( aArquivos, { "cep",       "cep1","cep2"})
 	Aadd( aArquivos, { "cadcli",    "cadcli1","cadcli2","cadcli3","cadcli4","cadcli5","cadcli6","cadcli7","cadcli8"})
 	Aadd( aArquivos, { "printer",   "printer1","printer2"})
-	Aadd( aArquivos, { "uf",        "uf1","uf"})
+	Aadd( aArquivos, { "uf",        "uf1","uf2"})
+	Aadd( aArquivos, { "represen",  "represen1","represen2","represen3"})
 	return( aArquivos )
 endef
 
@@ -2444,6 +2487,7 @@ def CriaIndice( cDbf )
 	Aadd( aProc, {"cadcli",    {||Re_CadCli()}})
 	Aadd( aProc, {"printer",   {||Re_Printer()}})
 	Aadd( aProc, {"uf",        {||Re_Uf()}})
+	Aadd( aProc, {"represen",  {||Re_Represen()}})
 
 	nTodos := Len( aProc )
 	//----------------------------------------------------------------//
@@ -2557,3 +2601,14 @@ Proc Re_Uf()
 	oIndice:AddNtx("Nome", "UF2", "UF" )
 	oIndice:CriaNtx()
 	Return
+	
+Proc Re_Represen()
+*****************
+	oIndice:Limpa()
+	oIndice:DbfNtx("represen")
+	oIndice:PackDbf("represen")
+	oIndice:AddNtx("codr",     "REPRESEN1", "REPRESEN" )
+	oIndice:AddNtx("nrep", 	   "REPRESEN2", "REPRESEN" )
+	oIndice:AddNtx("completo", "REPRESEN3", "REPRESEN" )
+	oIndice:CriaNtx()
+	Return	
