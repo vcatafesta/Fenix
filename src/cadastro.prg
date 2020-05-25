@@ -495,31 +495,13 @@ PrintOff()
 return(ResTela( cScreen ))
 
 
-function PickTipoRegime( cPick )
+function PickTipoRegime( cPick, cList, nRow, nCol )
 	LOCAL aList 	 := { "SIMPLES NACIONAL", "OUTROS REGIMES", "ISENTO"}
 	LOCAL aSituacao := { "1", "2", "3" }
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL nChoice
 
-	if Ascan( aSituacao, cPick ) != 0
-		Return( OK )
-	endif
-	MaBox( 11, 01, 16, 44, NIL, NIL, Roloc( Cor()) )
-	IF (nChoice := AChoice( 12, 02, 15, 43, aList )) != 0
-		cPick := aSituacao[ nChoice ]
-	EndIf
-	ResTela( cScreen )
-	Return( OK )
-endef
-
-
-function PickTipoCobranca( cPick, cList, nRow, nCol )
-	LOCAL aList 	 := { "COMUM", "ESPECIAL"}
-	LOCAL aSituacao := { 1, 2 }
-	LOCAL cScreen	 := SaveScreen()
-	LOCAL nChoice
-
-	if !Ascan( aSituacao, cPick ) != 0
+	if Ascan( aSituacao, cPick ) == 0
 		MaBox( 11, 01, 14, 44, NIL, NIL, Roloc( Cor()) )
 		if (nChoice := AChoice( 12, 02, 13, 43, aList )) != 0
 			cPick := aSituacao[ nChoice ]
@@ -529,10 +511,35 @@ function PickTipoCobranca( cPick, cList, nRow, nCol )
 	endif
 	cPick := aSituacao[ nChoice ]
 	cList := aList[ nChoice ]
-	if nRow != nil .and. nCol != nil
+	resTela( cScreen )
+	if !isnil(nRow) .and. !isnil(nCol)
 		write( nRow, nCol, cList)
 	endif	
+	return true
+	
+endef
+
+
+function PickTipoCobranca( cPick, cList, nRow, nCol )
+	LOCAL aList 	 := { "COMUM", "ESPECIAL"}
+	LOCAL aSituacao := { 1, 2 }
+	LOCAL cScreen	 := SaveScreen()
+	LOCAL nChoice
+
+	if Ascan( aSituacao, cPick ) == 0
+		MaBox( 11, 01, 14, 44, NIL, NIL, Roloc( Cor()) )
+		if (nChoice := AChoice( 12, 02, 13, 43, aList )) != 0
+			cPick := aSituacao[ nChoice ]
+		else
+			return false
+		endif
+	endif
+	cPick := aSituacao[ nChoice ]
+	cList := aList[ nChoice ]
 	resTela( cScreen )
+	if !isnil(nRow) .and. !isnil(nCol)
+		write( nRow, nCol, cList)
+	endif	
 	return true
 endef
 
@@ -556,23 +563,27 @@ function PickTipoContribuinte( cPick, cList )
 endef
 
 
-function PickTipoPagamento( cPick, cList )
+function PickTipoPagamento( cPick, cList, nRow, nCol )
 	LOCAL aList 	 := { "BOLETO","DINHEIRO","CHEQUE","DEPOSITO","NENHUM"}
 	LOCAL aSituacao := { 1, 2, 3 , 4, 5 }
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL nChoice
 
-	if Ascan( aSituacao, cPick ) != 0
-		cList := aList[ nChoice ]
-		return true
+	if Ascan( aSituacao, cPick ) == 0
+		MaBox( 11, 01, 17, 44, NIL, NIL, Roloc( Cor()) )
+		if (nChoice := AChoice( 12, 02, 16, 43, aList )) != 0
+			cPick := aSituacao[ nChoice ]
+		else
+			return false
+		endif
 	endif
-	MaBox( 11, 01, 15, 44, NIL, NIL, Roloc( Cor()) )
-	IF (nChoice := AChoice( 12, 02, 14, 43, aList )) != 0
-		cPick := aSituacao[ nChoice ]
-		cList := aList[ nChoice ]
-	EndIf
+	cPick := aSituacao[ nChoice ]
+	cList := aList[ nChoice ]
 	resTela( cScreen )
-	return false
+	if !isnil(nRow) .and. !isnil(nCol)
+		write( nRow, nCol, cList)
+	endif	
+	return true
 endef
 
 function ClientesInclusao()
@@ -635,9 +646,11 @@ function ClientesInclusao()
 		op_regap    := Space(1)
 		desc_rega   :=	Space(0)
 		op_ctb      := Space(1)
+		cCodi       := space(4)
 		
 		Mabox(01,01, Maxrow(), maxcol(), "INCLUSAO DE CLIENTES")
-		@ Row()+1,02 say "Codigo do Cliente...:" 	get FJ
+		@ Row()+1,02 say "Tipo Cliente........:" 	+ Space(1) + FJ
+		@ Row()+1,02 say "Codigo do Cliente...:" 	get cCodi pict "9999"
 		@ Row()+1,02 say "Data Cadastro:......." 	get date
 		@ Row()+1,02 say "Fantasia............:" 	get Rcliente pict '@!' valid lastkey() = UP .or. eval({|p1|
 		if empty(p1)
@@ -658,7 +671,7 @@ function ClientesInclusao()
 		}, rRazao)
 
 		if FJ = 'E'
-			@ Row()+1,02 say "C.N.P.J..........:" 	get Rcnpj   pict '99.999.999/9999-99' valid lastkey() = UP .or. eval({|p1|
+			@ Row()+1,02 say "C.N.P.J.............:" 	get Rcnpj   pict '99.999.999/9999-99' valid lastkey() = UP .or. eval({|p1|
 			Cadcli->(Order(CADCLI_CNPJ))
 			if CadCli->(DbSeek(p1))
 				errorbeep()
@@ -667,9 +680,9 @@ function ClientesInclusao()
 			endif
 			return true
 			}, Rcnpj) 			
-			@ Row(),  42 say "'Inscr.Est.......:" 	get Rinscr  pict '9999999999999999'
+			@ Row(),  50 say "'Inscr.Est :" 	get Rinscr  pict '9999999999999999'
 		else
-			@ Row()+1,02 say 'CPF..............:' 	get RCPF    pict '999.999.999-99' valid lastKey() = UP .or. eval({|p1|
+			@ Row()+1,02 say "CPF.................:" 	get RCPF    pict '999.999.999-99' valid lastKey() = UP .or. eval({|p1|
 			Cadcli->(Order(CADCLI_CPF))
 			if CadCli->(DbSeek(p1))
 				errorbeep()
@@ -678,17 +691,17 @@ function ClientesInclusao()
 			endif
 			return true
 			}, Rcpf) 			
-			@ Row(),  42 say 'RG:..............:' 	get Rinscrp pict '9999999999999999'
+			@ Row(),  50 say "RG...:" 	get Rinscrp pict '9999999999999999'
 		endif
 			
-		@ Row()+1,02 say "Contato.........:"		get Rcontato pict '@!'
-		@ Row(),  35 say "Fone............:"  		get Rfone1   pict '(99)9999-99999'
-		@ Row(),  56 say "Fone1:"   					get Rfone2   pict '(99)9999-99999'
-		@ Row()+1,02 say "E-mail.............:"  	get Rmail
-		@ Row()+1,02 say "Prazo:"   					get Rprazo   pict '999'
-		@ Row(),  12 say "/"
-		@ Row(),  17 say "Dias."
-		@ Row(),  13                					get Rprazo2  pict '999' valid lastkey() = UP .or. eval({|p1, p2|
+		@ Row()+1,02 say "Contato.............:"	get Rcontato pict '@!'
+		@ Row(),  50 say "Fone :"  					get Rfone1   pict '(99)9999-99999'
+		@ Row(),  72 say "Fone1:"   					get Rfone2   pict '(99)9999-99999'
+		@ Row()+1,02 say "E-mail..............:"  get Rmail
+		@ Row()+1,02 say "Prazo...............:"  get Rprazo   pict '999'
+		@ Row(),  27 say "/"
+		@ Row(),  32 say "Dias."
+		@ Row(),  28                					get Rprazo2  pict '999' valid lastkey() = UP .or. eval({|p1, p2|
 		if p1 <> 0 
 			if p1 > p2
 				return true
@@ -700,12 +713,12 @@ function ClientesInclusao()
 		endif
 		return true
 		}, rPrazo2, rPrazo)
-		@ Row(),  50 say "Cnae................:" get Rcnae 	pict "9999-9/99"
+		@ Row(),  50 say "Cnae :" 					  get Rcnae 	pict "9999-9/99"
+		@ Row()+1,02 say "Pedido Minimo.......:" get Rvmin 	pict "9,999.99"
 		@ Row()+1,02 say "Obs.................:" get Robs 		pict "@!"
-		@ Row(),  54 say "Pedido Minimo.......:" get Rvmin 	pict "9,999.99"
 		@ Row()+1,02 say "Tipo de Cobranca....:" get dsc   	pict "9"    		valid PickTipoCobranca(@dsc, nil, Row(), Col()+1)
-		@ Row()+1,02 say "Regime de Apuracaoo.:" get op_regap pict "9" 			valid PickTipoRegime(@op_regap)
-		@ Row(),  50 say "Tipo Pagamento......:" get rtpag    pict "9" 			valid PickTipoPagamento(@rtpag)
+		@ Row()+1,02 say "Regime de Apuracaoo.:" get op_regap pict "9" 			valid PickTipoRegime(@op_regap, nil, Row(), Col()+1)
+		@ Row(),  50 say "Tipo Pagamento......:" get rtpag    pict "9" 			valid PickTipoPagamento(@rtpag, nil, Row(), Col()+1)
 		@ Row()+1,42 say "Percentagem Desconto"  get Rdesc 	pict '999.9999'	valid lastkey() = UP .or. eval({|p1, p2|
 		if p1 = 1
 			if rDesc > descto
