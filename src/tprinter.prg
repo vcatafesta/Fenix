@@ -729,11 +729,10 @@ Function TPrinterNew()
 *********************
 return( TPrinter():New())
 
-
 #ifdef __PLATFORM__WINDOWS
 	function cupsPrintFile()
 		return nil
 
 	function cupsGetDests()
-		return nil
+		return {}
 #endif		

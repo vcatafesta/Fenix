@@ -31,7 +31,7 @@ init def Main(...)
 	public oIni		  	:= TIniNew("fenix.ini")
 	public oIndice	  	:= TIndiceNew()
    public oPrinter   := TPrinterNew()
-
+   
 	hb_langSelect( "pt" )
 	oMenu:Limpa()
   	SetaAmbiente()
@@ -82,11 +82,17 @@ init def Main(...)
    Date := Date()
    Dif  := Date()
    SetColor("")
-
-	oMenu:Limpa()
-   oPull := Monta_Menu()
-	while MenuModal( oPull, 01, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
-   return( nil )
+	oPull := Monta_Menu()
+	while true
+		BEGIN Sequence
+			oMenu:Limpa()
+			while MenuModal( oPull, 01, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo			
+		Recover
+			oPull := Monta_Menu()
+			//FechaTudo()
+		FINALLY
+	enddo	
+	Encerra()
 endef
 
 def Monta_Menu()
@@ -97,6 +103,17 @@ def Monta_Menu()
 
    oTopBar           := TopBar( 01,00 , MaxCol())
    oTopBar:ColorSpec := cCorBar
+
+*----------
+*SAIR
+*----------	
+	oPopUp            := PopUp()
+   oPopUp :ColorSpec := cCorItem
+   oTopBar:AddItem(MenuItem( "&Sair", oPopUp,,))
+	   oPopUp2           := PopUp()
+      oPopUp2:ColorSpec := cCorItem
+      oItem             := MenuItem( "&Encerrar execucao do sistema", {|| Encerra(@nResult) } , K_ALT_F4,, 999)
+      oPopUp:AddItem( oItem )
 
 *=============================================================================================================================*
 * CADASTROS
@@ -732,7 +749,7 @@ def Monta_Menu()
 
       oPopUp2 := PopUp()
       oPopUp2 :ColorSpec:= cCorItem
-      oItem := MenuItem( "&Cor fundo", {|| SetaCorFundo(3) })
+      oItem := MenuItem( "&Cor fundo", {|| SetaCor(3) })
       oPopUp:AddItem( oItem )
 
       oPopUp2 := PopUp()
@@ -742,38 +759,66 @@ def Monta_Menu()
 		
 		oPopUp2 := PopUp()
       oPopUp2 :ColorSpec:= cCorItem
-      oItem := MenuItem( "&Cor Alerta", {|| SetaCorFundo(8) })
+      oItem := MenuItem( "&Cor Alerta", {|| SetaCor(8) })
       oPopUp:AddItem( oItem )
 		
 		oPopUp2 := PopUp()
       oPopUp2 :ColorSpec:= cCorItem
-      oItem := MenuItem( "&Cor Cabecalho", {|| SetaCorFundo(2) })
+      oItem := MenuItem( "&Cor Cabecalho", {|| SetaCor(2) })
+      oPopUp:AddItem( oItem )
+
+// Manutencao
+	oPopUp := PopUp()
+   oPopUp :ColorSpec:= cCorItem
+   oTopBar:AddItem( MenuItem ( "&Manutencao", oPopUp, ,) )
+
+      oPopUp2 := PopUp()
+      oPopUp2 :ColorSpec:= cCorItem
+      oItem := MenuItem( "&Reindexar banco de dados", {|| xReindexar()})
       oPopUp:AddItem( oItem )
 
 *----------
-*SAIR
-*----------
+*SOBRE
+*----------	
 	oPopUp  := PopUp()
    oPopUp :ColorSpec:= cCorItem
-   oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
-   //Rodape()
+   oTopBar:AddItem(MenuItem( "&Sobre", oPopUp,,))
+	
+	   oPopUp2 := PopUp()
+      oPopUp2 :ColorSpec:= cCorItem
+      oItem := MenuItem( "&Sobre o sistema", {|| xInfo() })
+      oPopUp:AddItem( oItem )
+	
+	
    return ( oTopBar )
 endef
 
-def SetaCorFundo(nCor)
-***********************
+def xReindexar()
+	LOCAL cScreen := SaveScreen()
+	oMenu:Limpa()
+	if MenuIndice()
+		CriaIndice()
+		UsaArquivo()
+	endif
+	return(restela(cScreen))	
+endef	
+
+def SetaCor(nCor)
+*****************
 	oMenu:Limpa()
 	oMenu:Setacor(nCor)
 	SalvaMem()
 	oMenu:Limpa()
-	return nil
+	break
 endef
 
 def xSetaPano()
 ********************
+	oMenu:Limpa()
 	oMenu:SetaPano()
 	SalvaMem()
-	return nil
+	oMenu:Limpa()
+	break
 endef
 
 def Rodape()
@@ -1565,3 +1610,143 @@ def MacroErro(e)
 	Break
 	Return .T.
 endef
+
+def xinfo()
+	oMenu:Limpa()
+	oMenu:CorCabec := Roloc( oMenu:CorCabec )
+	Info(2)
+endef
+	
+def Info(nRow, lInkey)
+*----------------------*
+	LOCAL cScreen	  := SaveScreen( )
+	LOCAL Drive 	  := Curdrive()
+	LOCAL cDiretorio := FCurdir()
+	LOCAL nMaxRow	  := MaxRow()
+	LOCAL nMaxCol	  := MaxCol()-3
+	LOCAL cSistema   := StrTran( oMenu:StatusSup, "MENU PRINCIPAL-","")
+	LOCAL nRamLivre  := Memory(0)
+   LOCAL aPrinter   := cupsGetDests()   
+   LOCAL aMenu      := {}
+   LOCAL nPr
+	LOCAL nColor
+	LOCAL Handle
+	LOCAL xMicrobras
+	LOCAL xEndereco
+	LOCAL xTelefone
+	LOCAL xCidade
+
+	IfNil(nRow, 2)
+	FChDir( oAmbiente:xRoot )	
+	
+	xMicrobras := ""
+	xEndereco  := ""
+	xTelefone  := ""
+	xCidade	  := ""
+	CenturyOn()
+
+   oMenu:Limpa()
+	oAmbiente:xProgramador := xMicrobras
+	nRow                   := (nMaxRow-20)/2
+	nSetColor( oMenu:CorMenu )
+
+	MaBox( nRow,	 02, nRow+24, (nMaxCol+1))   
+	Print( nRow+01, 03, "") ; printf(Padc(cSistema,   nMaxCol-2), AscanCor(clBrightGreen))
+	Print( nRow+02, 03, "") ; printf(Padc(xMicrobras, nMaxCol-2), AscanCor(clBrightRed))
+	Print( nRow+03, 03, "") ; printf(Padc(xEndereco,  nMaxCol-2), AscanCor(clBrightBlue))
+	Print( nRow+04, 03, "") ; printf(Padc(xTelefone,  nMaxCol-2), AscanCor(clBrightCyan))
+	
+	aHost := GetIp()
+	Print( nRow+06, 03, "S. Operacional : ") ; printf(Os(), AscanCor(clBrightYellow))
+	Print( nRow+07, 03, "  Data Sistema : ") ; printf(Date(), AscanCor(clBrightGreen))
+	Print( nRow+08, 03, "     Diretorio : ") ; printf(AllTrim(oAmbiente:xRoot), AscanCor(clBrightGreen))      
+	Print( nRow+09, 03, "  Espaco Total : ") ; printf(AllTrim(Tran( FT_DskSize(Drive)/1024/1024/1024, "999,999")), AscanCor(clBrightCyan)) ; printf( " GB", AscanCor(clBrightGreen))
+	Print( nRow+10, 03, "   Memoria RAM : ") ; printf(hb_ntos(Memory(HB_MEM_BLOCK)/1024), AscanCor(clBrightCyan)) ; printf( " GB", AscanCor(clBrightGreen))
+	Print( nRow+11, 03, "   Mem Virtual : ") ; printf(hb_ntos(Memory(HB_MEM_VM)/1024),     AscanCor(clBrightCyan)) ; printf( " GB", AscanCor(clBrightGreen))
+	Print( nRow+12, 03, "  Max Used Mem : ") ; printf(hb_ntos(Memory(HB_MEM_USEDMAX)/1024),     AscanCor(clBrightCyan)) ; printf( " KB", AscanCor(clBrightGreen))
+	Print( nRow+13, 03, "  Arqs Abertos : ") //; printf(AllTrim(Str(NextHandle()-6,3)), AscanCor(clBrightGreen))
+	Print( nRow+14, 03, "      Ano 2000 : ") ; printf(IF( oAmbiente:Ano2000, "Habilitado", "Desabilitado"), AscanCor(IF( oAmbiente:Ano2000,   clBrightGreen,clBrightRed)))
+	//Print( nRow+15, 03, "    Base Dados : ") ; printf(IF( oProtege:Protegido,"Protegida",  "DesProtegida"), AscanCor(IF( oProtege:Protegido, clBrightGreen,clBrightRed))) 
+	//Print( nRow+16, 03, " Print Spooler : " /*+ IF( IsQueue(), "Sim","Nao")*/)
+	Print( nRow+17, 03, "Versao Harbour : ") ; printf(hb_Version(HB_VERSION_HARBOUR ), AscanCor(clBrightCyan))
+	Print( nRow+18, 03, "  Compiler C++ : ") ; printf(hb_Version(HB_VERSION_COMPILER), AscanCor(clBrightCyan))
+	//Print( nRow+19, 03, "   Versao Leto : ") ; printf(LETO_GETSERVERVERSION(), AscanCor(clBrightCyan))
+	//Print( nRow+20, 03, "       Leto IP : ") ; printf(LETO_GETCURRENTCONNECTION(), AscanCor(clBrightCyan))
+	Print( nRow+21, 03, "      IP Local : ") ; printf(StrGetIp(), AscanCor(clBrightCyan))
+	
+	Print( nRow+06, ((nMaxCol/2)-2), "   Nome Estacao : ") ; printf(AllTrim(Left(NetName(),20)), AscanCor(clBrightYellow))
+	Print( nRow+07, ((nMaxCol/2)-2), "  Horas Sistema : " + Time())	
+   Print( nRow+08, ((nMaxCol/2)-2), " Drive Corrente : ") ; printf(AllTrim(Drive), AscanCor(clBrightGreen))   	
+	Print( nRow+09, ((nMaxCol/2)-2), "  Espaco Livre  : ") ; printf(AllTrim(Tran(ft_DskFree()/1024/1024/1024, "999,999")), AscanCor(clBrightCyan)) ; printf( " GB", AscanCor(clBrightGreen))
+	Print( nRow+10, ((nMaxCol/2)-2), "  Mem RAM Livre : " + AllTrim(Str(nRamLivre/1024) + " GB"))
+	IF nRamLivre < 100 // Pouca memoria
+	Print( nRow+10, ((nMaxCol/2)-2), "  Mem RAM Livre : " + AllTrim(Str(nRamLivre/1024) + " GB"), Roloc(Cor()))
+	EndIF
+	Print( nRow+11, ((nMaxCol/2)-2), "  Memoria usada : " + hb_ntos(Memory(HB_MEM_USED)) + " KB")
+	Print( nRow+12, ((nMaxCol/2)-2), "  Path Corrente : " + AllTrim( oAmbiente:xBase ))
+	Print( nRow+13, ((nMaxCol/2)-2), "  Limite Acesso : ") ; printf( oAmbiente:xDataCodigo, AscanCor(clBrightRed))
+	Print( nRow+14, ((nMaxCol/2)-2), "   MultiUsuario : ") ; printf(IF( MULTI, "Habilitado", "Desabilitado"), AscanCor(IF( MULTI, clBrightGreen,clBrightRed)))
+	Print( nRow+15, ((nMaxCol/2)-2), "     Portas LPT : " + IF( FisPrinter("LPT1"), "#1 ","NIL,") + IF( FisPrinter("LPT2"), "#2 ","NIL,") + IF( FisPrinter("LPT3"), "#3 ","NIL,"))
+	Print( nRow+16, ((nMaxCol/2)-2), "     Portas COM : " + IF( FisPrinter("COM1"), "#1 ","NIL,") + IF( FisPrinter("COM2"), "#2 ","NIL,") + IF( FisPrinter("COM3"), "#3 ","NIL,"))
+
+   nRow1 := 16   
+   /*
+	FOR EACH nPr IN aPrinter
+      nRow1++            
+      Print( nRow+nRow1, ((nMaxCol/2)-2), "  Porta Cups #" + TrimStr(nPr:__enumIndex()) + " : " + nPr)
+   NEXT                         
+   */
+   
+	IF oAmbiente:Visual
+	  Print( nRow+22, 03, Padc( "Software Licenciado para", nMaxCol-7), AscanCor(clBrightGreen))
+	  Print( nRow+23, 03, Padc( XNOMEFIR, nMaxCol-7 ), AscanCor(clBrightRed))
+	Else
+	  Print( nRow+22, 03, Padc( "Software Licenciado para" , nMaxCol-2), AscanCor(clBrightGreen))
+	  Print( nRow+23, 03, Padc( XNOMEFIR, nMaxCol-2 ), AscanCor(clBrightRed))
+	EndIF	
+		
+	Print( ++nRow, (nMaxCol-30), "< Memoria >", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_CHAR       : ") ; printf(hb_ntos(Memory(HB_MEM_CHAR       )/1024) + " GB", AscanCor(clBrightRed))
+	Print( ++nRow, (nMaxCol-30), "  MEM_BLOCK      : ") ; printf(hb_ntos(Memory(HB_MEM_BLOCK      )/1024) + " GB", AscanCor(clBrightRed))
+	Print( ++nRow, (nMaxCol-30), "  MEM_RUN        : ") ; printf(hb_ntos(Memory(HB_MEM_RUN        )/1024) + " GB", AscanCor(clBrightRed))
+	++nRow                                                                                 
+	Print( ++nRow, (nMaxCol-30), "  MEM_VM         : ") ; printf(hb_ntos(Memory(HB_MEM_VM         )/1024) + " GB", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_EMS        : ") ; printf(hb_ntos(Memory(HB_MEM_EMS        )/1024) + " GB", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_FM         : ") ; printf(hb_ntos(Memory(HB_MEM_FM         )/1024) + " GB", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_FMSEGS     : ") ; printf(hb_ntos(Memory(HB_MEM_FMSEGS     )/1024) + " GB", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_SWAP       : ") ; printf(hb_ntos(Memory(HB_MEM_SWAP       )/1024) + " GB", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_CONV       : ") ; printf(hb_ntos(Memory(HB_MEM_CONV       )/1024) + " GB", AscanCor(clBrightCyan))
+	Print( ++nRow, (nMaxCol-30), "  MEM_EMSUSED    : ") ; printf(hb_ntos(Memory(HB_MEM_EMSUSED    )/1024) + " GB", AscanCor(clBrightCyan))
+	++nRow
+	Print( ++nRow, (nMaxCol-30), "  MEM_USED       : ") ; printf(hb_ntos(Memory(HB_MEM_USED       )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_USEDMAX    : ") ; printf(hb_ntos(Memory(HB_MEM_USEDMAX    )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_STACKITEMS : ") ; printf(hb_ntos(Memory(HB_MEM_STACKITEMS )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_STACK      : ") ; printf(hb_ntos(Memory(HB_MEM_STACK      )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_STACK_TOP  : ") ; printf(hb_ntos(Memory(HB_MEM_STACK_TOP  )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_BLOCKS     : ") ; printf(hb_ntos(Memory(HB_MEM_BLOCKS     )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_STATISTICS : ") ; printf(hb_ntos(Memory(HB_MEM_STATISTICS )) + " B", AscanCor(clBrightGreen))
+	Print( ++nRow, (nMaxCol-30), "  MEM_CANLIMIT   : ") ; printf(hb_ntos(Memory(HB_MEM_CANLIMIT   )) + " B", AscanCor(clBrightGreen))
+	CenturyOff()
+	IF lInkey = NIL
+		SetCursor(0)
+		WaitKey(0)
+	EndIF
+	FChDir( cDiretorio )
+	break
+endef
+
+function StrGetIp()
+*--------------*
+	LOCAL cString 	:= ""
+	LOCAL aHost 	:= GetIp()
+	LOCAL nLen     := Len(aHost)
+	LOCAL c
+	
+	for each c IN aHost
+		cString += c
+		if nLen >= 2		
+			cString += ', '
+		endif
+	next
+	return cString
+	

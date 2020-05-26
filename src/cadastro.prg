@@ -837,7 +837,7 @@ def ClientesInclusao()
 		Robs			:=	spac(45)
 		CCEP			:=	spac(10)
 		Rcontato		:=	spac(20)
-		Rvmin 		:=	 0
+		Rvmin 		:=	0
 		Rcnae			:=	spac(9)
 		Rmail			:=	spac(60)
 		Rexml			:=	spac(43)
@@ -846,8 +846,8 @@ def ClientesInclusao()
 		Rtpag			:=	0
 		Rlinha		:=	spac(2)
 		Rhrrec		:=	spac(62)
-		Rnf 			:=	 'S'
-		Rprnf 		:=	 'S'
+		Rnf 			:=	'S'
+		Rprnf 		:=	'S'
 		Rreg_apur	:=	spac(1)
 		cPais 		:=	"BRASIL"
 		Rdespacho 	:=	spac(40)
@@ -886,7 +886,7 @@ def ClientesInclusao()
 			Cadcli->(Order(CADCLI_CNPJ))
 			if CadCli->(DbSeek(p1))
 				errorbeep()
-				Alerta("INFO: Cliente já registrado")
+				Alerta("INFO: Cliente ja registrado")
 				return false
 			endif
 			return true
@@ -897,7 +897,7 @@ def ClientesInclusao()
 			Cadcli->(Order(CADCLI_CPF))
 			if CadCli->(DbSeek(p1))
 				errorbeep()
-				Alerta("INFO: Cliente já registrado")
+				Alerta("INFO: Cliente ja registrado")
 				return false
 			endif
 			return true

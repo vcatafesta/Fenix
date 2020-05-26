@@ -560,14 +560,86 @@ def MaBox( nTopo, nEsq, nFundo, nDireita, Cabecalho, Rodape, lInverterCor )
 	return NIL
 endef
 
-function conf(cString)
-**********************
-	return(alert(cstring, {" Sim ", " Nao "}) == 1)
+def Conf( Texto, aPrompt, cor)
+   LOCAL cScreen   := SaveScreen()	
+	LOCAL Les		 := 19
+	LOCAL Exceto	 := .F.
+	LOCAL Ativo 	 :=  1
+	LOCAL aArray	 := { " Sim ", " Nao " }
+	LOCAL cFundo	 := 207
+	LOCAL cFrente	 := 192
+	LOCAL Largjan	 := Len( Texto ) + 2
+	LOCAL cFrame    := oAmbiente:Frame
+	LOCAL nRetVal
+	LOCAL PBack
+	LOCAL nLen
+	LOCAL Ces
+	LOCAL Com
+	LOCAL Coluna
+	LOCAL nRow
+	LOCAL nCol
+	LOCAL nComp
+	LOCAL nChoice
+	LOCAL Centralizar := false
+	LOCAL lPrompt     := true
+	
+	__DefaultNIL(@cor, oAmbiente:CorMsg)
+	if aPrompt == nil .OR. !(IsArray(aPrompt))
+	   aPrompt := aArray	
+	endif
+	nRetval := AlertaPy(Texto + ';-;;', cor, centralizar, lPrompt, aPrompt)
+	restela(cScreen)
+	return( nRetVal == 1 )
+		
+	LargJan := Iif( LargJan < 16, 16, LargJan )
+	Les	  := Iif( Les = Nil .OR. Les = 0, 19, Les )
+	Ces	  := (MaxCol()-LargJan)/2
+	Com	  := Ces + LargJan
+	Coluna  := (LargJan - 9 ) / 2
+	nRow	  := Les + 2
+	nCol	  := Ces + Coluna
+	nBot	  := Les + 3
+	nComp   := ( Com - Ces )-1
+	
+	M_Title( Texto )
+	if aPrompt != NIL
+		nLen := Len( aPrompt )
+		//ColorSet( @cFundo, @PBack )
+		MSFrame( Les-nLen, Ces, Les+3, Com, oAmbiente:CorMsg )
+		nChoice := aChoice( (Les-nLen)+3, Ces+4, Les+5, Com-3, aPrompt )
+		ResTela( cScreen )
+		return( nChoice )
+	endif
+	//ColorSet( @cFundo, @PBack )
+	MsFrame( Les-2, Ces, Les+3, Com, oAmbiente:CorMsg )
+	nRetVal := aChoice( Les+1, Ces+4, Les+5, Com-3, aArray )
+	ResTela( cScreen )
+	return( nRetVal == 1 )
 
-function Alerta( cString, aArray )
-**********************************
-	aArray := IIF( aArray = NIL, { " Okay " }, aArray )
-	Return( Alert( cString, aArray, 31 ))
+def MsFrame( nTopo, nEsquerda, nFundo, nDireita, Cor )
+***********************************************************
+	LOCAL cFrame2	:= SubStr( oAmbiente:Frame, 2, 1 )
+	LOCAL pFore 	:= Iif( Cor = NIL, Cor(), Cor )
+	LOCAL cPattern := " "
+	LOCAL pBack
+
+	ColorSet( @pfore, @pback )
+	Box( nTopo, nEsquerda, nFundo, nDireita, oAmbiente:Frame + cPattern, pFore  )
+	cSetColor( SetColor())
+	nSetColor( pFore, Roloc( pFore ))
+	@ nTopo+2, nEsquerda+1 SAY Repl( cFrame2, (nDireita - nEsquerda )-1 )
+	@ nTopo+3, nEsquerda+2 TO  nFundo-1,nEsquerda+2
+	@ nTopo+1, nEsquerda+1 SAY Padc( M_Title(), nDireita-nEsquerda-1)
+	@ nTopo+3, nDireita-2  TO  nFundo-1, nDireita-2
+return( NIL )
+
+def Alerta( cString, aArray, Color )
+*----------------------------------*
+	__DefaultNIL(@cString, '(Pressione qualquer tecla)')	
+	__DefaultNIL(@Color, oAmbiente:CorAlerta)
+	__DefaultNIL(@aArray, ' Ok ')		
+	return( alert( cString, aArray, ColorIntToStr(Color)))
+endef	
 
 function Nada(cString)
 **********************
@@ -578,32 +650,80 @@ function Nada(cString)
 	Alerta( cString )
 	return(ResTela( cScreen ))
 
-function Mensagem( String, Color, nLine )
-*****************************************
+def Mensagem( String, Color, nLine, nCol, centralizar, nOk )
 	LOCAL cScreen := SaveScreen()
 	LOCAL pstrlen := len(string) + 6
+	LOCAL nlinhas := strcount(';', string)
 	LOCAL cFundo  := 112
 	LOCAL pBack
 	LOCAL Row
 	LOCAL Col
 	LOCAL Col2
-
-	IF nLine = Nil
-		Row    := ((  MaxRow() + 1 ) / 2 ) - 2
-		Col    := ((( MaxCol() + 1 ) - PstrLen ) ) / 2
-		Col2   := ((( MaxCol() + 1 ) / 2 ) - 10 )
-	Else
+	
+	__DefaultNIL(@centralizar, true)    
+	__DefaultNIL(@color, oAmbiente:CorMsg)    
+   __DefaultNIL(@nOk, false)    
+	Do case
+		case nLine == nil .and. nLinhas = 0	
+			String := "Fenix" + ";-;" + String
+			AlertaPy(string, Color, centralizar, nOK)
+			return(cScreen)
+		case nLine == nil .and. nLinhas > 0
+			String := "Fenix" + ";-;" + String
+			AlertaPy(string, Color, centralizar, nOK)		
+			return( cScreen )
+		case nLine != nil .and. nLinhas > 0			
+			AlertaPy(string, Color, centralizar, nOK)
+			return(cScreen)
+	endcase
+	
+	if nLine == Nil
+		Row	 := ((  LastRow() + 1 ) / 2 ) - 2
+		Col	 := ((( LastCol() + 1 ) - PstrLen ) ) / 2
+		Col2	 := ((( LastCol() + 1 ) / 2 ) - 10 )
+	else
 		Row	 := nLine
-		Col    := ((( MaxCol() + 1 ) - PstrLen ) ) / 2
-		Col2   := ((( MaxCol() + 1 ) / 2 ) - 10 )
-	EndIF
+		if nCol == NIL
+			Col	 := ((( LastCol() + 1 ) - PstrLen ) ) / 2
+			Col2	 := ((( LastCol() + 1 ) / 2 ) - 10 )
+		else
+			Col	 := nCol
+			Col2	 := ((( LastCol() + 1 ) / 2 ) - 10 )
+		endif	
+	endif
+	hb_default( @color, CorAlerta())
 
-	hb_default(@Color, "w+/r")
-	ms_box( Row, Col, Row+4, Col+PstrLen, B_SINGLE_DOUBLE, Color)
-	setcolor(Color)
+	/*
+	MsBox( Row, Col, Row+4, Col+ PstrLen, Color, false )
+	WriteBox( Row + 2, Col + 4, String )
+	*/
+
+	ColorSet( @cFundo, @PBack )
+	Box( Row, Col, Row+4, Col+PstrLen, M_Frame() + " ", Color )
 	Print( Row + 2, Col + 4, String, Color)
-	setcolor("")
-	Return( cScreen )
+	return( cScreen )
+endef	
+    
+def Mens( String, Color, nLine )
+*********************************
+	LOCAL cScreen := SaveScreen()
+	LOCAL pstrlen := len(string) + 6
+	LOCAL Row
+	LOCAL Col
+	LOCAL Col2
+
+	if nLine = Nil
+		Row	 := ((  LastRow() + 1 ) / 2 ) - 2
+		Col	 := ((( LastCol() + 1 ) - PstrLen ) ) / 2
+		Col2	 := ((( LastCol() + 1 ) / 2 ) - 10 )
+	else
+		Row	 := nLine
+		Col	 := ((( LastCol() + 1 ) - PstrLen ) ) / 2
+		Col2	 := ((( LastCol() + 1 ) / 2 ) - 10 )
+	endif
+	MsBox( Row, Col, Row+4, Col+ PstrLen, Color, false )
+	WriteBox( Row + 2, Col + 4, String )
+	return cScreen
 
 Function ColorSet( pfore, pback, pUns )
 ***************************************
@@ -620,7 +740,6 @@ Function ColorSet( pfore, pback, pUns )
 
 function m_frame()
 	return B_SINGLE_DOUBLE
-
 
 function cor()
 	return 31
@@ -754,21 +873,20 @@ function ColorStandard( nStd )
    LOCAL nColor
    Return( nColor := ft_Color2N( xColor ) )
 
+def aMaxStrLen( xArray )
+*----------------------------*
+	LOCAL nTam    := Len(xArray)
+	LOCAL nLen    := 0
+	LOCAL nMaxLen := 0
+	LOCAL x
 
-Function aMaxStrLen( xArray )
-*****************************
-LOCAL nTam    := Len(xArray)
-LOCAL nLen    := 0
-LOCAL nMaxLen := 0
-LOCAL x
-
-For x := 1 To nTam
-	nLen := Len(xArray[x])
-	IF nMaxLen < nLen
-		nMaxLen := nLen
-	EndIF
-Next
-return( nMaxLen )
+	For x := 1 To nTam
+		nLen := Len(xArray[x])
+		if nMaxLen < nLen
+			nMaxLen := nLen
+		endif	
+	Next
+	return( nMaxLen )
 
 //******************************************************************************
 
@@ -1333,12 +1451,6 @@ function podeexcluir()
 function podealterar()
 	return OK
 
-Function CorBox( nTipo )
-************************
-	hb_default( @nTipo, 1 )
-	return( 31 )
-
-
 function Write( Linha, Col, xString, nCor)
 *-----------------------------------*
 	LOCAL Color_Ant := SetCOlor()
@@ -1411,6 +1523,12 @@ def FechaTudo()
 	return
 endef
 
+def MsgOK( String, nOK)
+   __DefaultNIL(@String, "Tecle algo")
+   __DefaultNIL(@nOk, true)
+   return(mensagem( String, nil , nil , nil , nil, nOk ))
+endef   
+
 def AlertPy(string, cor, centralizar, nOK, cOk)
 *----------------------------------------------*
 	AlertaPy(string, cor, centralizar, nOK, cOk)
@@ -1430,103 +1548,105 @@ def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
 	LOCAL nCol1
    LOCAL nMax
    LOCAL xTemp
-
-   hb_default(@string, "AlertaPy")
-   //hb_default(@cor, 31)
-	hb_default(@centralizar, false)
-	hb_default(@lOk, true)
-   hb_default(@aPrompt, {" Ok "})
-
+	LOCAL x	
+    
+   hb_default(@string, "AlertaPy")    
+   //hb_default(@cor, 31)    
+	hb_default(@centralizar, false)    
+	hb_default(@lOk, true) 
+   hb_default(@aPrompt, {" Ok "}) 
+   
    nlinhas := strcount(';', string)
-	aString := StrSplit( string, ';', -1)
-	nLen    := amaxstrlen( aString)
-   nMax    := Len(aString)
-
+	aString := StrSplit( string, ';', -1)  
+	nLen    := amaxstrlen( aString)   
+   nMax    := Len(aString)	     		   
+     
    if aPrompt == nil .or. len(aPrompt) == 0 .or. !IsArray(aPrompt)
 		aPrompt := {" Ok "}
 	endif
-
-	// verifica se a string contem separador de linhas ;-;
+	
+	// verifica se a string contem separador de linhas ;-; 
+	
 	for x := 1 To nMax
-		switch aString[x]
+		switch aString[x] 
 			case ';'; nPv++ ;	exit
 			case '-'; nSep++;	exit
 		endswitch
 	next
-
+	 
 	if nSep == 0 // Sem linha horizontal
 		string  += ';-;'
 		nlinhas := strcount(';', string)
-		aString := StrSplit( string, ';', -1)
-		nLen    := amaxstrlen( aString)
-	endif
+		aString := StrSplit( string, ';', -1)  
+		nLen    := amaxstrlen( aString)	
+	endif		
 
-   nMax    := Len(aString)
-
+   nMax    := Len(aString)	     		   
+   
    if !IsArray(Cor)
       xTemp := Cor
-      Cor   := Array(nMax)
+      Cor   := Array(nMax)      
       Afill( Cor, xTemp)
-   endif
-
+   endif   
+   
    if !IsArray(Centralizar)
-      xTemp       := Centralizar
+      xTemp       := Centralizar 
       Centralizar := Array(nMax)
       Afill(Centralizar, xTemp )
-   endif
-
+   endif    
+   
    if nLen < 6
 		nLen = 6
-	endif
-
+	endif	 
+   
 	row     := (maxrow() / 2) - (nlinhas / 2) - 4
-	col     := (maxcol() - nLen) / 2
-	cScreen := SaveScreen()
+	col     := (maxcol() - nLen) / 2	 
+	cScreen := SaveScreen()	 
 	nrow    := row
 	ncol    := (col-2)
 	nrow1   := (row+4+nlinhas)
-	ncol1   := (col+nLen+1)
-
+	ncol1   := (col+nLen+1)	 	 
+	 
 	nTamPrompt := 0
-	nLenaPrompt := Len(aPrompt)
+	nLenaPrompt := Len(aPrompt)	
 	for k := 1 to nLenaPrompt
 		nTamPrompt += Len(aPrompt[k])
-	next
-
+	next	
+	 
 	center  := (maxcol()/2) - (nTamPrompt/2)
-
+	 
 //==================== 20/2 = 10
        //center
-
-    setcursor(0)
+	 
+    setcursor(0)    
     box(nrow, ncol, nrow1, ncol1, m_frame(), Cor[1])
-    for x := 1 To Len(aString)
+    for x := 1 To Len(aString)	     
 	     cString := aString[x]
         if centralizar[x]
             ncol := (maxcol() - len(cString)) / 2
         else
             ncol := col
-		  endif
+		  endif		
 		  if cString == '-'
 			  LinhaHorizontal(row + 1, Col - 2, Col + nlen, cor[x])
-		  else
+		  else	  
 				aprint(row + 1, ncol, cString, cor[x])
-		  endif
+		  endif		
         row := row + 1
-	 next
+	 next	  
 	 if lOk
 		if nLenaPrompt = 1
 			aprint(row + 2, center, aPrompt[1], roloc(cor[1]))
 			inkey(0)
-			restela(cScreen)
-			return(cScreen)
-		else
+			restela(cScreen) 	 
+			return(cScreen) 	 
+		else			
 			//nSetColor(cor)
 			return( nRetval := aChoice( row, Col, row + 4, Col + nLen, aPrompt))
 		endif
 	 endif
-	 return(cScreen)
-endef
+	 return(cScreen) 	 
+endef	 
 
 *==================================================================================================*
 
@@ -1561,20 +1681,20 @@ def StrSplit( string, delims)
 		cChar := Repl("*",nLen)
 	endif
 
-	if nConta = 0
+	if nConta = 0 
 		return { string }
 	endif
-
+		
 	aPos   := aStrPos(string, Delims)
 	nConta := Len(aPos)
-	For x := 1 to nConta
+	For x := 1 to nConta 
 		nInicio  := aPos[x]
 		if x = 1
 			cString   := Left(String, nInicio-1)
 		else
 			nFim     := aPos[x-1]
 			cString  := SubStr(String, nFim+1, nInicio-nFim-1)
-		endif
+		endif	
 		Aadd( aArray, cString)
 	Next
 	return(aArray)
@@ -4137,3 +4257,429 @@ def FReadByte( nH )
 	FSEEK( nH, nSavePos, FS_SET )
    return cBuffer
 
+Proc CenturyOn()
+*****************
+	Set Cent On
+	return
+
+Proc CenturyOff()
+****************
+	Set Cent Off
+	return
+
+def GetIp()
+*-----------*
+	LOCAL aHosts
+	LOCAL cEstacao := NETNAME(.F.)
+
+	HB_InetInit()
+	aHosts := HB_InetGetHosts( cEstacao )
+	IF aHosts == NIL
+		aHosts := HB_InetGetAlias( cEstacao )
+	END
+	IF EMPTY(aHosts)
+		aHosts := HB_InetGetAlias( cEstacao )
+	END
+	HB_InetCleanup()
+	return aHosts
+endef
+
+def FCurdir()
+*-----------------*
+	LOCAL cRetChar
+   #ifdef __PLATFORM__WINDOWS
+      cRetChar := CurDrive() + ':\' + Curdir()
+   #else
+      cRetChar := Curdir()   
+   #endif
+	return(cRetChar)
+
+def CorAlerta( nTipo )
+***************************
+ifNil( nTipo, 1 )
+return( oAmbiente:CorAlerta )
+	
+def CorBox( nTipo )
+************************
+ifNil( nTipo, 1 )
+return( oAmbiente:CorAlerta )
+
+def CorBoxCima( nTipo )
+***************************
+ifNil( nTipo, 1 )
+return( oAmbiente:CorCima )
+
+def MsBox( nCol, nRow, nCol1, nRow1, nCor, lRelevo, cTexto )
+*+----------------------------------------------------------*
+	LOCAL cFrame  := oAmbiente:Frame
+	LOCAL nRetVal
+	LOCAL PBack
+	LOCAL aCor
+	LOCAL aFundo
+	LOCAL aCima
+	LOCAL cCor
+	if lRelevo // Alto Relevo
+	  aCor	  := { 16,32,48,64,64,80,096,112,128,144,160,176,192,208,224 }
+	  aFundo   := { 16,32,48,64,64,80,096,112,128,144,160,176,192,208,224 }
+	  aCima	  := { 25,47,53,76,64,86,101,117,143,149,165,181,207,213,239 }
+	else
+	  aCor	  := { 25,47,53,76,64,86,101,117,143,149,165,181,207,213,239 }
+	  aFundo   := { 25,47,53,76,64,86,101,117,143,149,165,181,207,213,239 }
+	  aCima	  := { 16,32,48,64,64,80,096,112,128,144,160,176,192,208,224 }
+	endif
+	if nCor = NIL
+		nCor	 := CorBox()
+	endif
+	cCor					:= aCor[nCor]
+	oAmbiente:CorCima := aCima[ nCor ]
+	nComp 				:= ( nRow1 - nRow )-1
+	ColorSet( @cCor, @PBack )
+	M_Frame( cFrame )
+	Box( nCol, nRow, nCol1, nRow1, M_Frame() + " ", aFundo[ nCor], 1, 8 )
+	cFrame1 := Left( cFrame, 1 )
+	cFrame2 := SubStr( cFrame, 2, 1 )
+	cFrame8 := SubStr( cFrame, 8, 1 )
+	cFrame7 := SubStr( cFrame, 7, 1 )
+	Print( nCol, nRow, cFrame1, aCima[nCor], 1 )
+	Print( nCol, nRow+1, Repl( cFrame2, nComp), aCima[nCor] )
+	For x := nCol+1 To nCol1-1
+		Print( x, nRow, cFrame8, aCima[nCor], 1 )
+	Next
+	Print( nCol1, nRow, cFrame7,	aCima[nCor],1 )
+	if cTexto != NIL
+		Print( nCol+1, nRow+1, Padc( cTexto, nRow1-nRow-1), aCima[nCor] )
+	endif
+	cSetColor( SetColor())
+	nSetColor( cCor, Roloc( cCor ))
+	return NIL
+	
+def WriteBox( Linha, Col, xString, nCor )
+******************************************
+   Iif( Linha	 = Nil, Linha	 := Row(), Linha )
+   Iif( Col 	 = Nil, Col 	 := Col(), Col )
+   Iif( xString = Nil, xString := "",    xString )
+   Iif( nCor	 = Nil, nCor	 := CorBoxCima(), nCor )
+   Print( Linha, Col, xString, nCor )
+   return nil
+endef
+
+def TestaCgc( Var )
+************************
+LOCAL Matriz[12]
+LOCAL i
+LOCAL Df1
+LOCAL Df2
+LOCAL Df3
+LOCAL nTam := 0
+
+if ValType( Var ) = "N"
+	Var := CpfCgcIntToStr( Var )
+	nTam := Len( Var )
+	if nTam <= 14
+		return( TestaCpf( Var ) )
+	endif
+endif
+
+/*
+	cTira := StrTran( Var,	".")
+	cTira := StrTran( cTira, "/")
+	cTira := StrTran( cTira, "-")
+	nComp := Len( AllTrim( cTira ))
+	if nComp >= 14 // Cgc
+		Var := Tran( Var, "99.999.999/9999-99")
+	else
+		Var := Tran( Var, "999.999.999-99" )
+		return( TestaCpf( Var ) )
+	endif
+*/
+
+if !Empty( Var ) .AND. Len( Var ) < 18
+	 ErrorBeep()
+	 Alerta("CGC Incorreto... Verifique." )
+	 return(.F.)
+endif
+Var1 := StrTran( Var,  ".")
+Var1 := StrTran( Var1, "/")
+Var1 := StrTran( Var1, "-")
+For I = 1 To 12
+	Matriz[i] := Val( SubStr( Var1, I, 1))
+Next
+
+** Teste do Primeiro digito (unidade)
+Df1 := 5 * Matriz[1] + 4 * Matriz[2] + 3 * Matriz[3] + 2 * Matriz[4] + 9 * Matriz[5] + ;
+		 8 * Matriz[6] + 7 * Matriz[7] + 6 * Matriz[8] + 5 * Matriz[9] + 4 * Matriz[10] + ;
+		 3 * Matriz[11] + 2 * Matriz[12]
+Df2 := Df1 / 11
+Df3 = Int( Df2 ) * 11
+Resto1 := ( Df1- df3 )
+if Resto1 = 0 .OR. Resto1 = 1
+  Pridig := 0
+else
+  Pridig := ( 11 - Resto1 )
+endif
+
+** Teste do segundo digito (dezena)
+DF1 := 6 * Matriz[1] + 5 * Matriz[2] + 4 * Matriz[3] + 3 * Matriz[4] + 2 * Matriz[5] + ;
+		 9 * Matriz[6] + 8 * Matriz[7] + 7 * Matriz[8] + 6 * Matriz[9] + 5 * Matriz[10] + ;
+		 4 * Matriz[11] + 3 * Matriz[12] + 2 * Pridig
+Df2 := ( Df1/11 )
+Df3 := Int( Df2 ) * 11
+Resto2 := ( Df1 - Df3)
+if Resto2 = 0 .OR. Resto2 = 1
+  SegDig := 0
+else
+  SegDig := (11 - Resto2)
+endif
+if Pridig <> Val( SubStr( Var1,13,1)) .OR. SegDig <> Val( SubStr( Var1,14,1))
+	 ErrorBeep()
+	 Alerta("CGC Incorreto... Verifique." )
+	 return(.F.)
+else
+	return(.T.)
+endif
+
+def DataExtenso( dData )
+*****************************
+LOCAL cString := ""
+LOCAL nMes
+LOCAL aMes
+LOCAL aDia
+LOCAL nDia
+LOCAL aDecada
+LOCAL nDecada
+LOCAL aAno
+LOCAL nAno
+LOCAL aSeculo
+LOCAL nSeculo
+LOCAL nMenor
+LOCAL nMaior
+LOCAL aDecimal
+LOCAL cAno
+LOCAL cDia
+LOCAL cMes
+LOCAL cDecada
+LOCAL cSeculo
+
+aMes		:= {"janeiro","fevereiro","marco","abril","maio","junho",;
+				 "julho","agosto","setembro","outubro","novembro","dezembro" }
+aDia		:= {"primeiro", "segundo", "terceiro", "quarto", "quinto", "sexto", "setimo",;
+				 "oitavo", "nono", "decimo"}
+aDecimal := {"decimo", "vigesimo", "trigesimo" }
+aSeculo	:= {"um mil novecentos ", "dois mil " }
+aDecada	:= {"dez ","vinte ","trinta ","quarenta ","cinquenta ","sescenta ","setenta ","oitenta ","noventa "}
+aAno		:= {"um","dois","tres","quatro","cinco","seis","sete","oito","nove" }
+
+nSeculo	:= Val( Left( StrZero( Year( dData ), 4),1))
+nDecada	:= Val( SubStr( StrZero( Year( dData ), 4), 3,1))
+nAno		:= Val( Right( StrZero( Year( dData ), 4),1))
+nDia		:= Day( dData )
+nMes		:= Month( dData)
+cAno		:= StrZero( nAno, 4)
+cDia		:= StrZero( nDia, 2 )
+nMenor	:= Val( Left( cDia, 1 ))
+nMaior	:= Val( Right( cDia, 1 ))
+cMes		:= aMes[ nMes ]
+
+if nMenor > 0
+	cString := aDecimal[nMenor] + " "
+endif
+if nDecada = 0
+	cDecada := ""
+else
+	cDecada := "e " + aDecada[nDecada]
+endif
+if nAno = 0
+	cAno := ""
+else
+	cAno := "e " + aAno[nAno]
+endif
+cSeculo := aSeculo[nSeculo]
+cString += Iif( nMaior = 0, "", aDia[nMaior] + " " )
+cString += "dia do mes de "
+cString += cMes
+cString += " do ano "
+cString += cSeculo
+cString += cDecada
+cString += cAno
+return( cString )
+
+
+def DataExt1( dData )
+*************************
+LOCAL Mes
+LOCAL MesExt
+
+if dData = NIL .OR. ValType( dData ) != "D"
+	dData := Date()
+endif
+Mes	 := Month( dData)
+MesExt := {"Janeiro","Fevereiro","Marco","Abril","Maio","Junho",;
+			  "Julho","Agosto","Setembro","Outubro","Novembro","Dezembro" }
+return( StrZero( Day( dData ), 2 ) + " de "+ MesExt[ Mes ] +" de "+ Str(Year( dData ),4 ))
+
+def Mes( dData )
+*********************
+LOCAL Mes
+LOCAL MesExt
+
+if dData = NIL
+	dData := Date()
+	Mes	:= Month( dData)
+elseif ValType( dData ) = "D"
+	Mes := Month( dData)
+elseif ValType( dData ) = 'N'
+	Mes := dData
+else
+	dData := Date()
+	Mes	:= Month( dData)
+endif
+MesExt := { "Janeiro","Fevereiro","Marco","Abril","Maio","Junho",;
+				"Julho","Agosto","Setembro","Outubro","Novembro","Dezembro" }
+return( MesExt[ Mes ] )
+
+def DataExt2( dData )
+**************************
+LOCAL Mes, MesExt, Dia
+
+if dData = NIL .OR. ValType( dData ) != "D"
+	dData := Date()
+endif
+Mes	 := Month( dData)
+MesExt := { { "Janeiro"  , 07 },;
+				{ "Fevereiro", 05 },;
+				{ "Março"    , 09 },;
+				{ "Abril"    , 09 },;
+				{ "Maio"     , 10 },;
+				{ "Junho"    , 09 },;
+				{ "Julho"    , 09 },;
+				{ "Agosto"   , 08 },;
+				{ "Setembro" , 06 },;
+				{ "Outubro"  , 07 },;
+				{ "Novembro" , 06 },;
+				{ "Dezembro" , 06 }}
+
+Dia	 := { "Primeiro ",;
+			  "Dois "    ,;
+			  "Três "    ,;
+			  "Quatro "  ,;
+			  "Cinco "   ,;
+			  "Seis "    ,;
+			  "Sete "    ,;
+			  "Oito "    ,;
+			  "Nove "    ,;
+			  "Dez "     ,;
+			  "Onze "    ,;
+			  "Doze "    ,;
+			  "Trez "    ,;
+			  "Quatorze "    ,;
+			  "Quinze "    ,;
+			  "Dezesseis "    ,;
+			  "Dezessete "    ,;
+			  "Dezoito "    ,;
+			  "Dezenove "    ,;
+			  "Vinte "    ,;
+			  "Vinte e um "    ,;
+			  "Vinte e dois "    ,;
+			  "Vinte e três "    ,;
+			  "Vinte e quatro "    ,;
+			  "Vinte e cinco "    ,;
+			  "Vinte e seis "    ,;
+			  "Vinte e sete "    ,;
+			  "Vinte e oito "    ,;
+			  "Vinte e nove "    ,;
+			  "Trinta "    ,;
+			  "Trinta e um "}
+
+return( Dia[ Day( dData ) ] + "de " + MesExt[ Mes,1 ] + " de " + Str( Year( dData ),4))	
+
+def CpfCgcIntToStr( nCpfCgc )
+**********************************
+LOCAL cCgc	:= AllTrim( Str( nCpfCgc ))
+LOCAL nTam	:= Len( cCgc )
+
+if nTam <= 11
+	cCpf1 := Left( cCgc, 3 )
+	cCpf2 := SubStr( cCgc, 4, 3 )
+	cCpf3 := SubStr( cCgc, 7, 3 )
+	cCpf4 := SubStr( cCgc, 10, 2 )
+	cCgc	:= cCpf1 + "." + cCpf2 + "." + cCpf3 + "-" + cCpf4
+else
+	cCgc1 := Left( cCgc, 2 )
+	cCgc2 := SubStr( cCgc, 3, 3 )
+	cCgc3 := SubStr( cCgc, 6, 3 )
+	cCgc4 := SubStr( cCgc, 9, 4 )
+	cCgc5 := SubStr( cCgc, 13, 2 )
+	cCgc	:= cCgc1 + "." + cCgc2 + "." + cCgc3 + "/" + cCgc4 + "-" + cCgc5
+endif
+return( cCgc )
+
+def TestaCpf( cCpf )
+*************************
+LOCAL cDig
+LOCAL nNumero
+LOCAL nMult
+LOCAL nSoma
+LOCAL nProd
+LOCAL nNum
+LOCAL nDig
+LOCAL Digito
+LOCAL Var1
+LOCAL Var2
+LOCAL Numero
+LOCAL d1
+LOCAL Dig
+LOCAL Soma
+LOCAL Num
+LOCAL Mult
+LOCAL Prod
+LOCAL Conta
+
+if !Empty( cCpf ) .AND. Len( cCpf ) < 14
+	 ErrorBeep()
+	 Alerta("Erro: CPF incorreto." )
+	 return(.F.)
+endif
+cCpf	  := AllTrim( cCpf )
+Digito  := Right( cCpf, 2 )
+Var1	  := StrTran( cCpf, "." )
+Var2	  := StrTran( Var1, "-" )
+Numero  := Left( Var2, 9 )
+
+Mult	 := 1
+Soma	 := 0
+Prod	 := 0
+Num	 := 0
+Dig	 := 0
+cDig	 := ""
+For Conta := Len( Numero ) To 1 Step -1
+	Num := Val( SubStr( Numero, Conta, 1 ) )
+	Mult++
+	Soma += ( Num * Mult )
+Next Conta
+Dig := Mod( ( Soma * 10), 11 )
+if Dig >= 10
+	Dig := 0
+endif
+d1 := Dig
+Numero = Left( Var2, 10 )
+Mult	 := 1
+Soma	 := 0
+Dig	 := 0
+Prod	 := 0
+Num	 := 0
+For Conta := Len( Numero ) To 1 Step -1
+	Num := Val( SubStr( Numero, Conta, 1 ) )
+	Mult++
+	Soma += ( Num * Mult )
+Next Conta
+Dig := Mod( ( Soma * 10), 11 )
+if Dig >= 10
+	Dig := 0
+endif
+// cDig := Left(Str( d1 ), 1 ) + Left( Str( Dig ), 1 )
+if Val( Left( Digito, 1 ) ) != d1 .OR. Val( Right( Digito, 1 ) ) != Dig
+	ErrorBeep()
+	Alerta( "Erro: CPF invalido.")
+	return(.F.)
+endif
+return(.T.)

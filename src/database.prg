@@ -64,7 +64,7 @@ function ArrayBancoDeDados()
 					"vazil",;
 					"sldvaz",;
 					"ctrvaz",;
-					"comcx",;
+					"comcx",; 
 					"comvz",;
 					"regiao",;
 					"cmda",;
@@ -1067,21 +1067,24 @@ Aadd( aArquivos, {"clafisc.dbf",;
           {;
           {'NRCMANDA', 'C', 10, 0 };
           }})
+ 
  Aadd( aArquivos, {"comcx.dbf",;
           {;
-          {'NRFAT', 'C', 10, 0 },;
-          {'CODVZ', 'C', 4, 0 },;
-          {'VAZIL', 'C', 15, 0 },;
-          {'QDE', 'N', 7, 2 },;
-          {'X', 'C', 1, 0 },;
-          {'FN', 'C', 1, 0 };
+          {'NRFAT', 	'C', 10, 0 },;
+          {'CODVZ', 	'C', 04, 0 },;
+          {'VAZIL', 	'C', 15, 0 },;
+          {'QDE', 	'N', 07, 2 },;
+          {'X', 		'C', 01, 0 },;
+          {'FN', 		'C', 01, 0 };
           }})
+
  Aadd( aArquivos, {"comp.dbf",;
           {;
           {'COMP', 'C', 15, 0 },;
           {'TERMINAL', 'C', 2, 0 },;
           {'UNIDADE', 'C', 2, 0 };
           }})
+ 
  Aadd( aArquivos, {"compras.dbf",;
           {;
           {'DATA', 'D', 8, 0 },;
