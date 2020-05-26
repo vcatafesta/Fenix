@@ -2,7 +2,7 @@
 
 STATIC static13
 STATIC static14
-STATIC static1 := "????"
+STATIC static1 := "’Õ∏≥æÕ‘≥"
 STATIC static2 := ""
 STATIC static3 := {1, 1, 0, 0, 0, 0, 0, 0, 0, 24, 79, 1, 0, 0, 0, 1, 8, 1, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, -999, 0, 0, Nil}
 
@@ -51,7 +51,7 @@ function mdsha()
 ****************
 	set bell on
 	Tone(200,5)
-	Alert(" ATENÄ«O !!!;;SENHA INCORRETA ! ", , "W+/B")
+	Alert(" ATEN√á√ÉO!!!;;SENHA INCORRETA ! ", , "W+/B")
 	set bell off
 	return nil
 
@@ -904,7 +904,7 @@ Function FazMenu( nTopo, nEsquerda, aArray, Cor )
 	LOCAL cTitulo    := "ESCOLHA UMA OPCAO"
 	LOCAL nTamTitle  := ( Len( cTitulo ) + 12 )
 	LOCAL nDireita   := ( nEsquerda + AmaxStrLen( aArray ) + 1 )
-	LOCAL cChar      :=   "¶v¶=¶¶"
+	LOCAL cChar      := chr(186) + chr(61) + chr(186) + chr(24) + chr(186) + chr(25) + chr(186)
 
 	IF ( nDireita - nEsquerda ) <  nTamTitle
 		nDireita := ( nEsquerda + nTamTitle )
@@ -1305,7 +1305,7 @@ Function Incluiu()
 	DbAppend()
 	WHILE NetErr()
 		ErrorBeep()
-		IF !Conf("Registro em uso em outra Estaáao. Tentar Novamente ? " )
+		IF !Conf("Registro em uso em outra esta√ß√£o. Tentar Novamente ? " )
 			Return( FALSO )
 		EndIF
 		DbAppend()
@@ -1499,7 +1499,7 @@ def AlertaPy(string, Cor, Centralizar, lOK, aPrompt)
        //center
 
     setcursor(0)
-    box(nrow, ncol, nrow1, ncol1, "????", Cor[1])
+    box(nrow, ncol, nrow1, ncol1, m_frame(), Cor[1])
     for x := 1 To Len(aString)
 	     cString := aString[x]
         if centralizar[x]
@@ -3897,7 +3897,7 @@ def PrinterErrada( cCodi )
    Printer->(Order( PRINTER_CODI ))
    if Printer->(!DbSeek( cCodi ))
       Printer->(Order( PRINTER_NOME ))
-      Printer->(Escolhe( 02, 00, LastRow()-2, "Codi + ' ' + Nome", "ID NOME DA IMPRESSORA", aRotina ))
+      Printer->(Escolhe( 02, 00, LastRow()-2, "Codi + chr(186) + Nome", "ID NOME DA IMPRESSORA", aRotina ))
       cCodi := Printer->Codi
    endif
    AreaAnt( Arq_Ant, Ind_Ant )

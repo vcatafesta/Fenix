@@ -1,6 +1,6 @@
 ﻿#include "fenix.ch"
 
-request SIXCDX
+REQUEST SIXCDX
 REQUEST HB_CODEPAGE_PT850
 REQUEST HB_CODEPAGE_PTISO
 REQUEST HB_CODEPAGE_PT860
@@ -11,11 +11,10 @@ static s_hMutex
 public XNOMEFIR
 public SISTEM_NA2
 
-function main()
-********************
+init def Main(...)
+******************
    LOCAL oPull
-
-   Public Logfan	:= spac(4)
+   Public Logfan		:= spac(4)
    Public CT_cli 	   := ' '
    Public cdtr 	   := ' '
    Public rcb_V 	   := ' '
@@ -52,7 +51,7 @@ function main()
 	//Abrearea()
    oMenu:Limpa()
 	login()
-
+	SetaIni()
 	oMenu:StatusSup 	:= "Fenix for Windows v1.0"
 	oMenu:StatusInf 	+= AllTrim(oMenu:Comp)
 	oMenu:StatusInf 	+= "|"
@@ -88,25 +87,24 @@ function main()
    oPull := Monta_Menu()
 	while MenuModal( oPull, 01, 00, MaxCol(), MaxCol(), "w+/b" ) != 999 ;  enddo
    return( nil )
+endef
 
-function Monta_Menu()
+def Monta_Menu()
    local oTopBar, oPopUp, oPopUp1, oPopUp2, oPopUp3, oItem, oItem1, oItem2
    local cCorBar  := "b*/w,w+/bg,b*/w,w+/bg,b*/w,b*/w"
    local cCorItem := "w+/bg,b*/w,w+/bg,b*/w,w/bg,w+/bg"
 	local nResult  := 0
 
-
-   oTopBar := TopBar( 01,00 , MaxCol())
+   oTopBar           := TopBar( 01,00 , MaxCol())
    oTopBar:ColorSpec := cCorBar
 
 *=============================================================================================================================*
 * CADASTROS
 *=============================================================================================================================*
 
-   oPopUp := PopUp()
-   oPopUp :ColorSpec:= cCorItem
+   oPopUp           := PopUp()
+   oPopUp:ColorSpec := cCorItem
    oTopBar:AddItem( MenuItem ( "&Cadastros", oPopUp, ,) )
-
 
    oItem := MenuItem( "&Clientes" , {|| ClientesInclusao() } ,101)
    oPopUp:AddItem( oItem )
@@ -142,7 +140,7 @@ function Monta_Menu()
 
    oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
 
-   oItem :=MenuItem( "Representantes", {|| Alert("representantes()") })
+	oItem :=MenuItem( "Representantes", {|| RepresentanteInclusao() })
    oPopUp:AddItem( oItem )
    if Yrepcad = 'B'
       oItem:Enabled := .f.
@@ -268,7 +266,7 @@ function Monta_Menu()
 
    oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
 
-   oItem :=MenuItem( "Representantes", {|| Alert("representantes()") })
+   oItem :=MenuItem( "Representantes", {|| RepresentanteInclusao(true) })
    oPopUp:AddItem( oItem )
    if Yrepcad = 'B'
       oItem:Enabled := .f.
@@ -394,7 +392,7 @@ function Monta_Menu()
 
    oPopUp:AddItem( MenuItem( MENU_SEPARATOR ) )
 
-   oItem :=MenuItem( "Representantes", {|| Alert("representantes()") })
+   oItem :=MenuItem( "Representantes", {|| RepresentanteInclusao(true) })
    oPopUp:AddItem( oItem )
    if Yrepcad = 'B'
       oItem:Enabled := .f.
@@ -667,7 +665,7 @@ function Monta_Menu()
            oItem_L3 := MenuItem( "&Representantes", {|| Alert("Representantes()") })
            oPopUp_L:AddItem( oItem_L3 )
 
-           oItem_L4 := MenuItem( "&Estoque Representantes", {|| Alert("Estoque Repres...()") })
+           oItem_L4 := MenuItem( "&Estoque Representantes", {|| RepresentanteInclusao() })
            oPopUp_L:AddItem( oItem_L4 )
 
            oItem_L5 := MenuItem( "P&rotestos", {|| Alert("Protestos...()") })
@@ -734,12 +732,22 @@ function Monta_Menu()
 
       oPopUp2 := PopUp()
       oPopUp2 :ColorSpec:= cCorItem
-      oItem := MenuItem( "&Cor fundo", {|| SetaCorFundo() })
+      oItem := MenuItem( "&Cor fundo", {|| SetaCorFundo(3) })
       oPopUp:AddItem( oItem )
 
       oPopUp2 := PopUp()
       oPopUp2 :ColorSpec:= cCorItem
-      oItem := MenuItem( "&Pano Fundo", {|| xSetaPano() })
+      oItem := MenuItem( "&Pano Fundo", {||xSetaPano()})
+      oPopUp:AddItem( oItem )
+		
+		oPopUp2 := PopUp()
+      oPopUp2 :ColorSpec:= cCorItem
+      oItem := MenuItem( "&Cor Alerta", {|| SetaCorFundo(8) })
+      oPopUp:AddItem( oItem )
+		
+		oPopUp2 := PopUp()
+      oPopUp2 :ColorSpec:= cCorItem
+      oItem := MenuItem( "&Cor Cabecalho", {|| SetaCorFundo(2) })
       oPopUp:AddItem( oItem )
 
 *----------
@@ -750,14 +758,25 @@ function Monta_Menu()
    oTopBar:AddItem(MenuItem( "&Sair", {|| Encerra(@nResult) } , K_ALT_F4,, 999))
    //Rodape()
    return ( oTopBar )
+endef
 
-Function xSetaPano()
+def SetaCorFundo(nCor)
+***********************
+	oMenu:Limpa()
+	oMenu:Setacor(nCor)
+	SalvaMem()
+	oMenu:Limpa()
+	return nil
+endef
+
+def xSetaPano()
 ********************
 	oMenu:SetaPano()
 	SalvaMem()
 	return nil
+endef
 
-function Rodape()
+def Rodape()
 *****************
 	Date := Date()
    DTF  := Date()
@@ -778,6 +797,7 @@ function Rodape()
    Write(nRow,77, oMenu:Unidade)
    return nil
 
+
 def Encerra(nResult)
 	ErrorBeep()
 	nResult := 999
@@ -795,14 +815,6 @@ def Encerra(nResult)
 	return( __Quit())
 endef
 
-
-function SetaCorFundo()
-***********************
-	oMenu:Limpa()
-	oMenu:Setacor(3)
-	SalvaMem()
-	oMenu:Limpa()
-	return nil
 
 def F_Fim( Texto )
 ***********************
@@ -870,9 +882,7 @@ def SetaIni()
 		Eval( oAmbiente:TabelaFonte[ oAmbiente:Fonte] )
 	EndIF
 	return( NIL)
-
-	endef
-
+endef
 
 def SalvaMem()
 	oIni:WriteString(  oAmbiente:xUsuario,	'frame',         oMenu:Frame )
@@ -903,8 +913,7 @@ def SalvaMem()
 	return NIL
 endef
 
-
-function SetaAmbiente()
+def SetaAmbiente()
 	set key -41 to
    SET CENT ON
    SET( _SET_EVENTMASK, INKEY_ALL )
@@ -922,9 +931,10 @@ function SetaAmbiente()
 	SetCancel( .F. )
 	//SetMode(28,132)
 	return nil
+endef
 
-function login()
-****************
+def login()
+***********
 	LOCAL cScreen   := SaveScreen()
 	LOCAL R         := Space(1)
 	LOCAL cLogin    := Space(15)
@@ -999,9 +1009,10 @@ function login()
 		CadProd->(Libera())
 		ResTela( cScreen )
 		return nil
-	end
+	enddo
+endef	
 
-function UsuarioErrado( cNome )
+def UsuarioErrado( cNome )
 ******************************
 	LOCAL aRotinaInclusao  := {{||CadUser() }}
 	LOCAL aRotinaAlteracao := NIL // {{||AltSenha() }}
@@ -1026,19 +1037,20 @@ function UsuarioErrado( cNome )
 
 	AreaAnt( Arq_Ant, Ind_Ant )
 	return( OK )
+endef
 
 def SenhaErrada(cLogin, cPassWord)
 	LOCAL cSenha  := Usuario->( AllTrim( Senha ))
 	LOCAL Passe   := cPassword
 
-		IF !Empty( Passe) .AND. cSenha == Passe
-			return true
-		EndIF
-		cPassword := Space(6)
-		ErrorBeep()
-		Alert("ERRO: Senha nao confere.")
-		return false
-	endef
+	if !Empty( Passe) .AND. cSenha == Passe
+		return true
+	endif
+	cPassword := Space(6)
+	ErrorBeep()
+	Alert("ERRO: Senha nao confere.")
+	return false
+endef
 
 def GravaSenhaAdmin(lIncluirOuAlterar)
 	LOCAL Arq_Ant := Alias()
@@ -1087,13 +1099,14 @@ def AbreUsuario()
 	Return( UsaArquivo("usuario") )
 endef
 
-Proc ErrorSys()
+def ErrorSys()
 *--------------*
 	Private ErrorSys := 9876543210
 	ErrorBlock( {|Erro| MacroErro(Erro)} )
 	return
+endef 
 
-Function MacroErro(e)
+def MacroErro(e)
 *********************
 	LOCAL cScreen	 := SaveScreen()
 	LOCAL cPrograma := ms_swap_extensao("fenix", ".err")
