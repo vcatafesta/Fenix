@@ -1,5 +1,12 @@
 #include "fenix.ch"
 
+#define WIN_PRINTERLIST_PRINTERNAME     1
+#define WIN_PRINTERLIST_PORT            2
+#define WIN_PRINTERLIST_TYPE            3
+#define WIN_PRINTERLIST_DRIVERNAME      4
+#define WIN_PRINTERLIST_SHARENAME       5
+#define WIN_PRINTERLIST_SERVERNAME      6           
+
 STATIC static13
 STATIC static14
 STATIC static1 := "’Õ∏≥æÕ‘≥"
@@ -2846,7 +2853,7 @@ endef
 *==================================================================================================*
 
 def CupsArrayPrinter()
-   LOCAL aPrinter := {} //cupsGetDests()
+   LOCAL aPrinter := cupsGetDests()
    LOCAL aModelo  := {}
    LOCAL aMenu    := {}
    LOCAL aAction	:= { "PRONTA         ","FORA DE LINHA  ","DESLIGADA      ","SEM PAPEL      ", "NAO CONECTADA  "}
@@ -2855,6 +2862,7 @@ def CupsArrayPrinter()
    LOCAL nIndex   := 0
    LOCAL nPr
    MEMVAR cStr
+	LOCAL nLen
 
    aMenu := {  " LPT1 ¶ " + aAction[ aStatus[1]] + " ¶ " + oAmbiente:aLpt1[1,2],;
 					" LPT2 ¶ " + aAction[ aStatus[2]] + " ¶ " + oAmbiente:aLpt2[1,2],;
@@ -2870,6 +2878,20 @@ def CupsArrayPrinter()
 					" CANCELAR     ¶ ";
             }
 
+	nLen := Len( aPrinter )   
+	for nPr := 1 to nLen
+      nIndex++          
+      cStr := &( "oAmbiente:aLpd" + trimstr(nIndex))
+	   #ifdef __PLATFORM__WINDOWS
+	      Aadd( aMenu, " GDI" + TrimStr(nIndex) + "  ¶ " + padr(aPrinter[nIndex, WIN_PRINTERLIST_PORT],14) + " ¶ " + Left(cStr[1,2],17) + " em " + aPrinter[nIndex, WIN_PRINTERLIST_PRINTERNAME])
+		#else
+   	   Aadd( aMenu, " LPD" + TrimStr(nIndex) + "  ¶ REDE CUPS      ¶ " + Left(cStr[1,2],17) + " em " + aPrinter[nIndex, WIN_PRINTERLIST_PRINTERNAME])                   
+      #endif
+		Aadd( aModelo, aPrinter[nIndex, WIN_PRINTERLIST_PRINTERNAME])        
+   next
+   return {aMenu, aModelo, aAction, aStatus, aPrinter}
+
+	/*
    FOR EACH nPr IN aPrinter
       //? nPr:__enumIndex(), i
       //nWidth := Max( nWidth, Len( nPr ) )
@@ -2879,7 +2901,21 @@ def CupsArrayPrinter()
       Aadd( aModelo, nPr)
    NEXT
    return {aMenu, aModelo, aAction, aStatus, aPrinter}
+	*/
 endef
+
+*==================================================================================================*
+
+#ifdef __PLATFORM__WINDOWS
+	
+	function cupsPrintFile(cPrinterName, cArquivo)
+		nBytesImpressos := 0
+		nBytesImpressos := win_PrintFileRaw(cPrinterName, cArquivo)
+		return nBytesImpressos
+		
+	function cupsGetDests()
+		return win_printerList(true) // xhb.hbc
+#endif		
 
 *==================================================================================================*
 
@@ -3176,7 +3212,7 @@ def Instru80( nQualPorta, cArquivo )
          oAmbiente:lVisSpooler := false
          if !(Isnil(cArquivo))
             oAmbiente:cArquivo := cArquivo
-            //cupsPrintFile( oAmbiente:CupsPrinter, cArquivo, "Macrosoft SCI for Linux")
+            cupsPrintFile( oAmbiente:CupsPrinter, cArquivo, "Macrosoft SCI for Linux")
             loop
          endif
 			return(SaidaParaRedeCups(cArquivo))
@@ -3445,7 +3481,7 @@ def CloseSpooler()
             //ShellRun("NOTEPAD " + cTemp )
             ResTela( cScreen )
          else
-            //cupsPrintFile( oAmbiente:CupsPrinter, oAmbiente:cArquivo, "Macrosoft SCI for Linux")
+            cupsPrintFile( oAmbiente:CupsPrinter, oAmbiente:cArquivo, "Macrosoft SCI for Linux")
          endif
       endif
    endif
@@ -3817,7 +3853,7 @@ def ShellExec( cComando )
 	#ifdef __XHARBOUR__
 		WshShell := CreateObject("WScript.Shell")
 	#else
-		//WshShell := win_oleCreateObject("WScript.Shell")
+		WshShell := win_oleCreateObject("WScript.Shell")
 	#endif
 
 	//oExec := oShell:Run("%comspec% /c " + cComando, intWindowStyle, .F.)

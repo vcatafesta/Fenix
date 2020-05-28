@@ -55,7 +55,7 @@ init def Main(...)
 	oMenu:StatusSup 	:= "Fenix for Windows v1.0"
 	oMenu:StatusInf 	+= AllTrim(oMenu:Comp)
 	oMenu:StatusInf 	+= "|"
-	oMenu:StatusInf 	+= AllTrim(oMenu:Unidade)
+	oMenu:StatusInf 	+= Upper(StrTrim(oAmbiente:xBase))
 	XNOMEFIR 		 	:= oMenu:Nomefirma	
 	SISTEM_NA2			:= oMenu:StatusSup
 
