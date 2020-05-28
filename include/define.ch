@@ -350,7 +350,6 @@
 #translate IfNil( <var>, <val> ) 					=> IF( <var> = NIL, <var> := <val>, <var> )
 #Translate MkDir  	 	 	 							=> FT_MkDir
 #Translate FChDir  	 	 	 							=> FT_ChDir	
-#translate strcount       								=> GT_StrCount
 #translate isarray			 							=> hb_isarray
 #translate ischar			 								=> hb_ischar
 #translate isdate			 								=> hb_isdate
