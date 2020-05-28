@@ -461,7 +461,216 @@ function myFuncao()
        endcase
    return(vnRetorno)
 
-function psqrepre()
+   
+function psq_lin()
+****************
+LOCAL Tela := SaveScreen()
+LHA := spac(40)
+do whil LHA = spac(40)
+   @ 00,00 clea to 17,29
+   @ 00,00 to 17,29
+   @ 02,01 say 'Digite Linha:'
+   @ 04,01 get LHA pict '!!!!!!!!!!!!!!!'
+   read
+   if LHA = '     '
+      Restela(Tela)
+      retu
+   endi
+   Area("Cadlin")
+   loca for linha = trim(LHA)
+   if eof()
+      mdfor()
+      LHA := spac(40)
+      loop
+   endi
+   @ 01,01 clea to 16,28
+   @ 01,01 say 'CodL    Linha          '
+   ln := 3
+   index on linha to lnh
+   set index to lnh
+   go top
+   do whil .not. eof()
+      if linha != trim(LHA)
+         skip
+         loop
+      endi
+      @ ln,01 say codl
+      @ ln,09 say linha
+      skip
+      ln := ln + 1
+      t := ' '
+      if ln > 15
+         @ 16,03 say ' Tecle Algo:' get t
+         read
+         @ 02,01 clea to 16,28
+         ln := 3
+         loop
+      endi
+   endd
+   @ 16,03 say ' Tecle Algo:' get t
+   read
+endd
+Restela(Tela)
+
+   function psqlin()
+*******************************************
+Local tela := SaveScreen()
+LHA := spac(40)
+do whil LHA = spac(40)
+   @ 00,00 clea to 17,29
+   @ 00,00 to 17,29
+   @ 02,01 say 'Digite Linha:'
+   @ 04,01 get LHA pict '!!!!!!!!!!!!!!!'
+   read
+   if LHA = '     '
+      Restela(tela)
+      retu
+   endi
+    Area(oMenu:aDbfs[38])
+   loca for linha = trim(LHA)
+   if eof()
+      mdfor()
+      LHA := spac(40)
+      loop
+   endi
+   @ 01,01 clea to 16,28
+   set color to w/r+
+   @ 01,01 say 'CodL    Linha          '
+   set color to c/w/r+
+   ln := 3
+   index on linha to lnh
+   set index to lnh
+   go top
+   do whil .not. eof()
+      if linha <> trim(LHA)
+         skip
+         loop
+      endi
+      @ ln,01 say codl
+      @ ln,09 say linha
+      skip
+      ln := ln + 1
+      t := ' '
+      if ln > 15
+         @ 16,03 say 'Tecle Algo:' get t
+         read
+         @ 02,01 clea to 16,28
+         ln := 3
+         loop
+      endi
+   endd
+   @ 16,03 say 'Tecle Algo:' get t
+   read
+endd
+Restela(Tela)
+
+function psqfor()
+
+LOCAL Tela := SaveScreen()
+t:=0
+do whil t = 0
+CNP := spac(18)
+RZ := spac(40)
+MNOME := SPACE(15)
+if cdtr = 'X'
+   @ 09,04 prompt 'NOME FANTASIA'
+   @ 10,04 prompt 'RAZAO SOCIAL'
+   @ 11,04 prompt 'CNPJ'
+   menu to TT
+else
+   TT := 1
+endi
+   @ 00,00 clea to 23,29
+   @ 00,00 to 23,29
+if TT = 1
+   @ 02,01 say 'Digite o Nome do Fornecedor:'
+   @ 03,01 get MNOME pict '@!'
+elseif TT = 2
+   @ 02,01 say "Digite a RazÆo Social:"
+   @ 03,01 GET RZ PICT "!!!!!!!!!!!!!!!!!!!!"
+elseif TT = 3
+   @ 02,01 say "Digite o CNPJ:"
+   @ 03,01 GET CNP PICT "99.999.999/9999-99"
+endi
+READ
+if TT = 0
+   Restela(tela)
+   retu
+endi
+if TT = 1 .and. Mnome = '     '
+   Restela(tela)
+   retu
+elseif TT = 2 .and. RZ = '    '
+   Restela(tela)
+   retu
+elseif TT = 3 .and. CNP = '  '
+   Restela(tela)
+   retu
+endi
+read
+  Area(oMenu:aDbfs[4])
+DBGOTOP()
+if TT = 1
+   LOCATE FOR ALLTRIM(MNOME)$nfor
+elseif TT = 2
+   LOCATE FOR ALLTRIM(RZ)$RAZAO
+elseif TT = 3
+   LOCATE FOR ALLTRIM(CNP)$CNPJ
+endi
+   if eof()
+      mdfor()
+      inkey(0)
+      if cdtr = 'X'
+         Restela(tela)
+      endi
+      t := 0
+      loop
+   endi
+   @ 01,01 clea to 16,28
+   bcor()
+   @ 01,01 say 'Codg    Fornecedor          '
+   tcor()
+   ln := 3
+   CONTA := 0
+Do whil .t.
+   conta++
+   @ ln,01 say codf
+   @ ln,09 say nfor
+   if TT # 1
+      @ ln+1,01 say subs(razao,1,25)
+      if sit = 'EMPRESA'
+         @ ln+2,01 say cnpj
+      else
+         @ ln+2,01 say cpf
+      endi
+   endi
+   if TT = 1
+      ln := ln + 1
+   else
+      ln := ln + 4
+   endi
+   if ln > 20
+      @ 22,01 say 'Tecle algo...'
+      inkey(0)
+      @ 03,01 clea to 22,28
+      ln := 3
+   endi
+   IF EOF()
+      @ 22,01 SAY "Fim da Busca !"
+      inkey(10)
+      Restela(tela)
+      retu(.f.)
+   ENDIF
+   CONTINUE
+endd
+cdtr := ' '
+Restela(tela)
+endd
+
+ 
+   
+   
+   function psqrepre()
 *******************
 LOCAL Tela := SaveScreen()
 NMC := spac(15)

@@ -131,7 +131,7 @@ def Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-   oItem :=MenuItem( "&Fornecedores" ,{|| nil })
+   oItem :=MenuItem( "&Fornecedores" ,{|| cadasfor() })
    oPopUp:AddItem( oItem )
    if Yforcad = 'B'
       oItem:Enabled := .f.

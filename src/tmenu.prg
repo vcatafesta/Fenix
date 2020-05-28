@@ -4,7 +4,7 @@ class TMenu from TAmbiente
 	exported:
 		  VAR Col
 		  
-	public:
+	exported:
 		  METHOD New 
 
 	public Menu1
