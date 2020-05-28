@@ -60,7 +60,7 @@ def UfCerto( cUf )
 
 	if Empty( cUf )
 		ErrorBeep()
-		Alerta( "Erro: Entrada inválida!")
+		Alerta( "Erro: Entrada invalida!")
 		return( false )
 	endif
 
@@ -68,7 +68,7 @@ def UfCerto( cUf )
 	Uf->(Order( UF_UF ))
 	if Uf->(DbSeek( cUf ))
 		ErrorBeep()
-		Alerta("Erro: Ja registrado ou,; incluido por outra estacao...")
+		Alerta("ERRO: Ja registrado ou,; incluido por outra estacao...")
 		AreaAnt( Arq_Ant, Ind_Ant )
 		return( false )
 	endif
@@ -89,7 +89,7 @@ def ufErrado( cEsta, cNome, nRow, nCol)
 	uf->(Order( UF_UF ))
 	if (Lastrec() = 0 )
 		ErrorBeep()
-		if Conf(" Pergunta: Nenhuma UF Disponivel. Registrar ?")
+		if Conf(" INFO: Nenhuma UF Disponivel. Registrar ?")
 			UfInclusao()
 		endif
 		AreaAnt( Arq_Ant, Ind_Ant )
@@ -904,15 +904,15 @@ def ClientesInclusao()
 			}, Rcpf) 			
 			@ Row(),  50 say "RG....:" 	get Rinscrp pict '9999999999999999'
 		endif
-		@ Row()+1,02 say "Cep.................:"  get cCep 	pict '99999-999' valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
-		@ Row(),  50 say "Cidade:"		            get cCida   pict "@!"  
-		@ Row(),  90 say "Estado:"                get cEsta   pict "@" valid UfErrado(@cEsta, nil, Row(), Col()+1)
-		@ Row()+1,02 say "Pais................:"  get cPais   pict "@!"	
-		@ Row()+1,02 say "Endereco............:" 	get cEnde 	pict "@!"
-		@ Row()+1,02 say "Logradouro..........:" 	get cLogra 	pict '@!'
-		@ Row(),  72 say "Numero:" 					get Rnroend pict '@!'
-		@ Row()+1,02 say "Complemento.........:" 	get Rcompl 	pict '@!'
-		@ Row(),  50 say "Bairro:" 					get cBair	pict '@!'
+		@ Row()+1,02 say "Cep.................:"  get cCep 	 pict '99999-999' valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
+		@ Row(),  50 say "Cidade:"		            get cCida    pict "@!"  
+		@ Row(),  90 say "Estado:"                get cEsta    pict "@" valid UfErrado(@cEsta, nil, Row(), Col()+1)
+		@ Row()+1,02 say "Pais................:"  get cPais    pict "@!"	
+		@ Row()+1,02 say "Endereco............:" 	get cEnde 	 pict "@!"
+		@ Row()+1,02 say "Logradouro..........:" 	get cLogra 	 pict '@!'
+		@ Row(),  72 say "Numero:" 					get Rnroend  pict '@!'
+		@ Row()+1,02 say "Complemento.........:" 	get Rcompl 	 pict '@!'
+		@ Row(),  50 say "Bairro:" 					get cBair	 pict '@!'
 		@ Row()+1,02 say "Contato.............:"	get Rcontato pict '@!'
 		@ Row(),  50 say "Fone :"  					get Rfone1   pict '(99)9999-99999'
 		@ Row(),  72 say "Fone1:"   					get Rfone2   pict '(99)9999-99999'
@@ -961,9 +961,10 @@ def ClientesInclusao()
 		read
 		if lastkey() = ESC
 			errorbeep()
-			if conf("INFO: Deseja voltar?")
+			if conf("INFO: Deseja encerrar cadastro?")
 				return(restela(cScreen))
 			endif
+			loop
 		endif
 	
 		rTpdesc   := iif(dsc == 1, "C", "E")
@@ -1010,7 +1011,7 @@ def ClientesInclusao()
 				Cadcli->Vmin 		:= Rvmin
 				Cadcli->despacho 	:= Rdespacho
 				Cadcli->reg_apur 	:= strzero(op_regap,1)
-				Cadcli->indie 		:= strzero(op_ctb)
+				Cadcli->indie 		:= strzero(op_ctb,1)
 				Cadcli->cnae 		:= Rcnae
 				Cadcli->codrp 		:= cRepre
 				Cadcli->nrepre 	:= cNomeRepre
@@ -1064,7 +1065,8 @@ def lstcli()
          endif
       endif
 
-      if Cadcli->(!DbSeek( cEsta ))
+		if Cadcli->(!DbSeek( cEsta ))
+			ErrorBeep()
 		   if !conf("INFO: Nada consta nos parametros informados. Deseja imprimir assim mesmo?")			
 				loop
 			endif	
