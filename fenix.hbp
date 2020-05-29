@@ -15,6 +15,7 @@
 -lhbct
 -lhbgt
 -lhbnf
+-lhbxpp
 
 {mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition  
 {win}-prgflag= -iinclude;

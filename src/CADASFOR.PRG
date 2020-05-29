@@ -2,25 +2,17 @@
 
 function cadasfor()
 *******************
-	
-	
-   LOCAL Opsel := 0	
+   LOCAL GetList := {}
    LOCAL cScreen := SaveScreen()
+   LOCAL Opsel   := 0	
    LOCAL aMenu   := {" Pesquisar ", " Cadastrar "}
- 
-@ 00,00 clea to 23,79
-	@ 00,00 to 23,79 doub
-	@ 03,23 to 05,52 doub
-	@ 04,24 say '* CADASTRO DE FORNECEDORES *'
-	*CN := 'N'
-	
+
    while true
 		oMenu:Limpa()
-   	Opsel := FazMenu( 10, 10, aMenu )
+   	Opsel := FazMenu( 10, 10, aMenu, "CADASTRO DE FORNECEDORES" )
 		Do Case
 		Case Opsel = 0
-   		Restela( cScreen )
-			return nil
+   		return(Restela(cScreen))
 		Case Opsel = 1
       	    FornecedorInclusao()
 		Case Opsel = 2
@@ -29,27 +21,29 @@ function cadasfor()
 	enddo
 
 
-
-
-Function FornecedorInclusao()
+function FornecedorInclusao()
 ***************************
-    oMenu:Limpa()
-    Area(oMenu:aDbfs[4])
-    go bott
-    cdf := CODf
-    Do case
-       case val(cdf)+1 < 10
+   LOCAL GetList := {}
+   LOCAL cScreen := SaveScreen()
+     
+
+   oMenu:Limpa()
+   Area(oMenu:aDbfs[4])
+   go bott
+   cdf := CODf
+   Do case
+      case val(cdf)+1 < 10
             stor '000'+subs(str(val(cdf)+1),10,1) to cod
-       case val(cdf)+1 >9 .and. val(cdf) < 100
+      case val(cdf)+1 >9 .and. val(cdf) < 100
             stor '00'+subs(str(val(cdf)+1),9,2) to cod
-       case val(cdf)+1 > 99 .and. val(cdf) < 1000
+      case val(cdf)+1 > 99 .and. val(cdf) < 1000
             stor '0'+subs(str(val(cdf)+1),8,3) to cod
-       case val(cdf)+1 > 999
+      case val(cdf)+1 > 999
             stor subs(str(val(cdf)+1),7,4) to cod
     Endcase
     Tdoc := 0
     FJ := ' '
-    do whil FJ = ' '
+    while FJ = ' '
        @ 10,04 say '* <P>rodutor ou <E>mpresa:' get FJ pict '!' valid (FJ $ 'PE')
        read
        if FJ = ' '
@@ -80,7 +74,7 @@ Function FornecedorInclusao()
     DT := date()
     @ 05,00 clea to 23,79
     Area("cadfor")
-    if Cadfor->(inclui())
+    if Cadfor->(Incluiu())
        Cadfor->data := DT
 	   Cadfor->codf := COD
 	   Cadfor->sit := FJ
@@ -253,7 +247,7 @@ Function FornecedorInclusao()
         endif
         Area("Cadfor")
         go regcad
-        if Cadfor->(Inclui())
+        if Cadfor->(Incluiu())
            Cadfor->nfor := rnfor
 		   Cadfor->razao := Rrazao
 		   Cadfor->ender := Render
