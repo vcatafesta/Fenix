@@ -117,7 +117,7 @@ function FornecedorInclusao()
     @ 01,26 say '* CADASTRO DE FORNECEDORES *'
     @ 02,01 to 14,78    
     @ 02,02 say 'Fornecedor'
-    @ 04,02 say 'C¢digo do Fornecedor:' get cod
+    @ 04,02 say 'CÂ¢digo do Fornecedor:' get cod
     @ 04,30 get FJ
     @ 05,02 say 'Data Cadastro:' get date
     clea gets
@@ -140,13 +140,13 @@ function FornecedorInclusao()
     @ 11,02 say 'Observacoes:' get Robser pict '@!'
     read
     @ 15,01 to 22,78
-    @ 15,02 say 'Endere‡o'
+    @ 15,02 say 'Endereâ€¡o'
     @ 17,02 say 'Lagradouro:' get Render pict '@!'
-    @ 17,55 say 'N£mero:' get Rnroend pict '!!!!!!'
+    @ 17,55 say 'NÂ£mero:' get Rnroend pict '!!!!!!'
     @ 18,02 say 'Complemento:' get Rcompl pict '@!'
     @ 18,37 say 'Bairro:' get Rbairro pict '!!!!!!!!!!!!!!!!!'
     @ 20,62 say 'CEP:' get CCEP pict '99.999-999'
-    @ 19,02 say 'Pa¡s:' 
+    @ 19,02 say 'PaÂ¡s:' 
     @ 19,18 say 'Estado:'
     @ 19,39 say 'Cidade:' 
     read
@@ -198,7 +198,7 @@ function FornecedorInclusao()
     endd
     cdl := '  '
     do whil cdl = '  '
-       @ 20,02 say 'RegiÆo:' get cdl pict '!9'
+       @ 20,02 say 'RegiÃ†o:' get cdl pict '!9'
        @ 21,02 say '<*>'
        read
        if cdl = '  '
@@ -219,7 +219,7 @@ function FornecedorInclusao()
              loop
           endi
           @ 20,02 clea to 21,20
-          @ 20,02 say 'RegiÆo:' get cdl
+          @ 20,02 say 'RegiÃ†o:' get cdl
           @ 20,12 say '-'
           @ 20,13 get Regiao
           clea gets
@@ -369,7 +369,7 @@ function fornecedorpesquisa()
    @ 00,00 to 23,79 doub
    @ 01,26 say "* CADASTRO DE FORNECEDOR *"
    @ 02,01 to 14,78
-   @ 04,02 say 'C¢digo Fornecedor:'
+   @ 04,02 say 'CÂ¢digo Fornecedor:'
    @ 05,02 say 'Data Cadastro:' 
    @ 04,42 say 'Fantasia:'
    @ 06,02 say 'Razao Social:'
@@ -387,7 +387,7 @@ function fornecedorpesquisa()
    @ 10,02 say 'Prazo:'
    @ 10,13 say 'Dias.'
    @ 11,02 say 'Observacoes:'
-   @ 13,02 say 'Regime de Apura‡Æo:'
+   @ 13,02 say 'Regime de Apuraâ€¡Ã†o:'
    @ 14,02 say 'Tipo Contrbte:'      
    bcor()
    @ 04,21 say Ccodf
@@ -423,19 +423,19 @@ function fornecedorpesquisa()
    elseif Cindie = '2'
       @ 14,17 say '2-Contribuinte ISENTO'
    elseif Cindie = '9'
-      @ 14,17 say '9-NÇO Contribuinte'
+      @ 14,17 say '9-NÃ‡O Contribuinte'
    endif
 
    @ 15,01 to 22,78
    @ 17,02 say 'Lagradouro:'
-   @ 17,55 say 'N£mero:'
+   @ 17,55 say 'NÂ£mero:'
    @ 18,02 say 'Complemento:'
    @ 18,37 say 'Bairro:'
    @ 20,62 say 'CEP:'
-   @ 19,02 say 'Pa¡s:' 
+   @ 19,02 say 'PaÂ¡s:' 
    @ 19,18 say 'Estado:'
    @ 19,39 say 'Cidade:'
-   @ 20,02 say 'RegiÆo:'
+   @ 20,02 say 'RegiÃ†o:'
          
    @ 17,14 say Cender
    @ 17,63 say Cnroend
@@ -452,14 +452,14 @@ function fornecedorpesquisa()
    MN := 0
    Do Whil MN = 0
       @ 02,02 prompt 'Fornecedor'
-      @ 15,02 prompt 'Endere‡o'
+      @ 15,02 prompt 'Endereâ€¡o'
       menu to MN
       if MN = 0
          retu
       elseif MN = 1
          MN_cl := 0
          do whil MN_cl = 0
-            @ 04,02 say 'C¢digo Fornecedor:'
+            @ 04,02 say 'CÂ¢digo Fornecedor:'
             @ 05,02 say 'Data Cadastro:' 
             @ 04,42 prompt 'Fantasia:'
             @ 06,02 prompt 'Razao Social:'
@@ -477,7 +477,7 @@ function fornecedorpesquisa()
             @ 10,02 prompt 'Prazo:'
             @ 10,13 say 'Dias.'
             @ 11,02 prompt 'Observacoes:'
-            @ 13,02 prompt 'Regime de Apura‡Æo:'
+            @ 13,02 prompt 'Regime de Apuraâ€¡Ã†o:'
             @ 14,02 prompt 'Tipo Contrbte:'      
             @ 13,60 prompt 'VOLTAR'
             menu to mn_cl
@@ -662,7 +662,7 @@ function fornecedorpesquisa()
                @ 14,17 clea to 17,37
                @ 14,17 prompt '1-Contribuinte ICMS'
                @ 15,17 prompt '2-Contribuinte ISENTO'
-               @ 16,17 prompt '9-NÇO Contribuinte'
+               @ 16,17 prompt '9-NÃ‡O Contribuinte'
                menu to op_ctb
                if OP_ctb = 0
                   rest screen from tela12
@@ -675,7 +675,7 @@ function fornecedorpesquisa()
                   elseif OP_ctb = 2
                   desc_ctb := '2-Contribuinte ISENTO'
                   elseif OP_ctb = 3
-                  desc_ctb := '9-NÇO Contribuinte'
+                  desc_ctb := '9-NÃ‡O Contribuinte'
                Endif
                op_ctb := ltrim(str(op_ctb))
                Area("Cadfor")
@@ -699,13 +699,13 @@ function fornecedorpesquisa()
          MN_Ed := 0
          Do whil MN_Ed = 0
             @ 17,02 prompt 'Lagradouro:'
-            @ 17,55 prompt 'N£mero:'
+            @ 17,55 prompt 'NÂ£mero:'
             @ 18,02 prompt 'Complemento:'
             @ 18,37 prompt 'Bairro:'
-            @ 19,02 prompt 'Pa¡s:' 
+            @ 19,02 prompt 'PaÂ¡s:' 
             @ 19,18 prompt 'Estado:'
             @ 19,39 prompt 'Cidade:'
-            @ 20,02 prompt 'RegiÆo:'
+            @ 20,02 prompt 'RegiÃ†o:'
             @ 20,62 prompt 'CEP:'
             @ 21,02 prompt 'VOLTAR                                          '
             menu to MN_ED
@@ -855,7 +855,7 @@ function fornecedorpesquisa()
                      loop
                   endif
                   @ 20,02 clea to 21,20
-                  @ 20,02 say 'RegiÆo:' get clinha
+                  @ 20,02 say 'RegiÃ†o:' get clinha
                   @ 20,11 say '-'
                   rgao := regiao
                   @ 20,12 get Rgao
