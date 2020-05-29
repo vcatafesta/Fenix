@@ -1131,17 +1131,6 @@ HB_FUNC( INKEY )
 
 /*-----------------------------------------------------------------------------------------------*/	
 
-HB_FUNC( __KEYBOARD )
-{
-   /* Clear the typeahead buffer without reallocating the keyboard buffer */
-   hb_inkeyReset();
-
-   if( HB_ISCHAR( 1 ) )
-      hb_inkeySetText( hb_parc( 1 ), hb_parclen( 1 ) );
-}
-
-/*-----------------------------------------------------------------------------------------------*/	
-
 HB_FUNC( HB_KEYCLEAR )
 {
    hb_inkeyReset();
