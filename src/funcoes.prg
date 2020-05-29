@@ -103,7 +103,13 @@ function mdfunc()
 	ALERT(" ATEN€ÇO !!!;;FUNCIONµRIO NÇO LOCALIZADO ", , "W+/B")
 	set bell off
 
+function mdfor()
+	set bell on
+	TONE(200,5)
+	ALERT(" ATEN€ÇO !!!;;FORNECEDOR NÇO LOCALIZADO ", , "W+/B")
+	set bell off
 
+	
 function mdnroped()
 *******************
 	set bell on
