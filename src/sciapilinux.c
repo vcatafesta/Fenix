@@ -2986,6 +2986,7 @@ char * hb_verCompiler( void )
    CA-Cl*pper 5.3b returns: "Clipper (R) 5.3b Intl. (Rev. 338) (1997.04.25)"
  */
 
+/*
 char * hb_verHarbour( void )
 {
    char * pszVersion;
@@ -3021,6 +3022,7 @@ char * hb_verHarbour( void )
 
    return pszVersion;
 }
+*/
 
 char * hb_verPCode( void )
 {
