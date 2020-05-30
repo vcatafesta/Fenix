@@ -52,7 +52,11 @@ init def Main(...)
    oMenu:Limpa()
 	login()
 	SetaIni()
-	oMenu:StatusSup 	:= "Fenix for Windows v1.0"
+	#ifdef __PLATFORM__WINDOWS
+		oMenu:StatusSup 	:= "Fenix for Windows v0.1"
+	#else
+		oMenu:StatusSup 	:= "Fenix for Linux v0.1"
+	#endif
 	oMenu:StatusInf 	+= AllTrim(oMenu:Comp)
 	oMenu:StatusInf 	+= "|"
 	oMenu:StatusInf 	+= Upper(StrTrim(oAmbiente:xBase))

@@ -284,33 +284,7 @@ function ctr_user()
    stor nfsa to Ynfsa
 	return nil
 
-
-function imp_cadc( Cpar1 )
-**************************
-   LOCAL nPrn     := 1
-   LOCAL cBMPFile := "C:\hb32\clamar\imagem.bmp"
-   LOCAL GetList  := {}
-   LOCAL aPrn     := win_printerList()
-
-   if Empty( aPrn )
-      Alert( "Nao foi localizado nenhuma impressora instalada!!!" )
-   else
-      while nPrn != 0
-         vcTela = savescreen(07, 12, 23, 69)
-         @ 08,13 to 22,68
-         setcolor("n/w,w+/g")
-         @ 09, 14 clear to 21,67
-         @ 09, 14 say " Sele‡Æo de impressora                                " color "w+/r"
-         @ 21, 14 say " " +chr(24)+chr(25)+": Movimenta | Enter: Seleciona |  ESC: Cancelar    " color "w+/Gr"
-         nPrn := AChoice(10,15,20,66,aPrn, .T.,, "myFuncao" )
-         IF nPrn != 0
-            PrnTest( aPrn[ nPrn ], cBMPFile, iif( HB_ISSTRING( cPar1 ) .AND. Lower( cPar1 ) == "ask", .T., NIL ) )
-         endif
-         restscreen(07, 12, 23, 69,vcTela)
-         exit
-      enddo
-   endif
-   return nil
+#ifdef __PLATFORM__WINDOWS
 
 STATIC PROCEDURE PrnTest( cPrinter, cBMPFile, lAsk )
 
@@ -454,10 +428,6 @@ STATIC PROCEDURE PrnTest( cPrinter, cBMPFile, lAsk )
 *         oPrinter:Textout(LOTE)
 *         oPrinter:NewLine()
 
-
-
-
-
 *             @ ln+5,02 say 'Contato:'
 *             @ ln+5,11 say Ccontato
 *             @ ln+5,35 say 'Fone:'
@@ -537,8 +507,9 @@ STATIC PROCEDURE PrnTest( cPrinter, cBMPFile, lAsk )
    ENDIF
 
    RETURN
+#endif
 
-
+#ifdef __PLATFORM__WINDOWS
 STATIC PROCEDURE PrintBitmap( oPrn, cBitFile )
 
    LOCAL oBMP
@@ -562,6 +533,7 @@ STATIC PROCEDURE PrintBitmap( oPrn, cBitFile )
    ENDIF
 
    RETURN
+#endif
 
 function myFuncao()
 *******************
@@ -4136,10 +4108,11 @@ intWindowStyle
 10 Sets the show-state based on the state of the program that started the application.
 */
 
-#ifdef __XHARBOUR__
-   WshShell := CreateObject("WScript.Shell")
-#else
+
+#ifdef __PLATFORM__WINDOWS
    WshShell := win_oleCreateObject("WScript.Shell")
+#else
+	WshShell := CreateObject("WScript.Shell")
 #endif
 
 lRet     := WshShell:Run("%comspec% /c " + cComando, intWindowStyle, .F.)
@@ -4169,10 +4142,10 @@ def ShellExec( cComando )
 	10 Sets the show-state based on the state of the program that started the application.
 	*/
 
-	#ifdef __XHARBOUR__
-		WshShell := CreateObject("WScript.Shell")
-	#else
+	#ifdef __PLATFORM__WINDOWS
 		WshShell := win_oleCreateObject("WScript.Shell")
+	#else
+		WshShell := CreateObject("WScript.Shell")
 	#endif
 
 	//oExec := oShell:Run("%comspec% /c " + cComando, intWindowStyle, .F.)

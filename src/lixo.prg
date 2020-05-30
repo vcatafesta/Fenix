@@ -1505,6 +1505,41 @@ Function ClientesPesquisa()
       restscreen(00,00,23,79,TELA)
       retu
 
+
+function imp_cadc( Cpar1 )
+**************************
+   LOCAL nPrn     := 1
+   LOCAL cBMPFile := "C:\hb32\clamar\imagem.bmp"
+   LOCAL GetList  := {}
+   LOCAL aPrn     
+
+   #ifdef __PLATFORM__WINDOWS
+		aPrn     := win_printerList()
+	#else	
+		aPrn     := cupsGetDests()
+	#endif
+	
+   if Empty( aPrn )
+      Alert( "Nao foi localizado nenhuma impressora instalada!!!" )
+   else
+      while nPrn != 0
+         vcTela = savescreen(07, 12, 23, 69)
+         @ 08,13 to 22,68
+         setcolor("n/w,w+/g")
+         @ 09, 14 clear to 21,67
+         @ 09, 14 say " Sele‡Æo de impressora                                " color "w+/r"
+         @ 21, 14 say " " +chr(24)+chr(25)+": Movimenta | Enter: Seleciona |  ESC: Cancelar    " color "w+/Gr"
+         nPrn := AChoice(10,15,20,66,aPrn, .T.,, "myFuncao" )
+         IF nPrn != 0
+            PrnTest( aPrn[ nPrn ], cBMPFile, iif( HB_ISSTRING( cPar1 ) .AND. Lower( cPar1 ) == "ask", .T., NIL ) )
+         endif
+         restscreen(07, 12, 23, 69,vcTela)
+         exit
+      enddo
+   endif
+   return nil
+
+
 function psqcli()
 *****************
 t:=0

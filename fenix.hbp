@@ -11,15 +11,15 @@
 
 #libs
 -lxhb
--lhbwin
+{win}-lhbwin
 -lhbct
 -lhbgt
 -lhbnf
 -lhbxpp
 
-{mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition  
-{win}-prgflag= -iinclude;
-{linux}-prgflag= -iinclude;
+-ldflag=-Wl,--allow-multiple-definition  
+-prgflag= -iinclude;
+-prgflag= -iinclude;
 -cflag= -cpp -w0
 
 src\fenix.prg
@@ -46,3 +46,4 @@ hbblink.hbc
 hboslib.hbc
 hbgzio.hbc
 hbmemio.hbc
+{linux}hbcups.hbc
