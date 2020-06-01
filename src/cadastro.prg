@@ -1075,6 +1075,7 @@ def lstcli()
 		oMenu:Limpa()	
       oRelato				:= TRelatoNew()	
       oRelato:Tamanho	:= 132
+      oRelato:Coluna	   := 66
       oRelato:NomeFirma := AllTrim(oAmbiente:NomeFirma)
       oRelato:Sistema	:= oMenu:StatusSup
       oRelato:Titulo 	:= 'LISTAGEM DE CLIENTES DA UF : ' + cEsta
@@ -1101,7 +1102,7 @@ def lstcli()
          nQtDocumento++
          CadCli->( Qout( Codc, Cliente, Fone1, Contato, dscnto, email))
          CadCli->(DbSkip(1))
-         IF ++oRelato:RowPrn >= 25
+         IF ++oRelato:RowPrn >= oRelato:Coluna
             oRelato:Eject()
          endif	
       enddo   

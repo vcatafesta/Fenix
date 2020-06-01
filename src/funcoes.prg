@@ -1667,7 +1667,7 @@ Function Refresh()
 DbSkip(0)
 Return Nil
 
-Function TravaReg( nTentativa, aRegistros )
+function TravaReg( nTentativa, aRegistros )
 ******************************************
 LOCAL cScreen := SaveScreen()
 LOCAL lContinua, Restart := OK
@@ -3224,20 +3224,38 @@ endef
 def SetarVariavel( aNewLpt )
 ****************************
 	LOCAL nPos       := 2   
-	PUBLIC _CPI10	  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC _CPI12	  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC GD		  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC PQ		  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC NG		  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC NR		  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC CA		  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC C18		  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC LIGSUB	  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC DESSUB	  := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC _SALTOOFF := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC _SPACO1_8 := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC _SPACO1_6 := MsDecToChr( aNewLpt[++nPos] )
-	PUBLIC RESETA	  := MsDecToChr( aNewLpt[++nPos] )
+	
+	if oAmbiente:lVisSpooler // Visualizar
+		PUBLIC _CPI10	  := ""
+		PUBLIC _CPI12	  := ""
+		PUBLIC GD		  := ""
+		PUBLIC PQ		  := ""
+		PUBLIC NG		  := ""
+		PUBLIC NR		  := ""
+		PUBLIC CA		  := ""
+		PUBLIC C18		  := ""
+		PUBLIC LIGSUB	  := ""
+		PUBLIC DESSUB	  := ""
+		PUBLIC _SALTOOFF := ""
+		PUBLIC _SPACO1_8 := ""
+		PUBLIC _SPACO1_6 := ""
+		PUBLIC RESETA	  := ""
+	else
+		PUBLIC _CPI10	  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC _CPI12	  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC GD		  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC PQ		  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC NG		  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC NR		  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC CA		  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC C18		  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC LIGSUB	  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC DESSUB	  := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC _SALTOOFF := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC _SPACO1_8 := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC _SPACO1_6 := MsDecToChr( aNewLpt[++nPos] )
+		PUBLIC RESETA	  := MsDecToChr( aNewLpt[++nPos] )
+	endif
 	return   
 endef   
 
@@ -3494,6 +3512,7 @@ def Instru80( nQualPorta, cArquivo )
 		case nChoice = 8 // Visualizar
 			nPortaDeImpressao     := 1
          oAmbiente:lVisSpooler := true
+			SetarVariavel( aNewLpt )
 			return( SaidaParaArquivo())
 		case nChoice = 9
 			nPortaDeImpressao := 1
