@@ -3143,57 +3143,68 @@ endef
 
 *==================================================================================================*
 
-def CupsArrayPrinter()
-   LOCAL aPrinter := cupsGetDests()
-   LOCAL aModelo  := {}
-   LOCAL aMenu    := {}
-   LOCAL aAction	:= { "PRONTA         ","FORA DE LINHA  ","DESLIGADA      ","SEM PAPEL      ", "NAO CONECTADA  "}
-   LOCAL aComPort := { "DISPONIVEL     ","INDISPONIVEL   " }
-   LOCAL aStatus  := RetPrinterStatus()
-   LOCAL nIndex   := 0
-   LOCAL nPr
-   MEMVAR cStr
-	LOCAL nLen
+def CupsArrayPrinter()   
+   LOCAL aPrinter       := cupsGetDests()
+   LOCAL aModelo        := {}
+   LOCAL aMenu          := {} 
+   LOCAL aAction     	:= { "PRONTA         ","FORA DE LINHA  ","DESLIGADA      ","SEM PAPEL      ", "NAO CONECTADA  "}
+   LOCAL aComPort       := { "DISPONIVEL     ","INDISPONIVEL   " }
+   LOCAL aStatus        := RetPrinterStatus()
+   LOCAL nLocalPrinters := 7
+   LOCAL nIndex         := nLocalPrinters
+	LOCAL nPr  
+   LOCAL nLen
+	LOCAL nMaxPort
+	LOCAL nMaxPrinterName
+   MEMVAR aStr
 
-   aMenu := {  " LPT1 ¦ " + aAction[ aStatus[1]] + " ¦ " + oAmbiente:aLpt1[1,2],;
-					" LPT2 ¦ " + aAction[ aStatus[2]] + " ¦ " + oAmbiente:aLpt2[1,2],;
-					" LPT3 ¦ " + aAction[ aStatus[3]] + " ¦ " + oAmbiente:aLpt3[1,2],;
-					" COM1 ¦ " + Iif( FIsPrinter("COM1"), aComPort[1], aComPort[2]) + " ¦ " + "PORTA SERIAL 1",;
-					" COM2 ¦ " + Iif( FIsPrinter("COM2"), aComPort[1], aComPort[2]) + " ¦ " + "PORTA SERIAL 2",;
-					" COM3 ¦ " + Iif( FIsPrinter("COM3"), aComPort[1], aComPort[2]) + " ¦ " + "PORTA SERIAL 3",;
-					" USB  ¦ " + aAction[ aStatus[1]] + " ¦ IMPRESSORA USB",;
-					" VISUALIZAR   ¦ ",;
-					" ENVIAR EMAIL ¦ ",;
-					" WEB BROWSER  ¦ ",;
-					" SPOOLER      ¦ ",;
-					" CANCELAR     ¦ ";
-            }
+	nLen            := Len( aPrinter )
+	#ifdef __PLATFORM__WINDOWS
+		nMaxPort        := aMaxStrLen(aPrinter[WIN_PRINTERLIST_PORT])   
+		nMaxPrinterName := aMaxStrLen(aPrinter[WIN_PRINTERLIST_PRINTERNAME])   
+	#else
+		nMaxPort        := aMaxStrLen(aPrinter)
+		nMaxPrinterName := aMaxStrLen(aPrinter)
+	#endif
+	
+	if nMaxPort <= 0
+		nMaxPort = 29
+	endif
 
-	nLen := Len( aPrinter )   
+   aMenu := {  " LOCAL  þ " + padr("LPT1:",nMaxPort) + " þ " + left(oAmbiente:aLpt[1,TPRINTER_NOME],17) + " þ " + aAction[ aStatus[1]],;
+					" LOCAL  þ " + padr("LPT2:",nMaxPort) + " þ " + left(oAmbiente:aLpt[2,TPRINTER_NOME],17) + " þ " + aAction[ aStatus[2]],;
+					" LOCAL  þ " + padr("LPT3:",nMaxPort) + " þ " + left(oAmbiente:aLpt[3,TPRINTER_NOME],17) + " þ " + aAction[ aStatus[3]],;
+					" LOCAL  þ " + padr("COM1:",nMaxPort) + " þ " + left(oAmbiente:aLpt[4,TPRINTER_NOME],17) + " þ " + iif( FIsPrinter("COM1"), aComPort[1], aComPort[2]),;
+					" LOCAL  þ " + padr("COM2:",nMaxPort) + " þ " + left(oAmbiente:aLpt[5,TPRINTER_NOME],17) + " þ " + iif( FIsPrinter("COM2"), aComPort[1], aComPort[2]),;
+					" LOCAL  þ " + padr("COM2:",nMaxPort) + " þ " + left(oAmbiente:aLpt[6,TPRINTER_NOME],17) + " þ " + iif( FIsPrinter("COM3"), aComPort[1], aComPort[2]),;
+					" LOCAL  þ " + padr("USB: ",nMaxPort) + " þ " + left(oAmbiente:aLpt[7,TPRINTER_NOME],17) + " þ " + aAction[ aStatus[1]],;
+					" VISUALIZAR   þ ",;
+					" ENVIAR EMAIL þ ",;
+					" WEB BROWSER  þ ",;
+					" SPOOLER      þ ",;
+					" CANCELAR     þ ";
+					}
+   
+	//browsearray(oAmbiente:aLpt)
+   aStr    := oAmbiente:aLpt
 	for nPr := 1 to nLen
-      nIndex++          
-      cStr := &( "oAmbiente:aLpd" + trimstr(nIndex))
-	   #ifdef __PLATFORM__WINDOWS
-	      Aadd( aMenu, " GDI" + TrimStr(nIndex) + "  ¦ " + padr(aPrinter[nIndex, WIN_PRINTERLIST_PORT],14) + " ¦ " + Left(cStr[1,2],17) + " em " + aPrinter[nIndex, WIN_PRINTERLIST_PRINTERNAME])
+		nIndex++
+		#ifdef __PLATFORM__WINDOWS
+	      Aadd( aMenu, ;
+					" GDI" + StrZero(nPr,2)  + ;
+					"  þ "  + padr(aPrinter[nPr, WIN_PRINTERLIST_PORT],nMaxPort) + ;
+					" þ "  + Left(aStr[nIndex,2],17) + ;
+					" em " + aPrinter[nPr, WIN_PRINTERLIST_PRINTERNAME])
 		#else
-   	   Aadd( aMenu, " LPD" + TrimStr(nIndex) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + aPrinter[nIndex, WIN_PRINTERLIST_PRINTERNAME])                   
+   	   Aadd( aMenu, ;
+					" CUPS" + StrZero(nPr,2) + ;
+					" þ "   + Left(aStr[nIndex,2],17) + ;
+					" em "  + aPrinter[nPr, WIN_PRINTERLIST_PRINTERNAME])                   
       #endif
-		Aadd( aModelo, aPrinter[nIndex, WIN_PRINTERLIST_PRINTERNAME])        
+		Aadd( aModelo, aPrinter[nPr, WIN_PRINTERLIST_PRINTERNAME])        
    next
    return {aMenu, aModelo, aAction, aStatus, aPrinter}
-
-	/*
-   FOR EACH nPr IN aPrinter
-      //? nPr:__enumIndex(), i
-      //nWidth := Max( nWidth, Len( nPr ) )
-      nIndex++
-      cStr := &( "oAmbiente:aLpd" + trimstr(nIndex))
-      Aadd( aMenu, " LPD" + TrimStr(nPr:__enumIndex()) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + nPr)
-      Aadd( aModelo, nPr)
-   NEXT
-   return {aMenu, aModelo, aAction, aStatus, aPrinter}
-	*/
-endef
+endef   
 
 *==================================================================================================*
 
@@ -3212,25 +3223,23 @@ endef
 
 def SetarVariavel( aNewLpt )
 ****************************
-	LOCAL nPos       := 2
-	PUBLIC _CPI10	  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC _CPI12	  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC GD		  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC PQ		  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC NG		  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC NR		  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC CA		  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC C18		  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC LIGSUB	  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC DESSUB	  := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC _SALTOOFF := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC _SPACO1_8 := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC _SPACO1_6 := MsDecToChr( aNewLpt[1,++nPos] )
-	PUBLIC RESETA	  := MsDecToChr( aNewLpt[1,++nPos] )
-	return
-endef
-
-
+	LOCAL nPos       := 2   
+	PUBLIC _CPI10	  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC _CPI12	  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC GD		  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC PQ		  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC NG		  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC NR		  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC CA		  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC C18		  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC LIGSUB	  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC DESSUB	  := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC _SALTOOFF := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC _SPACO1_8 := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC _SPACO1_6 := MsDecToChr( aNewLpt[++nPos] )
+	PUBLIC RESETA	  := MsDecToChr( aNewLpt[++nPos] )
+	return   
+endef   
 
 def Instruim()
 *******************
@@ -3385,16 +3394,15 @@ AreaAnt( Arq_Ant, Ind_Ant )
 return( lRetVal )
 
 *==================================================================================================*
-
 def Instru80( nQualPorta, cArquivo )
    MEMVAR cStr
 	LOCAL cScreen				:= SaveScreen()
 	LOCAL Arq_Ant				:= Alias()
-	LOCAL Ind_Ant				:= IndexOrd()
+	LOCAL Ind_Ant				:= IndexOrd()   
    LOCAL aPrinter          := {}
 	LOCAL nChoice
 	LOCAL aNewLpt
-   LOCAL nTamJan           := 0
+   LOCAL nTamJan           := 0                  
 	LOCAL i						:= 0
 	LOCAL nStatus				:= 0
 	STATI nPortaDeImpressao := 1
@@ -3403,20 +3411,20 @@ def Instru80( nQualPorta, cArquivo )
 	PRIVA aAction				:= {}
 	PRIVA aComPort 			:= {}
    PRIVA aModelo           := {}
-   PRIVA nPr               := 0
-   PRIVA nIndex            := 0
+   PRIVA nPr               := 0 
+   PRIVA nIndex            := 0    
 	PRIVA aMenu
    PRIVA aModelo
-
-	if len(oAmbiente:aLpt1) == 0 .or. len(oAmbiente:aLpd1) == 0
+   
+	if len(oAmbiente:aLpt) == 0
 		oPrinter:EscolheImpressoraUsuario()
 	endif
-
+	
 	if nQualPorta != NIL
 		nQualPorta := nPortaDeImpressao
 		return( true )
 	endif
-
+   
 	ErrorBeep()
 	while(true)
 		oMenu:Limpa()
@@ -3427,33 +3435,33 @@ def Instru80( nQualPorta, cArquivo )
       aStatus  := aPrinter[CUPS_STATUS]
 		aComPort := { "DISPONIVEL     ","INDISPONIVEL   " }
 		alDisp   := { OK, OK, OK, OK, OK, OK, OK, OK, OK, OK, OK, true }
-      nTamJan  := AmaxStrLen(aMenu) + 3
+      nTamJan  := AmaxStrLen(aMenu)
       nIndex   := Len(aMenu)
 
-		MaBox( 05, 10, 05 + nIndex + 1, nTamJan + 1, nil , "ENTER=IMPRIMIR¦CTRL/ALT+ENTER=ESCOLHER¦CTRL+PGDN=ONLINE")
-		nChoice := aChoice( 06, 11, 04 + nIndex + 1, nTamJan, aMenu, alDisp, "_Instru80" )
+		MaBox( 05, 10, 05 + nIndex + 1, nTamJan + 14, nil, "<SAIDA DA IMPRESSAO>ºENTER=IMPRIMIRºCTRL/ALT+ENTER=ESCOLHERºCTRL+PGDN=ONLINE")
+		nChoice := aChoice( 06, 11, 04 + nIndex + 1, nTamJan+13, @aMenu, alDisp, "_Instru80" )
 		if nChoice = 0 .OR. nChoice = 12
          if Conf("Pergunta: Cancelar Impressao ?")
             lCancelou := OK
             return false
-         endif
+         endif   
 			Loop
-		endif
-
-      aNewLpt := oAmbiente:aLpt1
+		endif	
+		
+      aNewLpt := oAmbiente:aLpt[1]
       switch nChoice
       case 1
       case 7
       case 8
-      case 9
+      case 9 
       case 11
-         aNewLpt := oAmbiente:aLpt1
+         aNewLpt := oAmbiente:aLpt[1]
          exit
       case 2
-         aNewLpt := oAmbiente:aLpt2
-         exit
+         aNewLpt := oAmbiente:aLpt[2]
+         exit         
       case 3
-         aNewLpt := oAmbiente:aLpt3
+         aNewLpt := oAmbiente:aLpt[3] 
          exit
       case 13
       case 14
@@ -3463,11 +3471,11 @@ def Instru80( nQualPorta, cArquivo )
       case 18
       case 19
       case 20
-      case 21
-         aNewLpt := &("oAmbiente:aLpd" + trimstr(nChoice-12))
+      case 21         
+         aNewLpt := oAmbiente:aLpt[nChoice-12]
          exit
       endswitch
-
+      
 		AreaAnt( Arq_Ant, Ind_Ant )
 		SetarVariavel( aNewLpt )
       oAmbiente:IsPrinter := nChoice
@@ -3500,12 +3508,12 @@ def Instru80( nQualPorta, cArquivo )
       case nChoice >= 13 .and. nChoice <= 21
          oAmbiente:CupsPrinter := aModelo[nChoice-12]
          nPortaDeImpressao     := nChoice
-         oAmbiente:lVisSpooler := false
+         oAmbiente:lVisSpooler := false         
          if !(Isnil(cArquivo))
             oAmbiente:cArquivo := cArquivo
             cupsPrintFile( oAmbiente:CupsPrinter, cArquivo, "Macrosoft SCI for Linux")
             loop
-         endif
+         endif   			
 			return(SaidaParaRedeCups(cArquivo))
 		otherwise
 			nPortaDeImpressao     := Iif( nChoice = 0, 1, nChoice )
@@ -3521,7 +3529,7 @@ def Instru80( nQualPorta, cArquivo )
 		endcase
 	enddo
 	ResTela( cScreen )
-endef
+endef	
 
 *==================================================================================================*
 
@@ -4257,42 +4265,46 @@ def MudaImpressora( nCorrente, aMenu )
    LOCAL aPrinter := CupsArrayPrinter()
    LOCAL aModelo 	:= aPrinter[CUPS_MODELO]
 	LOCAL aAction	:= aPrinter[CUPS_ACTION]
-   LOCAL aStatus  := aPrinter[CUPS_STATUS]
-
+   LOCAL aStatus  := aPrinter[CUPS_STATUS]   
+   LOCAL nIndex   := nCorrente
+	LOCAL oEscolhe := TIniNew(oAmbiente:xUsuario + ".INI")
+	
    if IsNil( aMenu)
       aMenu := aPrinter[CUPS_MENU]
    endif
-
+   
 	if UsaArquivo("PRINTER")
 		PrinterErrada( @cCodi )
       aArrayPrn := {;
                      Printer->Codi,;
                      Printer->Nome, ;
-                     Printer->_Cpi10,;
-                     Printer->_Cpi12,;
-                     Printer->Gd,;
-                     Printer->Pq,;
-                     Printer->Ng,;
-                     Printer->Nr,;
-                     Printer->Ca,;
-                     Printer->c18,;
-                     Printer->LigSub,;
-                     Printer->DesSub,;
-                     Printer->_SaltoOff,;
-                     Printer->_Spaco1_6,;
+                     Printer->_Cpi10,; 
+                     Printer->_Cpi12,; 
+                     Printer->Gd,; 
+                     Printer->Pq,; 
+                     Printer->Ng,; 
+                     Printer->Nr,; 
+                     Printer->Ca,; 
+                     Printer->c18,; 
+                     Printer->LigSub,; 
+                     Printer->DesSub,; 
+                     Printer->_SaltoOff,; 
+                     Printer->_Spaco1_6,; 
                      Printer->_Spaco1_8,;
                      Printer->Reseta;
-                  }
-      switch nCorrente
+		}
+      
+		switch nCorrente
       case 1
       case 2
       case 3
-         nIndex := nCorrente
-         &("oAmbiente:aLpt" + trimstr(nIndex)) := {}
-         Aadd( &("oAmbiente:aLpt" + trimstr(nIndex)), aArrayPrn)
-         cStr := &("oAmbiente:aLpt" + trimstr(nIndex))
-         aMenu[nIndex] := " LPT" + trimstr(nIndex) + " ¦ " + aAction[aStatus[nIndex]] + " ¦ " + cStr[1,2]
-         exit
+      case 4
+      case 5
+      case 6
+      case 7
+			nIndex := nCorrente
+			oAmbiente:aLpt[nIndex] := aArrayPrn		
+         exit                                                                     
 		case 13
 		case 14
 		case 15
@@ -4302,35 +4314,25 @@ def MudaImpressora( nCorrente, aMenu )
 		case 19
 		case 20
 		case 21
-         nIndex := ( nCorrente - 12 )
-         &("oAmbiente:aLpd" + trimstr(nIndex)) := {}
-			Aadd( &("oAmbiente:aLpd" + trimstr(nIndex)), aArrayPrn)
-         cStr := &("oAmbiente:aLpd" + trimstr(nIndex))
-         aMenu[nCorrente] := " LPD" + TrimStr(nIndex) + "  ¦ REDE CUPS      ¦ " + Left(cStr[1,2],17) + " em " + aModelo[nIndex]
-         exit
+		case 22
+		case 23
+		case 24
+		case 25
+		case 26
+		case 27
+		case 28
+		case 29
+		case 30
+		case 31
+		case 32
+			nIndex := (nCorrente-5)
+			oAmbiente:aLpt[nIndex] := aArrayPrn		
+         exit            			
       endswitch
-
+		
+		aMenu  	:= CupsArrayPrinter()[CUPS_MENU]	
+		oEscolhe:WriteString('printer', 'lpt' + strzero(nIndex,2), oAmbiente:aLpt[nIndex, PRINTER_CODI])	
 		Printer->(DbCloseArea())
-		if UsaArquivo("USUARIO")
-			if Usuario->(DbSeek( oAmbiente:xUsuario ))
-				if Usuario->(TravaReg())
-					Usuario->Lpt1 := Iif( oAmbiente:aLpt1[1,1] = NIL, "", oAmbiente:aLpt1[1,1])
-					Usuario->Lpt2 := Iif( oAmbiente:aLpt2[1,1] = NIL, "", oAmbiente:aLpt2[1,1])
-					Usuario->Lpt3 := Iif( oAmbiente:aLpt3[1,1] = NIL, "", oAmbiente:aLpt3[1,1])
-					Usuario->Lpd1 := Iif( oAmbiente:aLpd1[1,1] = NIL, "", oAmbiente:aLpd1[1,1])
-					Usuario->Lpd2 := Iif( oAmbiente:aLpd2[1,1] = NIL, "", oAmbiente:aLpd2[1,1])
-					Usuario->Lpd3 := Iif( oAmbiente:aLpd3[1,1] = NIL, "", oAmbiente:aLpd3[1,1])
-					Usuario->Lpd4 := Iif( oAmbiente:aLpd4[1,1] = NIL, "", oAmbiente:aLpd4[1,1])
-					Usuario->Lpd5 := Iif( oAmbiente:aLpd5[1,1] = NIL, "", oAmbiente:aLpd5[1,1])
-					Usuario->Lpd6 := Iif( oAmbiente:aLpd6[1,1] = NIL, "", oAmbiente:aLpd6[1,1])
-					Usuario->Lpd7 := Iif( oAmbiente:aLpd7[1,1] = NIL, "", oAmbiente:aLpd7[1,1])
-					Usuario->Lpd8 := Iif( oAmbiente:aLpd8[1,1] = NIL, "", oAmbiente:aLpd8[1,1])
-					Usuario->Lpd9 := Iif( oAmbiente:aLpd9[1,1] = NIL, "", oAmbiente:aLpd9[1,1])
-					Usuario->(Libera())
-				endif
-			endif
-			Usuario->(DbCloseArea())
-		endif
 	endif
 endef
 

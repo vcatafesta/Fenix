@@ -1051,7 +1051,7 @@ def lstcli()
    LOCAL cTela
 
    Area("cadcli")
-   Order( CADCLI_ESTA )
+   CadCli->(Order( CADCLI_ESTA ))
    
    while true
       oMenu:Limpa()
@@ -1081,8 +1081,6 @@ def lstcli()
       oRelato:Cabecalho := "CODI CLIENTE                FONE1          CONTATO              DSCNTO EMAIL"
       
       if !Instru80()
-         Sx_ClrScope( S_TOP )
-         Sx_ClrScope( S_BOTTOM )
          AreaAnt( Arq_Ant, Ind_Ant )
          return(ResTela( cScreen ))
       endif

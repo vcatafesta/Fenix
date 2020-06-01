@@ -33,6 +33,7 @@
 	#include "setcurs.ch"
 	#include "indice.ch"
 	#include "rddname.ch"
+	#include "tprinter.ch"
 
 //#require "hbwin"
 #define FORM_A4 9

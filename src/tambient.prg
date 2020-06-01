@@ -2,18 +2,7 @@
 
 class TAmbiente	
 	EXPORTED:
-		DATA aLpt1 		INIT {}
-		DATA aLpt2 		INIT {}
-		DATA aLpt3 		INIT {}
-      DATA aLpd1     INIT {}
-      DATA aLpd2     INIT {}
-      DATA aLpd3     INIT {}
-      DATA aLpd4     INIT {}
-      DATA aLpd5     INIT {}
-      DATA aLpd6     INIT {}
-      DATA aLpd7     INIT {}
-      DATA aLpd8     INIT {}
-      DATA aLpd9     INIT {}
+		DATA aLpt 		INIT {}
       DATA CupsPrinter INIT ""
       DATA lVisSpooler INIT FALSO
       DATA Sendmail    INIT FALSO
@@ -948,6 +937,7 @@ method HelpCor(xColor)
 				   ' SETA ACIMA : MUDA COR                  ' + ';' + ;
 				   ' SETA ABAIXO: MUDA COR                  ', xColor, true, false)
 	return nil
+
 	
 method SetaPano()
 *****************
@@ -976,7 +966,7 @@ method SetaPano()
 		Keyb( Chr( 27 ))
 		oTemp:Show(lManterScreen := FALSO)
 		M_Frame( ::Frame )
-      Mensagem("Use as setas CIMA e BAIXO para trocar, ENTER para aceitar, ESC Cancelar.;-; Nº " + StrZero( Selecionado, 3 ) + ' ' + ::Panos[Selecionado], Selecionado)
+      Mensagem("Use as setas CIMA e BAIXO para trocar, ENTER para aceitar, ESC Cancelar.;-; N§ " + StrZero( Selecionado, 3 ) + ' ' + ::Panos[Selecionado], Selecionado)
 		nKey := Inkey(0)
 		if ( nKey == 27 .OR. nKey = 13 )
 			Exit

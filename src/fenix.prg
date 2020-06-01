@@ -989,20 +989,7 @@ def login()
 	LOCAL cLogin    := Space(15)
 	LOCAL cPassword := Space(6)
 	LOCAL SNA       := "168935"
-	memvar cLpt1
-	memvar cLpt2
-	memvar cLpt3
-	memvar cLpd1
-	memvar cLpd2
-	memvar cLpd3
-	memvar cLpd4
-	memvar cLpd5
-	memvar cLpd6
-	memvar cLpd7
-	memvar cLpd8
-	memvar cLpd9
-
-
+	
 	Area("usuario")
 	while true
 		MaBox(09, 21, 14, 50, "LOGIN")
@@ -1019,21 +1006,11 @@ def login()
       Log           			:= cLogin
       Sha          		 	:= Sna
 		LogFan        			:= Usuario->CodUsu
-		nMuser        			:= Usuario->Fantazia
-		oMenu:Usuario 			:= Usuario->Fantazia
-		oAmbiente:xUsuario	:= Usuario->Fantazia
-      cLpt1 := "06"
-      cLpt2 := "06"
-      cLpt3 := "06"
-      cLpd1 := "06"
-      cLpd2 := "06"
-      cLpd3 := "06"
-      cLpd4 := "06"
-      cLpd5 := "06"
-      cLpd6 := "06"
-      cLpd7 := "06"
-      cLpd8 := "06"
-      cLpd9 := "06"
+		oAmbiente:xUsuario	:= StrTrim(Usuario->Fantazia)
+		nMuser        			:= oAmbiente:xUsuario
+		oMenu:Usuario 			:= oAmbiente:xUsuario
+		oPrinter:EscolheImpressoraUsuario()
+	
 		Ctr_User()
 
 		Area("desc")
