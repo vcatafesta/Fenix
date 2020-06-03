@@ -1,0 +1,408 @@
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 20:13:48
+SubSystem : BASE
+SubCode   : 1132
+Variavel  : acesso de array
+Arquivo   : 
+Area      : UF
+Indice    : uf
+Descricao : Erro de limite
+Explanacao: ERRO NAO DOCUMENTADO.
+Acao      : IMPRIMA ESTA TELA. E ENTRE EM CONTATO COM O
+Acao      : SUPORTE TECNICO ATRAVES DO TEL (69)3451.3085 ou VCATAFESTA@GMAIL.COM
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000442    Proc : TDBF:GETFIELDBLANK
+                Linha : 000361    Proc : TDBF:ADDFIELD
+                Linha : 000284    Proc : TDBF:NEW
+                Linha : 000011    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 20:14:22
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : 
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000017    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:06:37
+SubSystem : BASE
+SubCode   : 1003
+Variavel  : CALIAS
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : VARIAVEL NAO EXISTE.
+Explanacao: A VARIAVEL ESPECIFICADA NAO EXISTE OU NAO E VISIVEL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000243    Proc : (b)TDBF
+                Linha : 000000    Proc : TDBF:AREA
+                Linha : 000484    Proc : TDBF:OPEN
+                Linha : 000284    Proc : TDBF:NEW
+                Linha : 001128    Proc : UFIMPRESSAO
+                Linha : 000568    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:17:00
+SubSystem : BASE
+SubCode   : 1132
+Variavel  : acesso de array
+Arquivo   : 
+Area      : UF
+Indice    : uf
+Descricao : Erro de limite
+Explanacao: ERRO NAO DOCUMENTADO.
+Acao      : IMPRIMA ESTA TELA. E ENTRE EM CONTATO COM O
+Acao      : SUPORTE TECNICO ATRAVES DO TEL (69)3451.3085 ou VCATAFESTA@GMAIL.COM
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000443    Proc : TDBF:GETFIELDBLANK
+                Linha : 000362    Proc : TDBF:ADDFIELD
+                Linha : 000285    Proc : TDBF:NEW
+                Linha : 001128    Proc : UFIMPRESSAO
+                Linha : 000568    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:18:58
+SubSystem : BASE
+SubCode   : 1132
+Variavel  : acesso de array
+Arquivo   : 
+Area      : UF
+Indice    : uf
+Descricao : Erro de limite
+Explanacao: ERRO NAO DOCUMENTADO.
+Acao      : IMPRIMA ESTA TELA. E ENTRE EM CONTATO COM O
+Acao      : SUPORTE TECNICO ATRAVES DO TEL (69)3451.3085 ou VCATAFESTA@GMAIL.COM
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000447    Proc : TDBF:GETFIELDBLANK
+                Linha : 000362    Proc : TDBF:ADDFIELD
+                Linha : 000285    Proc : TDBF:NEW
+                Linha : 001128    Proc : UFIMPRESSAO
+                Linha : 000568    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:26:25
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : 
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:29:55
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : 
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:31:29
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : 
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:45:09
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:51:08
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 21:54:32
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 22:29:35
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : UF
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000244    Proc : (b)TDBF
+                Linha : 000000    Proc : TDBF:AREA
+                Linha : 000299    Proc : TDBF:OPEN
+                Linha : 001132    Proc : UFIMPRESSAO
+                Linha : 000568    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 22:29:58
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : uf
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000319    Proc : AREA
+                Linha : 000016    Proc : UFINCLUSAO
+                Linha : 000198    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 22:30:03
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : UF
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000244    Proc : (b)TDBF
+                Linha : 000000    Proc : TDBF:AREA
+                Linha : 000299    Proc : TDBF:OPEN
+                Linha : 001132    Proc : UFIMPRESSAO
+                Linha : 000568    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: GABRIEL
+Data      : 02/06/2020
+Horas     : 22:30:26
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : UF
+Arquivo   : 
+Area      : CADADM
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000244    Proc : (b)TDBF
+                Linha : 000000    Proc : TDBF:AREA
+                Linha : 000299    Proc : TDBF:OPEN
+                Linha : 001132    Proc : UFIMPRESSAO
+                Linha : 000568    Proc : (b)MONTA_MENU
+                Linha : 000000    Proc : HBMENUSYS:EXECUTE
+                Linha : 000000    Proc : HBMENUSYS:MODAL
+                Linha : 000000    Proc : MENUMODAL
+                Linha : 000093    Proc : MAIN$
+================================================================================
+================================================================================
+Usuario  1: ADMIN
+Data      : 02/06/20
+Horas     : 22:32:53
+SubSystem : BASE
+SubCode   : 1002
+Variavel  : UF
+Arquivo   : 
+Area      : 
+Indice    : 
+Descricao : ALIAS NAO EXISTE.
+Explanacao: O ALIAS ESPECIFICADO NAO ASSOCIADO COM A AREA DE TRABALHO ATUAL.
+Acao      : ENTRE EM CONTATO COM O SUPORTE TECNICO.
+Acao      : 
+--------------------------------------------------------------------------------
+PILHA DE CARGA
+                Linha : 000000    Proc : DBSELECTAREA
+                Linha : 000244    Proc : (b)TDBF
+                Linha : 000000    Proc : TDBF:AREA
+                Linha : 000299    Proc : TDBF:OPEN
+                Linha : 000034    Proc : MAIN$
+================================================================================

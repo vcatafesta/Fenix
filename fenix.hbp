@@ -32,6 +32,7 @@ src\tindice.prg
 src\tmenu.prg
 src\tget.prg
 src\tini.prg
+src\tdbf.prg
 src\tprinter.prg
 src\trelato.prg
 src\tbrowse.prg

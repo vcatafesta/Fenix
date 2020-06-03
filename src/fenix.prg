@@ -565,7 +565,7 @@ def Monta_Menu()
       oItem:Enabled := .T.
    endi
 
-   oItem :=MenuItem( "&Estado/ICMS", {|| UfDbEdit() })
+   oItem :=MenuItem( "&Estado/ICMS", {|| UfImpressao() })
    oPopUp:AddItem( oItem )
    if Yestcad = 'B'
       oItem:Enabled := .f.

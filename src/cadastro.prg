@@ -1115,6 +1115,68 @@ def lstcli()
 
 *--------------------------------------------------------------------------*
 
+def UfImpressao()
+*****************
+   LOCAL GetList        := {}
+   LOCAL cScreen        := SaveScreen()
+   LOCAL cEsta          := Space(2)
+	LOCAL Arq_Ant        := Alias()
+	LOCAL Ind_Ant        := IndexOrd()
+   LOCAL nRow           := 0 
+   LOCAL nDesconto      := 0
+   LOCAL nQtDocumento   := 0
+   LOCAL oRelato
+   LOCAL cTela
+	LOCAL oUf            := TDbf():Open("uf")
+	
+   oMenu:Limpa() 
+   oUf:Order( UF_NOME )
+	oUf:DbGoTop()
+	if oUf:Eof()
+		ErrorBeep()
+	   if !conf("INFO: Nada consta nos parametros informados. Deseja imprimir assim mesmo?")			
+			return(restela(cSCreen))
+		endif	
+	endif	
+
+	oMenu:Limpa()	
+   oRelato				:= TRelatoNew()	
+   oRelato:Tamanho	:= 80
+   oRelato:Coluna	   := 66
+   oRelato:NomeFirma := AllTrim(oAmbiente:NomeFirma)
+   oRelato:Sistema	:= oMenu:StatusSup
+   oRelato:Titulo 	:= 'LISTAGEM DE UF'
+   oRelato:Cabecalho := "UF NOME ESTADO                               ICMS"
+   
+   if !Instru80()
+      AreaAnt( Arq_Ant, Ind_Ant )
+      return(ResTela( cScreen ))
+   endif
+   cTela := Mensagem("Aguarde, Imprimindo Relatorio.")
+   oRelato:PrintOn(Chr(ESC) + "C" + Chr(66))
+   oRelato:Inicio()       
+
+	oBloco := {|| !oUf:Eof() }     
+   while Eval( oBloco ) .AND. Rel_Ok()
+      IF oRelato:RowPrn = 0		   
+         oRelato:Cabec()         
+      endif	
+      
+      nQtDocumento++
+		Qout(oUf:Uf, oUf:Nome, oUf:Icms)
+		oUf:DbSkip(1)
+      IF ++oRelato:RowPrn >= oRelato:Coluna
+         oRelato:Eject()
+      endif	
+   enddo   
+   Qout(Repl("-",oRelato:Tamanho))
+   oRelato:Eject()
+   ORelato:PrintOff(Chr(ESC) + "C" + Chr(66))
+	AreaAnt( Arq_Ant, Ind_Ant )
+	return(ResTela( cScreen ))
+
+*--------------------------------------------------------------------------*
+
 def ClientesDbedit()
 ********************
    LOCAL Arq_Ant	:= Alias()
