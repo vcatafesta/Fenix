@@ -7,7 +7,11 @@
 -b
 -run
 
+# path adicional para pesquisa de libs
+-Lc:\fenix\lib
 
+# diretorio para temporario
+-workdir=c:\lixo
 
 #libs
 -lxhb
@@ -16,6 +20,7 @@
 -lhbgt
 -lhbnf
 -lhbxpp
+-lfenix
 
 -ldflag=-Wl,--allow-multiple-definition  
 -prgflag= -iinclude;
@@ -25,22 +30,22 @@
 src\fenix.prg
 src\cadastro.prg
 src\cadasfor.prg
-src\funcoes.prg
+#src\funcoes.prg
 src\database.prg
-src\tambient.prg
-src\tindice.prg
-src\tmenu.prg
-src\tget.prg
-src\tini.prg
-src\tdbf.prg
-src\tprinter.prg
-src\trelato.prg
-src\tbrowse.prg
-src\getsys.prg
-src\getpsw.prg
-src\sixtools.prg
-src\errorsys.prg
-src\sciapilinux.c
+#src\tambient.prg
+#src\tindice.prg
+#src\tmenu.prg
+#src\tget.prg
+#src\tini.prg
+#src\tdbf.prg
+#src\tprinter.prg
+#src\trelato.prg
+#src\tbrowse.prg
+#src\getsys.prg
+#src\getpsw.prg
+#src\sixtools.prg
+#src\errorsys.prg
+#src\sciapilinux.c
 
 hbmisc.hbc
 hbblink.hbc
