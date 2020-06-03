@@ -9,3 +9,16 @@ git reset --hard HEAD # isso deixa todos os arquivos na versão do seu ultimo co
 	git reset --hard HEAD^
 2) Mas se você ainda não fez o commit
 	git reset --hard HEAD
+
+
+Primeiro certifique-se que o seu repositório está sincronizado com o repositório remoto: 
+$ git pull origin master, (supondo que o branch seja master).
+
+Então remova a pasta localmente: 
+$ git rm -r Landing Email.
+
+Agora faça um commit das modificações: 
+$ git commit -m "Remove pastas Landing e Email"
+
+Sincronize com repositório remoto: 
+$ git push origin master
