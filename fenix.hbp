@@ -7,6 +7,10 @@
 -b
 -run
 
+# linkar com bibliotecas estaticas/compartilhadas
+-static
+#-shared
+
 # path adicional para pesquisa de libs
 -Lc:\fenix\lib
 
