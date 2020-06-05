@@ -813,7 +813,7 @@ def ClientesInclusao()
 		Area("cadcli")
 		Cadcli->(DbGoBottom())
 		cCodi 		:= Strzero(Cadcli->Id + 1, 4)
-		fj 			:= space(1)
+		fj 			:= "E"
 		DT				:=	date()
 		rdata			:=	date
 		rativo		:=	spac(1)
@@ -860,18 +860,18 @@ def ClientesInclusao()
 		cNomeRepre  := Space(0)
 		cBair 		:= space(16)
 		
-		Mabox(10,01, 37, maxcol(), "INCLUSAO DE CLIENTES")
-		@ Row()+1,02 say "<P>Fisica <E>mpresa.:"  get fj pict "!" valid PickTipoCliente(@fj, @cSit, Row(), Col()+1)
-		@ Row()+1,02 say "Codigo do Cliente...:" 	get cCodi pict "9999"
+		Mabox(10,01, 38, maxcol(), "INCLUSAO DE CLIENTES")
+		@ Row()+1,02 say "<P>Fisica <E>mpresa.:"  get fj    		pict "!" valid PickTipoCliente(@fj, @cSit, Row(), Col()+1)
+		@ Row()+1,02 say "Codigo do Cliente...:" 	get cCodi		pict "9999"
 		@ Row()+1,02 say "Data Cadastro:......." 	get date
-		@ Row()+1,02 say "Fantasia............:" 	get Rcliente pict '@!' valid lastkey() = UP .or. eval({|p1|
-		if empty(p1)
-			errorbeep()
-			Alerta("ERRO: Nome fantasia invalido")
-			return false
-		endif
-		return true
-		}, rCliente)
+		@ Row()+1,02 say "Fantasia............:" 	get Rcliente 	pict '@!' valid lastkey() = UP .or. eval({|p1|
+			if empty(p1)
+				errorbeep()
+				Alerta("ERRO: Nome fantasia invalido")
+				return false
+			endif
+			return true
+			}, rCliente)
 		@ Row()+1,02 say "Razao Social........:" 	get Rrazao   pict '@!' valid lastkey() = UP .or. eval({|p1|
 		if empty(p1)
 			errorbeep()
@@ -881,8 +881,7 @@ def ClientesInclusao()
 		return true
 		}, rRazao)
 
-		if FJ = 'E'
-			@ Row()+1,02 say "C.N.P.J.............:" 	get Rcnpj   pict '99.999.999/9999-99' valid lastkey() = UP .or. eval({|p1|
+		@ Row()+1,02 say "C.N.P.J.............:" 	get Rcnpj   pict "99.999.999/9999-99" When fj == "E" valid TestaCgc( rCnpj) .or. lastkey() = UP .and. eval({|p1|
 			Cadcli->(Order(CADCLI_CNPJ))
 			if CadCli->(DbSeek(p1))
 				errorbeep()
@@ -891,9 +890,8 @@ def ClientesInclusao()
 			endif
 			return true
 			}, Rcnpj) 			
-			@ Row(),  50 say "'Inscr.Est :" 	get Rinscr  pict '9999999999999999'
-		else
-			@ Row()+1,02 say "CPF.................:" 	get RCPF    pict '999.999.999-99' valid lastKey() = UP .or. eval({|p1|
+		@ Row(),  50 say "Inscr.Est :" 				get Rinscr  pict '9999999999999999'	When fj == "E"	
+		@ Row()+1,02 say "CPF.................:" 	get RCPF    pict "999.999.999-99"   When fj == "P" valid TestaCpf(rCpf) .or. lastKey() = UP .and. eval({|p1|
 			Cadcli->(Order(CADCLI_CPF))
 			if CadCli->(DbSeek(p1))
 				errorbeep()
@@ -902,8 +900,7 @@ def ClientesInclusao()
 			endif
 			return true
 			}, Rcpf) 			
-			@ Row(),  50 say "RG....:" 	get Rinscrp pict '9999999999999999'
-		endif
+		@ Row(),  50 say "RG........:" 				get Rinscrp  pict '9999999999999999' When fj == "P"
 		@ Row()+1,02 say "Cep.................:"  get cCep 	 pict '99999-999' valid CepErrado( @cCep, @cCida, @cEsta, @cBair )
 		@ Row(),  50 say "Cidade:"		            get cCida    pict "@!"  
 		@ Row(),  90 say "Estado:"                get cEsta    pict "@" valid UfErrado(@cEsta, nil, Row(), Col()+1)
@@ -948,7 +945,7 @@ def ClientesInclusao()
 		endif
 		return true
 		}, dsc, rDesc, desc->desc)
-		@ Row(),  70 say "%"						                                        
+		@ Row(), 33 say "%"						                                        
 		@ Row()+1,02 say "Tipo Contribuinte...:" get op_ctb pict "9"    valid PickTipoContribuinte(@op_ctb, @desc_rega, Row(), Col()+1)
 		@ Row()+1,02 say "Representante.......:" get cRepre pict "9999" valid RepresentanteErrado(@cRepre, @cNomeRepre, Row(), Col()+1)
 		@ Row()+1,02 say "XML.................:" get Rexml
@@ -1119,7 +1116,6 @@ def UfImpressao()
 *****************
    LOCAL GetList        := {}
    LOCAL cScreen        := SaveScreen()
-   LOCAL cEsta          := Space(2)
 	LOCAL Arq_Ant        := Alias()
 	LOCAL Ind_Ant        := IndexOrd()
    LOCAL nRow           := 0 
