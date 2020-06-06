@@ -8,7 +8,6 @@
 //#warning "this header is deprecated"
 #endif
 
-
 // synonymn for MS_* 
 	HB_FUNC_TRANSLATE(TRIM,    	RTRIM)
 	HB_FUNC_TRANSLATE(MS_TRIM,    RTRIM)
@@ -19,17 +18,17 @@
 
 /*-----------------------------------------------------------------------------------------------*/	
 
-static size_t 
-strlen(
-   char s[]
-   )
+/*
+static size_t strlen( char s[] )
 {
 	int i = 0;
-	while(s[i] != '\0' ){ 
-		i++; 
+	while(s[i] != '\0' )
+	{
+		i++;
 	}
 	return i;
 }
+*/
 
 /*-----------------------------------------------------------------------------------------------*/	
 
@@ -54,36 +53,33 @@ void *malloc_s(size_t size) {
 
 //=================================================================
 
-char *
-spacechar(
-   size_t stTamBlock, 
-   char chInit = 0
-   ) 
+char *spacechar( size_t stTamBlock, char chInit )
 {
-    //TString pBuf = (char *)malloc(stTamBlock + 1);
-    char *pBuf = new char[stTamBlock];
+    TString pBuf = (char *)malloc(stTamBlock + 1);
+    //char *pBuf = new char[stTamBlock];
     if(pBuf != 0)
         memset(pBuf, chInit, stTamBlock);
-        
+
     pBuf[stTamBlock] = '\0';
     return pBuf;
 }
 
 //=================================================================
 
-char *space(int x, char ch = 0) {
+char *space(int x, char ch)
+{
     char *buff = (char *)malloc(x * sizeof(char *));
-    
+
     if(buff != 0)
         memset(buff, ch, x);
-        
+
     buff[x] = '\0';
     return buff;
 }
 
 //=================================================================
 
-void *spaceset(size_t size, char ch=0) {
+void *spaceset(size_t size, char ch ) {
     return(memset((char *)malloc_s(size * sizeof(char *)), ch, size));
 }
 
@@ -419,7 +415,7 @@ HB_FUNC(MS_CLEAR){
 
 /*-----------------------------------------------------------------------------------------------*/	
 
-static bool hb_ctGetWinCord(MS_INT *piTop, MS_INT *piLeft, MS_INT *piBottom, MS_INT *piRight )
+static HB_BOOL hb_ctGetWinCord(MS_INT *piTop, MS_INT *piLeft, MS_INT *piBottom, MS_INT *piRight )
 {
 	MS_INT	iMaxRow	= hb_gtMaxRow();
 	MS_INT 	iMaxCol 	= hb_gtMaxCol();
@@ -1131,6 +1127,17 @@ HB_FUNC( INKEY )
 
 /*-----------------------------------------------------------------------------------------------*/	
 
+HB_FUNC( __KEYBOARD )
+{
+   /* Clear the typeahead buffer without reallocating the keyboard buffer */
+   hb_inkeyReset();
+
+   if( HB_ISCHAR( 1 ) )
+      hb_inkeySetText( hb_parc( 1 ), hb_parclen( 1 ) );
+}
+
+/*-----------------------------------------------------------------------------------------------*/	
+
 HB_FUNC( HB_KEYCLEAR )
 {
    hb_inkeyReset();
@@ -1637,7 +1644,7 @@ HB_FUNC( MS_SPACE )
             int size = hb_parclen( 1 );                  
             // char buffer[ 4096 ];
             // memset( buffer, '\0', 4096 );
-            char *buffer = spacechar(nlen);
+            char *buffer = spacechar(nlen,0);
             strcat( buffer, szString );
             strcat( buffer, space( nlen - size, 32 ) );
             hb_retc( buffer );
@@ -2968,50 +2975,6 @@ char * hb_verCompiler( void )
    return pszCompiler;
 }
 
-/* NOTE: The caller must free the returned buffer. [vszakats] */
-
-/* NOTE:
-   CA-Cl*pper 5.2e returns: "Clipper (R) 5.2e Intl. (x216)  (1995.02.07)"
-   CA-Cl*pper 5.3b returns: "Clipper (R) 5.3b Intl. (Rev. 338) (1997.04.25)"
- */
-
-/*
-char * hb_verHarbour( void )
-{
-   char * pszVersion;
-   char szDateRaw[ 11 ];
-   char szDate[ 17 ];
-
-   HB_TRACE( HB_TR_DEBUG, ( "hb_verHarbour()" ) );
-
-   hb_snprintf( szDateRaw, sizeof( szDateRaw ), "%d", hb_verCommitRev() );
-
-   szDate[ 0 ] = '2';
-   szDate[ 1 ] = '0';
-   szDate[ 2 ] = szDateRaw[ 0 ];
-   szDate[ 3 ] = szDateRaw[ 1 ];
-   szDate[ 4 ] = '-';
-   szDate[ 5 ] = szDateRaw[ 2 ];
-   szDate[ 6 ] = szDateRaw[ 3 ];
-   szDate[ 7 ] = '-';
-   szDate[ 8 ] = szDateRaw[ 4 ];
-   szDate[ 9 ] = szDateRaw[ 5 ];
-   szDate[ 10 ] = ' ';
-   szDate[ 11 ] = szDateRaw[ 6 ];
-   szDate[ 12 ] = szDateRaw[ 7 ];
-   szDate[ 13 ] = ':';
-   szDate[ 14 ] = szDateRaw[ 8 ];
-   szDate[ 15 ] = szDateRaw[ 9 ];
-   szDate[ 16 ] = '\0';
-
-   pszVersion = ( char * ) hb_xgrab( 80 );
-   hb_snprintf( pszVersion, 80, "Harbour %d.%d.%d%s (%s) (%s)",
-                HB_VER_MAJOR, HB_VER_MINOR, HB_VER_RELEASE, HB_VER_STATUS,
-                hb_verCommitIDShort(), szDate );
-
-   return pszVersion;
-}
-*/
 
 char * hb_verPCode( void )
 {

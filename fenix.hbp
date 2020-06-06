@@ -4,18 +4,22 @@
 -info
 #-gui
 -n2
--b
 -run
+
+# debug
+-b
 
 # linkar com bibliotecas estaticas/compartilhadas
 -static
 #-shared
 
 # path adicional para pesquisa de libs
--Lc:\fenix\lib
+{win}-Lc:\fenix\libwin
+{linux}-L./liblinux
 
 # diretorio para temporario
--workdir=c:\lixo
+{win}-workdir=c:\lixo
+{linux}-workdir=/tmp
 
 #libs
 -lxhb
@@ -28,7 +32,10 @@
 
 -ldflag=-Wl,--allow-multiple-definition  
 -prgflag= -iinclude;
--cflag= -cpp -w0
+
+# compilar em C++
+#-cflag= -cpp -w0
+-cflag= -w0
 
 src\fenix.prg
 src\cadastro.prg
