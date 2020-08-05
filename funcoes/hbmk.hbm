@@ -6,7 +6,7 @@
 {linux}-workdir=/tmp
 -static
 #-shared
--hblib -ofenix
+#-hblib -ofenix
 
 #additional path to search for libraries
 #-L./ 
