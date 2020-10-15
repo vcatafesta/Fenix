@@ -10,8 +10,8 @@
 -b
 
 # linkar com bibliotecas estaticas/compartilhadas
--static
-#-shared
+#-static
+-shared
 
 # path adicional para pesquisa de libs
 {win}-Lc:\fenix\libwin
