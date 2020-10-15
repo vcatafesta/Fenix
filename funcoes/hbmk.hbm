@@ -15,7 +15,7 @@
 {win}-prgflag= -ic:\sci\include
 #{win}-cflag= -cpp -w0 
 {win}-i\sci\include
-{mingw|mingw64}-ldflag=-Wl,--allow-multiple-definition 
+{mingw|mingw64|gcc}-ldflag=-Wl,--allow-multiple-definition 
 
 {linux}-i../include
 {linux}-i../../include
@@ -47,7 +47,7 @@ hbnf.hbc
 hbgzio.hbc
 hbmemio.hbc
 #letodb.hbc
-{linux}rddleto.hbc
+#{linux}rddleto.hbc
 {linux}hbcups.hbc
 #{linux}/home/vcatafesta/github/hwgui/hwgui.hbc
 
