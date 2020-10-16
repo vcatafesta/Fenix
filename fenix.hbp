@@ -10,25 +10,16 @@
 -b
 
 # linkar com bibliotecas estaticas/compartilhadas
-#-static
--shared
+-static
+#-shared
 
 # path adicional para pesquisa de libs
-{win}-Lc:\fenix\libwin
+{win}-Lc:\github\fenix\libwin
 {linux}-L./liblinux
 
 # diretorio para temporario
 {win}-workdir=c:\lixo
 {linux}-workdir=/tmp
-
-#libs
--lxhb
-{win}-lhbwin
--lhbct
--lhbgt
--lhbnf
--lhbxpp
--lfenix
 
 -ldflag=-Wl,--allow-multiple-definition  
 -prgflag= -iinclude;
@@ -41,10 +32,41 @@ src\fenix.prg
 src\cadastro.prg
 src\cadasfor.prg
 src\database.prg
+#Bibliotecas
+#-lz
+-lfuncoes
+-lpng
+-lhbblink
+-lhbct
+-lhbxpp
+-lxhb
+-lhboslib
+-lhbgt
+{win}-lhbwin
+-lhbnf
+-lhbgzio
+-lhbmemio
+#letodbf novo
+#-lleto
+#{linux}-lrddleto
 
-hbmisc.hbc
-hbblink.hbc
-hboslib.hbc
-hbgzio.hbc
+hbhpdf.hbc
+hbblink.hbc 
+hbct.hbc 
+hbxpp.hbc
+xhb.hbc 
+hboslib.hbc 
+hbgt.hbc 
+{win}hbwin.hbc 
+hbnf.hbc 
+hbgzio.hbc 
 hbmemio.hbc
+{linux}letodb.hbc
 {linux}hbcups.hbc
+
+hbmzip.hbc
+hbmisc.hbc
+hbnetio.hbc
+rddsql.hbc
+hbmemio.hbc
+#hbsqlit3.hbc

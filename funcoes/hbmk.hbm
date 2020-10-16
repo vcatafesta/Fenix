@@ -4,15 +4,15 @@
 -es2
 {win}-workdir=c:\lixo
 {linux}-workdir=/tmp
--static
-#-shared
+#-static
+-shared
 #-hblib -ofenix
 
 #additional path to search for libraries
 #-L./ 
 
 {win}-prgflag= -i..\include;
-{win}-prgflag= -ic:\sci\include
+{win}-prgflag= -ic:\github\fenix\include
 #{win}-cflag= -cpp -w0 
 {win}-i\sci\include
 {mingw|mingw64|gcc}-ldflag=-Wl,--allow-multiple-definition 
